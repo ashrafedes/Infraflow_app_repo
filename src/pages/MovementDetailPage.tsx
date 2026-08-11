@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
-import { PageHeader, LoadingSpinner, EmptyState } from '@/components/ui'
-import { ArrowLeft } from 'lucide-react'
+import { PageHeader, LoadingSpinner, EmptyState, ConfirmDialog, Alert } from '@/components/ui'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 import { formatDate, formatNumber, formatDateTime } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
 import type { MovementDetail } from '@/types'
 
 const typeColors: Record<string, string> = {
@@ -19,8 +20,14 @@ const typeColors: Record<string, string> = {
 export function MovementDetailPage() {
   const { t } = useTranslation('movements')
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { profile } = useAuth()
+  const isCompanyAdmin = profile?.role === 'company_admin'
   const [lines, setLines] = useState<MovementDetail[]>([])
   const [loading, setLoading] = useState(true)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -37,6 +44,26 @@ export function MovementDetailPage() {
     fetchData()
   }, [id])
 
+  const handleDelete = async () => {
+    if (!id) return
+    setDeleting(true)
+    setError(null)
+    // Delete lines first, then the movement (RLS requires company_admin)
+    const { error: linesErr } = await supabase
+      .from('material_movement_lines')
+      .delete()
+      .eq('movement_id', id)
+    if (linesErr) { setError(linesErr.message); setDeleting(false); return }
+    const { error: movErr } = await supabase
+      .from('material_movements')
+      .delete()
+      .eq('id', id)
+    if (movErr) { setError(movErr.message); setDeleting(false); return }
+    setDeleting(false)
+    setDeleteOpen(false)
+    navigate('/movements')
+  }
+
   if (loading) return <LoadingSpinner />
   if (lines.length === 0) return <EmptyState message={t('movements:detail.notFound')} />
 
@@ -48,7 +75,20 @@ export function MovementDetailPage() {
         <ArrowLeft className="h-4 w-4" /> {t('movements:detail.backToMovements')}
       </Link>
 
-      <PageHeader title={m.movement_number} subtitle={`${t(`common:movementTypes.${m.movement_type}`)} — ${formatDate(m.movement_date)}`} />
+      <PageHeader
+        title={m.movement_number}
+        subtitle={`${t(`common:movementTypes.${m.movement_type}`)} — ${formatDate(m.movement_date)}`}
+        action={isCompanyAdmin && (
+          <button
+            onClick={() => setDeleteOpen(true)}
+            className="btn btn-danger"
+          >
+            <Trash2 className="h-4 w-4" /> {t('movements:detail.delete')}
+          </button>
+        )}
+      />
+
+      {error && <Alert type="error" message={error} />}
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div className="card p-4">
@@ -124,6 +164,18 @@ export function MovementDetailPage() {
           </tbody>
         </table>
       </div>
+
+      {isCompanyAdmin && (
+        <ConfirmDialog
+          open={deleteOpen}
+          onClose={() => setDeleteOpen(false)}
+          onConfirm={handleDelete}
+          title={t('movements:detail.deleteTitle')}
+          message={t('movements:detail.deleteConfirm', { number: m.movement_number })}
+          confirmLabel={deleting ? t('movements:detail.deleting') : t('movements:detail.delete')}
+          danger
+        />
+      )}
     </div>
   )
 }

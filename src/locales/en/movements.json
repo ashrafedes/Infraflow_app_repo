@@ -44,7 +44,11 @@
     "reason": "Reason:",
     "source": "Source",
     "type": "Type",
-    "wo": "WO:"
+    "wo": "WO:",
+    "delete": "Delete",
+    "deleteTitle": "Delete Movement",
+    "deleteConfirm": "Are you sure you want to delete movement {{number}}? This will remove all its line items and cannot be undone.",
+    "deleting": "Deleting..."
   },
   "new": {
     "title": "New Movement",
