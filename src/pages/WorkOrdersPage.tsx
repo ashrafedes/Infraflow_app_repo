@@ -116,6 +116,10 @@ export function WorkOrdersPage() {
     let allOk = true
     for (const row of dirtyRows) {
       const payload = {
+        work_order_number: row.work_order_number,
+        site_code: row.site_code || null,
+        project_id: row.project_id,
+        work_location_id: row.work_location_id,
         supervisor: row.supervisor,
         status: row.status,
         contractor_id: row.contractor_id || null,
@@ -148,6 +152,27 @@ export function WorkOrdersPage() {
       return { ...updated, _dirty: true }
     }))
   }, [selectedId])
+
+  // Handle project/work_location change — updates both the id and display name
+  const handleProjectChange = useCallback((projectId: string) => {
+    if (!selectedId) return
+    const project = projects.find((p) => p.id === projectId)
+    setRows((prev) => prev.map((r) => {
+      if (r.id !== selectedId) return r
+      if (r.project_id === projectId) return r
+      return { ...r, project_id: projectId, project_name: project?.name, project_code: project?.code, _dirty: true }
+    }))
+  }, [selectedId, projects])
+
+  const handleWorkLocationChange = useCallback((locationId: string) => {
+    if (!selectedId) return
+    const loc = locations.find((l) => l.id === locationId)
+    setRows((prev) => prev.map((r) => {
+      if (r.id !== selectedId) return r
+      if (r.work_location_id === locationId) return r
+      return { ...r, work_location_id: locationId, work_location_name: loc?.name, work_location_code: loc?.code, _dirty: true }
+    }))
+  }, [selectedId, locations])
 
   // ============================================================================
   // Create new WO (modal for immutable fields)
@@ -307,22 +332,44 @@ export function WorkOrdersPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-                  {/* Immutable fields (read-only) */}
+                  {/* Editable header fields */}
                   <div>
                     <label className="label">{t('workOrders:detail.woNumber')}</label>
-                    <p className="text-sm font-medium">{selectedWo.work_order_number}</p>
+                    <input
+                      type="text"
+                      value={selectedWo.work_order_number}
+                      onChange={(e) => handleHeaderFieldChange('work_order_number', e.target.value)}
+                      className="input"
+                    />
                   </div>
                   <div>
                     <label className="label">{t('workOrders:detail.siteCode')}</label>
-                    <p className="text-sm font-medium">{selectedWo.site_code ?? '—'}</p>
+                    <input
+                      type="text"
+                      value={selectedWo.site_code ?? ''}
+                      onChange={(e) => handleHeaderFieldChange('site_code', e.target.value || null)}
+                      className="input"
+                    />
                   </div>
                   <div>
                     <label className="label">{t('workOrders:detail.project')}</label>
-                    <p className="text-sm font-medium">{selectedWo.project_name}</p>
+                    <select
+                      value={selectedWo.project_id}
+                      onChange={(e) => handleProjectChange(e.target.value)}
+                      className="input"
+                    >
+                      {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                    </select>
                   </div>
                   <div>
                     <label className="label">{t('workOrders:detail.workLocation')}</label>
-                    <p className="text-sm font-medium">{selectedWo.work_location_name}</p>
+                    <select
+                      value={selectedWo.work_location_id}
+                      onChange={(e) => handleWorkLocationChange(e.target.value)}
+                      className="input"
+                    >
+                      {locations.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
+                    </select>
                   </div>
                   <div>
                     <label className="label">{t('workOrders:detail.class')}</label>
