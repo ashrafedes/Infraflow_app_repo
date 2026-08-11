@@ -1,16 +1,16 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
-import { PageHeader, LoadingSpinner, FeatureGate, LockedState } from '@/components/ui'
+import { PageHeader, LoadingSpinner, FeatureGate } from '@/components/ui'
 import { Datasheet, readOnlyCell } from '@/components/grid/Datasheet'
 import { MobileCardList } from '@/components/grid/MobileCardList'
 import { useFeature, FEATURES } from '@/lib/entitlements'
 import { formatNumber, cn } from '@/lib/utils'
-import { Download, Lock } from 'lucide-react'
+import { Download, Lock, TrendingUp, DollarSign, LineChart } from 'lucide-react'
 import type { Column } from 'react-data-grid'
-import type { WarehouseBalance, WorkOrderBalance, ContractorBalance, WOMaterialSummary } from '@/types'
+import type { WarehouseBalance, WorkOrderBalance, ContractorBalance, WOMaterialSummary, MovementDetail } from '@/types'
 
-type ReportTab = 'warehouse' | 'work_order' | 'contractor' | 'wo_summary'
+type ReportTab = 'warehouse' | 'work_order' | 'contractor' | 'wo_summary' | 'advanced'
 
 export function ReportsPage() {
   const { t } = useTranslation('reports')
@@ -21,8 +21,14 @@ export function ReportsPage() {
   const [woBalances, setWoBalances] = useState<WorkOrderBalance[]>([])
   const [conBalances, setConBalances] = useState<ContractorBalance[]>([])
   const [woSummary, setWoSummary] = useState<WOMaterialSummary[]>([])
+  const [advMovements, setAdvMovements] = useState<MovementDetail[]>([])
 
   const hasExports = useFeature(FEATURES.EXPORTS)
+  const hasAdvancedReports =
+    useFeature(FEATURES.ADVANCED_REPORTS) ||
+    useFeature(FEATURES.TREND_ANALYSIS) ||
+    useFeature(FEATURES.COST_BREAKDOWN) ||
+    useFeature(FEATURES.FORECASTING)
 
   useEffect(() => {
     async function fetchData() {
@@ -39,6 +45,13 @@ export function ReportsPage() {
       } else if (tab === 'wo_summary') {
         const { data } = await supabase.from('v_wo_material_summary').select('*').order('work_order_number').limit(1000)
         setWoSummary((data ?? []) as unknown as WOMaterialSummary[])
+      } else if (tab === 'advanced') {
+        const { data } = await supabase
+          .from('v_movement_details')
+          .select('*')
+          .order('movement_date', { ascending: false })
+          .limit(5000)
+        setAdvMovements((data ?? []) as unknown as MovementDetail[])
       }
       setLoading(false)
     }
@@ -50,6 +63,7 @@ export function ReportsPage() {
     { key: 'work_order', label: t('reports:tabs.workOrder') },
     { key: 'contractor', label: t('reports:tabs.contractor') },
     { key: 'wo_summary', label: t('reports:tabs.woSummary') },
+    ...(hasAdvancedReports ? [{ key: 'advanced' as ReportTab, label: t('reports:tabs.advanced') }] : []),
   ]
 
   // ============================================================================
@@ -141,6 +155,67 @@ export function ReportsPage() {
     URL.revokeObjectURL(url)
   }
 
+  // ============================================================================
+  // Advanced analytics computations
+  // ============================================================================
+  const { trend, topMaterials, forecast } = useMemo(() => {
+    if (tab !== 'advanced' || advMovements.length === 0) {
+      return { trend: [], topMaterials: [], forecast: [] }
+    }
+    const monthKey = (d: string) => d.slice(0, 7) // YYYY-MM
+    const months = Array.from(new Set(advMovements.map((m) => monthKey(m.movement_date)))).sort()
+
+    const trend = months.map((month) => {
+      const monthRows = advMovements.filter((m) => monthKey(m.movement_date) === month)
+      const sum = (type: string) => monthRows.filter((m) => m.movement_type === type).reduce((a, b) => a + Number(b.quantity), 0)
+      return {
+        month,
+        receipt: sum('RECEIPT'),
+        issue: sum('ISSUE'),
+        usage: sum('USAGE'),
+        transfer: sum('TRANSFER'),
+        returnQty: sum('RETURN'),
+        adjustment: sum('ADJUSTMENT'),
+      }
+    })
+
+    const materialTotals: Record<string, { item_number: string; short_description: string; uom: string; total: number }> = {}
+    advMovements
+      .filter((m) => m.movement_type === 'USAGE' || m.movement_type === 'ISSUE')
+      .forEach((m) => {
+        const k = `${m.item_number}::${m.short_description}::${m.uom}`
+        if (!materialTotals[k]) materialTotals[k] = { item_number: m.item_number, short_description: m.short_description, uom: m.uom, total: 0 }
+        materialTotals[k].total += Number(m.quantity)
+      })
+    const topMaterials = Object.values(materialTotals)
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 10)
+
+    const last3Months = months.slice(-3)
+    const materialMonthly: Record<string, { item_number: string; short_description: string; uom: string; months: Record<string, number> }> = {}
+    advMovements
+      .filter((m) => m.movement_type === 'USAGE')
+      .forEach((m) => {
+        const month = monthKey(m.movement_date)
+        if (!last3Months.includes(month)) return
+        const k = `${m.item_number}::${m.short_description}::${m.uom}`
+        if (!materialMonthly[k]) materialMonthly[k] = { item_number: m.item_number, short_description: m.short_description, uom: m.uom, months: {} }
+        materialMonthly[k].months[month] = (materialMonthly[k].months[month] ?? 0) + Number(m.quantity)
+      })
+    const forecast = Object.values(materialMonthly).map((m) => {
+      const values = last3Months.map((month) => m.months[month] ?? 0)
+      const avg = values.reduce((a, b) => a + b, 0) / Math.max(values.length, 1)
+      return { ...m, average: avg }
+    }).sort((a, b) => b.average - a.average).slice(0, 10)
+
+    return { trend, topMaterials, forecast }
+  }, [tab, advMovements])
+
+  const maxTrendValue = useMemo(() => {
+    if (trend.length === 0) return 1
+    return Math.max(...trend.flatMap((m) => [m.receipt, m.issue, m.usage, m.transfer, m.returnQty, m.adjustment]), 1)
+  }, [trend])
+
   return (
     <div className="flex h-full flex-col">
       <PageHeader
@@ -182,18 +257,6 @@ export function ReportsPage() {
         </div>
       </div>
 
-      {/* Advanced reports tab (gated) */}
-      <FeatureGate feature={FEATURES.ADVANCED_REPORTS} fallback={
-        <div className="mb-4">
-          <LockedState feature="advanced_reports" message={t('reports:advanced.lockedMessage')} />
-        </div>
-      }>
-        <div className="mb-4 card p-4">
-          <h3 className="text-sm font-semibold mb-2">{t('reports:advanced.title')}</h3>
-          <p className="text-xs text-gray-500">{t('reports:advanced.description')}</p>
-        </div>
-      </FeatureGate>
-
       {loading ? (
         <LoadingSpinner />
       ) : (
@@ -233,6 +296,14 @@ export function ReportsPage() {
               rowKeyGetter={(r) => `${r.work_order_id}-${r.material_id}`}
               emptyMessage={t('reports:empty.woSummary')}
               rowHeight={34}
+            />
+          )}
+          {tab === 'advanced' && (
+            <AdvancedReportsPanel
+              trend={trend}
+              topMaterials={topMaterials}
+              forecast={forecast}
+              maxTrendValue={maxTrendValue}
             />
           )}
         </div>
@@ -294,9 +365,159 @@ export function ReportsPage() {
               emptyMessage={t('reports:empty.woSummary')}
             />
           )}
+          {tab === 'advanced' && (
+            <AdvancedReportsPanel
+              trend={trend}
+              topMaterials={topMaterials}
+              forecast={forecast}
+              maxTrendValue={maxTrendValue}
+            />
+          )}
         </div>
         </>
       )}
+    </div>
+  )
+}
+
+// ============================================================================
+// AdvancedReportsPanel — trend, cost breakdown, forecasting
+// ============================================================================
+interface AdvancedReportsPanelProps {
+  trend: { month: string; receipt: number; issue: number; usage: number; transfer: number; returnQty: number; adjustment: number }[]
+  topMaterials: { item_number: string; short_description: string; uom: string; total: number }[]
+  forecast: { item_number: string; short_description: string; uom: string; average: number }[]
+  maxTrendValue: number
+}
+
+function AdvancedReportsPanel({ trend, topMaterials, forecast, maxTrendValue }: AdvancedReportsPanelProps) {
+  const { t } = useTranslation('reports')
+  const typeColors: Record<string, string> = {
+    receipt: 'bg-green-500',
+    issue: 'bg-blue-500',
+    usage: 'bg-yellow-500',
+    transfer: 'bg-gray-400',
+    returnQty: 'bg-purple-500',
+    adjustment: 'bg-red-500',
+  }
+  const typeLabels: Record<string, string> = {
+    receipt: t('reports:advanced.receipt'),
+    issue: t('reports:advanced.issue'),
+    usage: t('reports:advanced.usage'),
+    transfer: t('reports:advanced.transfer'),
+    returnQty: t('reports:advanced.return'),
+    adjustment: t('reports:advanced.adjustment'),
+  }
+
+  return (
+    <div className="h-full overflow-auto p-4 space-y-6">
+      {/* Trend Analysis */}
+      <section className="card p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingUp className="h-5 w-5 text-brand-600" />
+          <h3 className="font-semibold">{t('reports:advanced.trendTitle')}</h3>
+        </div>
+        {trend.length === 0 ? (
+          <p className="text-sm text-gray-500">{t('reports:advanced.noData')}</p>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4 text-xs">
+              {Object.keys(typeColors).map((key) => (
+                <span key={key} className="flex items-center gap-1">
+                  <span className={`h-2 w-2 rounded-full ${typeColors[key]}`} />
+                  {typeLabels[key]}
+                </span>
+              ))}
+            </div>
+            <div className="space-y-3">
+              {trend.map((row) => (
+                <div key={row.month}>
+                  <div className="text-xs text-gray-500 mb-1">{row.month}</div>
+                  <div className="flex h-6 w-full gap-0.5 overflow-hidden rounded">
+                    {Object.keys(typeColors).map((key) => {
+                      const val = Number((row as Record<string, number | string>)[key] ?? 0)
+                      const pct = maxTrendValue > 0 ? (val / maxTrendValue) * 100 : 0
+                      return (
+                        <div
+                          key={key}
+                          style={{ width: `${pct}%` }}
+                          className={`${typeColors[key]} h-full`}
+                          title={`${typeLabels[key]}: ${formatNumber(val)}`}
+                        />
+                      )
+                    })}
+                  </div>
+                  <div className="mt-1 text-xs text-gray-600 text-right">
+                    {formatNumber(row.receipt + row.issue + row.usage + row.transfer + row.returnQty + row.adjustment)} {t('reports:advanced.totalQty')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Cost Breakdown (quantity proxy) */}
+      <section className="card p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <DollarSign className="h-5 w-5 text-brand-600" />
+          <h3 className="font-semibold">{t('reports:advanced.costTitle')}</h3>
+        </div>
+        {topMaterials.length === 0 ? (
+          <p className="text-sm text-gray-500">{t('reports:advanced.noData')}</p>
+        ) : (
+          <table className="table w-full text-sm">
+            <thead>
+              <tr>
+                <th>{t('reports:columns.itemNumber')}</th>
+                <th>{t('reports:columns.description')}</th>
+                <th className="text-right">{t('reports:advanced.issuedUsed')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topMaterials.map((m) => (
+                <tr key={m.item_number}>
+                  <td className="font-medium">{m.item_number}</td>
+                  <td className="text-gray-600">{m.short_description}</td>
+                  <td className="text-right">{formatNumber(m.total)} {m.uom}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <p className="mt-3 text-xs text-gray-400">{t('reports:advanced.costNote')}</p>
+      </section>
+
+      {/* Forecasting */}
+      <section className="card p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <LineChart className="h-5 w-5 text-brand-600" />
+          <h3 className="font-semibold">{t('reports:advanced.forecastTitle')}</h3>
+        </div>
+        {forecast.length === 0 ? (
+          <p className="text-sm text-gray-500">{t('reports:advanced.noData')}</p>
+        ) : (
+          <table className="table w-full text-sm">
+            <thead>
+              <tr>
+                <th>{t('reports:columns.itemNumber')}</th>
+                <th>{t('reports:columns.description')}</th>
+                <th className="text-right">{t('reports:advanced.avgMonthlyUsage')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {forecast.map((m) => (
+                <tr key={m.item_number}>
+                  <td className="font-medium">{m.item_number}</td>
+                  <td className="text-gray-600">{m.short_description}</td>
+                  <td className="text-right">{formatNumber(m.average)} {m.uom}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <p className="mt-3 text-xs text-gray-400">{t('reports:advanced.forecastNote')}</p>
+      </section>
     </div>
   )
 }

@@ -17,6 +17,9 @@ export const FEATURES = {
   ADVANCED_DASHBOARD: 'advanced_dashboard',
   ADVANCED_ANALYTICS: 'advanced_analytics',
   EXPORTS: 'exports',
+  TREND_ANALYSIS: 'trend_analysis',
+  COST_BREAKDOWN: 'cost_breakdown',
+  FORECASTING: 'forecasting',
 } as const
 
 export type FeatureKey = (typeof FEATURES)[keyof typeof FEATURES]

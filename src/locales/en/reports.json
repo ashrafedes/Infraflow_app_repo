@@ -6,7 +6,8 @@
     "warehouse": "Warehouse Stock",
     "workOrder": "Work Order Balances",
     "contractor": "Contractor Balances",
-    "woSummary": "WO Material Summary"
+    "woSummary": "WO Material Summary",
+    "advanced": "Advanced Reports"
   },
   "columns": {
     "warehouse": "Warehouse",
@@ -36,7 +37,22 @@
   "advanced": {
     "title": "Advanced Reports",
     "description": "Trend analysis, cost breakdowns, and forecasting are available with the advanced reports feature.",
-    "lockedMessage": "Advanced reports (trend analysis, cost breakdowns, forecasting) require a higher plan"
+    "lockedMessage": "Advanced reports (trend analysis, cost breakdowns, forecasting) require a higher plan",
+    "trendTitle": "Trend Analysis",
+    "costTitle": "Cost Breakdown",
+    "forecastTitle": "Forecasting",
+    "receipt": "Receipt",
+    "issue": "Issue",
+    "usage": "Usage",
+    "transfer": "Transfer",
+    "return": "Return",
+    "adjustment": "Adjustment",
+    "totalQty": "total qty",
+    "issuedUsed": "Issued / Used",
+    "avgMonthlyUsage": "Avg. Monthly Usage",
+    "noData": "No movement data available for analysis.",
+    "costNote": "Cost values will be shown here once unit cost data is added to materials.",
+    "forecastNote": "Forecast based on average monthly usage over the last 3 months."
   },
   "exportTooltip": "Export to CSV"
 }
