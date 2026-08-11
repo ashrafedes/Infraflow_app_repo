@@ -1,6 +1,8 @@
 import { useRef, useCallback, type ReactNode } from 'react'
 import DataGrid, {
   type Column,
+  type CellClickArgs,
+  type CellMouseEvent,
   type RenderCellProps,
   type RenderEditCellProps,
   textEditor,
@@ -92,8 +94,17 @@ export function Datasheet<R>({
   )
 
   const handleCellClick = useCallback(
-    (args: { row: R }) => {
+    (args: CellClickArgs<R, unknown>, event: CellMouseEvent) => {
       onRowSelect?.(args.row)
+      const isEditable =
+        args.column.renderEditCell != null &&
+        (typeof args.column.editable === 'function'
+          ? args.column.editable(args.row) !== false
+          : args.column.editable !== false)
+      if (isEditable) {
+        args.selectCell(true)
+        event.preventGridDefault()
+      }
     },
     [onRowSelect]
   )

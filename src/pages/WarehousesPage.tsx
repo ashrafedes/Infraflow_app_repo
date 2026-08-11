@@ -230,7 +230,19 @@ export function WarehousesPage() {
     { key: 'code', name: 'Code', width: 120, resizable: true, editable: true, renderEditCell: textCellEditor<WarehouseRow>(), cellClass: 'font-medium' },
     { key: 'name', name: 'Name', width: 240, resizable: true, editable: true, renderEditCell: textCellEditor<WarehouseRow>() },
     { key: 'warehouse_type', name: 'Type', width: 90, editable: true, renderEditCell: selectEditor<WarehouseRow>(TYPE_OPTIONS), renderCell: selectCell<WarehouseRow>(TYPE_OPTIONS) },
-    { key: 'work_location_id', name: 'Work Location', width: 220, resizable: true, ...comboboxEditor<WarehouseRow>(locationItems, locationLabel) },
+    {
+      key: 'work_location_id',
+      name: 'Work Location',
+      width: 220,
+      resizable: true,
+      editable: (row) => row.warehouse_type === 'sub',
+      ...comboboxEditor<WarehouseRow>(locationItems, locationLabel),
+      renderCell: ({ row }: RenderCellProps<WarehouseRow>) => {
+        if (row.warehouse_type !== 'sub') return <span className="text-gray-300">—</span>
+        if (!row.work_location_id) return <span className="text-gray-400">Select…</span>
+        return <>{locationLabel(row.work_location_id)}</>
+      },
+    },
     { key: 'is_active', name: 'Active', width: 70, renderCell: checkboxCell<WarehouseRow>() },
     {
       key: '_actions', name: '', width: 50, sortable: false, resizable: false,
