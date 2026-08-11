@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -100,12 +100,12 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="fixed top-0 inset-x-0 z-50 h-14 border-b border-gray-200 bg-white px-4 shadow-sm">
         <div className="flex h-full items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-gray-900">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-white">
               <img src="/logo.png" alt="InfraFlow" className="h-full w-full object-contain" />
             </div>
             <span className="text-lg font-bold text-gray-900">InfraFlow</span>
-          </div>
+          </Link>
 
           {/* User actions */}
           <div className="flex items-center gap-2">
