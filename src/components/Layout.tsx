@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, FolderKanban, MapPin, Warehouse, Package,
   Truck, HardHat, ClipboardList, ArrowLeftRight, FileBarChart,
-  Users, LogOut, Boxes, Building2, CreditCard, Settings,
+  Users, LogOut, Building2, CreditCard, Settings,
   ScrollText, FileUp, Languages,
 } from 'lucide-react'
 
@@ -101,7 +101,9 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="flex h-full items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <Boxes className="h-6 w-6 text-brand-600" />
+            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-gray-900">
+              <img src="/logo.png" alt="InfraFlow" className="h-full w-full object-contain" />
+            </div>
             <span className="text-lg font-bold text-gray-900">InfraFlow</span>
           </div>
 
