@@ -26,5 +26,17 @@
   "language": {
     "toggle": "العربية",
     "label": "Language"
+  },
+  "sections": {
+    "main": "Main",
+    "projects": "Projects & Locations",
+    "inventory": "Inventory",
+    "administration": "Administration",
+    "platform": "Platform"
+  },
+  "sidebar": {
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "closeMenu": "Close menu"
   }
 }

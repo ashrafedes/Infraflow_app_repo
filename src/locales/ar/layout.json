@@ -1,30 +1,42 @@
 {
   "nav": {
-    "dashboard": "Dashboard",
-    "workOrders": "Work Orders",
-    "movements": "Movements",
-    "reports": "Reports",
-    "projects": "Projects",
-    "workLocations": "Work Locations",
-    "warehouses": "Warehouses",
-    "materials": "Materials",
-    "suppliers": "Suppliers",
-    "contractors": "Contractors",
-    "users": "Users",
-    "subscription": "Subscription",
-    "companies": "Companies",
-    "subscriptions": "Subscriptions",
-    "plansFeatures": "Plans & Features",
-    "auditLog": "Audit Log",
-    "upgradeRequests": "Upgrade Requests"
+    "dashboard": "لوحة التحكم",
+    "workOrders": "أوامر العمل",
+    "movements": "الحركات",
+    "reports": "التقارير",
+    "projects": "المشاريع",
+    "workLocations": "مواقع العمل",
+    "warehouses": "المخازن",
+    "materials": "المواد",
+    "suppliers": "الموردون",
+    "contractors": "المقاولون",
+    "users": "المستخدمون",
+    "subscription": "الاشتراك",
+    "companies": "الشركات",
+    "subscriptions": "الاشتراكات",
+    "plansFeatures": "الباقات والميزات",
+    "auditLog": "سجل التدقيق",
+    "upgradeRequests": "طلبات الترقية"
   },
   "user": {
-    "superAdmin": "Super Admin",
-    "platformAdmin": "Platform Administrator",
-    "signOut": "Sign Out"
+    "superAdmin": "مدير النظام",
+    "platformAdmin": "مدير المنصة",
+    "signOut": "تسجيل الخروج"
   },
   "language": {
-    "toggle": "العربية",
-    "label": "Language"
+    "toggle": "English",
+    "label": "اللغة"
+  },
+  "sections": {
+    "main": "الرئيسية",
+    "projects": "المشاريع والمواقع",
+    "inventory": "المخزون",
+    "administration": "الإدارة",
+    "platform": "المنصة"
+  },
+  "sidebar": {
+    "expand": "توسيع",
+    "collapse": "طي",
+    "closeMenu": "إغلاق القائمة"
   }
 }
