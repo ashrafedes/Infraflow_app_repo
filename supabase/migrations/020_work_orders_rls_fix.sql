@@ -28,3 +28,20 @@ CREATE POLICY projects_select ON projects
 DROP POLICY IF EXISTS work_locations_select ON work_locations;
 CREATE POLICY work_locations_select ON work_locations
     FOR SELECT USING (company_id = public.company_id());
+
+-- WORK_ORDER_BOQ — all company members can view and edit BOQ items
+DROP POLICY IF EXISTS boq_select ON work_order_boq;
+CREATE POLICY boq_select ON work_order_boq
+    FOR SELECT USING (company_id = public.company_id());
+
+DROP POLICY IF EXISTS boq_insert ON work_order_boq;
+CREATE POLICY boq_insert ON work_order_boq
+    FOR INSERT WITH CHECK (company_id = public.company_id());
+
+DROP POLICY IF EXISTS boq_update ON work_order_boq;
+CREATE POLICY boq_update ON work_order_boq
+    FOR UPDATE USING (company_id = public.company_id());
+
+DROP POLICY IF EXISTS boq_delete ON work_order_boq;
+CREATE POLICY boq_delete ON work_order_boq
+    FOR DELETE USING (company_id = public.company_id());
