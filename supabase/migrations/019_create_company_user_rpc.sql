@@ -132,7 +132,7 @@ BEGIN
         jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email')),
         jsonb_build_object('full_name', p_full_name),
         now(), now(),
-        '', false, false,
+        NULL, false, false,
         '', '', '',
         '', 0,
         ''
