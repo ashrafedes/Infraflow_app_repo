@@ -118,6 +118,7 @@ BEGIN
         raw_app_meta_data, raw_user_meta_data,
         created_at, updated_at,
         phone, is_sso_user, is_anonymous,
+        confirmation_token, recovery_token, email_change_token_new,
         email_change, phone_change, phone_change_token,
         email_change_token_current, email_change_confirm_status,
         reauthentication_token
@@ -130,9 +131,16 @@ BEGIN
         crypt(v_temp_password, gen_salt('bf')),
         now(),
         jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email')),
-        jsonb_build_object('full_name', p_full_name),
+        jsonb_build_object(
+            'sub', v_new_user_id::text,
+            'email', p_email,
+            'full_name', p_full_name,
+            'email_verified', true,
+            'phone_verified', false
+        ),
         now(), now(),
         NULL, false, false,
+        '', '', '',
         '', '', '',
         '', 0,
         ''
@@ -148,7 +156,9 @@ BEGIN
         jsonb_build_object(
             'sub', v_new_user_id::text,
             'email', p_email,
-            'email_verified', true
+            'full_name', p_full_name,
+            'email_verified', true,
+            'phone_verified', false
         ),
         'email',
         now(), now(), now()
