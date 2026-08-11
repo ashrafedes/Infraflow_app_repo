@@ -59,6 +59,7 @@ export function SearchableCombobox({
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({})
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Compute dropdown position relative to viewport for portal rendering
   useLayoutEffect(() => {
@@ -95,7 +96,11 @@ export function SearchableCombobox({
   useEffect(() => {
     if (!open) return
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node
+      if (
+        containerRef.current && !containerRef.current.contains(target) &&
+        dropdownRef.current && !dropdownRef.current.contains(target)
+      ) {
         setOpen(false)
         setQuery('')
       }
@@ -198,6 +203,7 @@ export function SearchableCombobox({
 
       {open && createPortal(
         <div
+          ref={dropdownRef}
           style={dropdownStyle}
           className="max-h-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
         >

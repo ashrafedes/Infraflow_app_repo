@@ -112,7 +112,11 @@ export function NewMovementPage() {
     [warehouses]
   )
   const workOrderItems: ComboboxItem[] = useMemo(
-    () => workOrders.map((w) => ({ id: w.id, label: w.work_order_number, subLabel: w.site_code ?? w.project_name })),
+    () => workOrders.map((w) => ({
+      id: w.id,
+      label: w.work_order_number,
+      subLabel: [w.site_code, w.subclass].filter(Boolean).join(' · ') || w.project_name,
+    })),
     [workOrders]
   )
   const supplierItems: ComboboxItem[] = useMemo(
