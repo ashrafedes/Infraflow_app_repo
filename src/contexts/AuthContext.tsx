@@ -124,6 +124,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut()
     setProfile(null)
+    setIsSuperAdmin(false)
+    setUser(null)
+    setSession(null)
   }
 
   const needsCompanySetup = !isSuperAdmin && !profile?.company_id

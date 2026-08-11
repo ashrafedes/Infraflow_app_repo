@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { PageHeader, LoadingSpinner, Alert, Modal } from '@/components/ui'
 import { formatDate, formatDateTime } from '@/lib/utils'
+import { RefreshCw } from 'lucide-react'
 import type { Subscription, SubscriptionPlan, SubscriptionAuditLog } from '@/types'
 
 interface SubWithDetails extends Subscription {
@@ -28,7 +29,11 @@ export function SuperAdminSubscriptions() {
     max_users_override: false,
     max_users: '',
     suspended_reason: '',
+    current_period_end: '',
   })
+  const [renewSub, setRenewSub] = useState<SubWithDetails | null>(null)
+  const [renewYears, setRenewYears] = useState(1)
+  const [renewing, setRenewing] = useState(false)
 
   const fetchData = async () => {
     setLoading(true)
@@ -68,6 +73,7 @@ export function SuperAdminSubscriptions() {
       max_users_override: s.max_users_override,
       max_users: s.max_users?.toString() ?? '',
       suspended_reason: s.suspended_reason ?? '',
+      current_period_end: s.current_period_end ? s.current_period_end.slice(0, 10) : '',
     })
   }
 
@@ -88,6 +94,13 @@ export function SuperAdminSubscriptions() {
     } else {
       updates.suspended_at = null
       updates.suspended_reason = null
+    }
+
+    // Period end — only for active subscriptions
+    if (editForm.status === 'active') {
+      updates.current_period_end = editForm.current_period_end
+        ? new Date(editForm.current_period_end).toISOString()
+        : null
     }
 
     const oldPlan = plans.find(p => p.id === editSub.plan_id)
@@ -134,6 +147,61 @@ export function SuperAdminSubscriptions() {
     setAuditLog((data ?? []) as SubscriptionAuditLog[])
   }
 
+  const handleRenew = async () => {
+    if (!renewSub) return
+    setRenewing(true)
+    setError(null)
+
+    // Compute new period end:
+    // If current_period_end is in the future, extend from it.
+    // If it's in the past or null, extend from now.
+    const now = new Date()
+    const currentEnd = renewSub.current_period_end ? new Date(renewSub.current_period_end) : null
+    const baseDate = currentEnd && currentEnd > now ? currentEnd : now
+    const newEnd = new Date(baseDate)
+    newEnd.setFullYear(newEnd.getFullYear() + renewYears)
+
+    const updates: Record<string, unknown> = {
+      current_period_end: newEnd.toISOString(),
+      status: 'active',
+      suspended_at: null,
+      suspended_reason: null,
+    }
+
+    // If period_start is null, set it to now
+    if (!renewSub.current_period_start) {
+      updates.current_period_start = now.toISOString()
+    }
+
+    const { error: updateErr } = await supabase
+      .from('subscriptions')
+      .update(updates)
+      .eq('id', renewSub.id)
+
+    if (updateErr) { setError(updateErr.message); setRenewing(false); return }
+
+    // Audit log
+    await supabase.from('subscription_audit_log').insert({
+      company_id: renewSub.company_id,
+      action: 'renewed',
+      old_value: {
+        current_period_end: renewSub.current_period_end,
+        status: renewSub.status,
+      },
+      new_value: {
+        current_period_end: newEnd.toISOString(),
+        years: renewYears,
+        status: 'active',
+      },
+      performed_by: user?.id ?? null,
+    })
+
+    setRenewing(false)
+    setRenewSub(null)
+    setRenewYears(1)
+    fetchData()
+  }
+
   if (loading) return <LoadingSpinner />
 
   return (
@@ -150,6 +218,7 @@ export function SuperAdminSubscriptions() {
               <th>{t('subscriptions.columns.status')}</th>
               <th>{t('subscriptions.columns.maxUsers')}</th>
               <th>{t('subscriptions.columns.trialEnds')}</th>
+              <th>{t('subscription:currentPeriodEnds')}</th>
               <th>{t('subscriptions.columns.created')}</th>
               <th className="text-right">{t('subscriptions.columns.actions')}</th>
             </tr>
@@ -170,9 +239,18 @@ export function SuperAdminSubscriptions() {
                   {s.max_users_override ? `${s.max_users} (${t('subscriptions.override')})` : `${plans.find(p => p.id === s.plan_id)?.default_max_users ?? '—'} (${t('subscriptions.plan')})`}
                 </td>
                 <td>{s.trial_ends_at ? formatDate(s.trial_ends_at) : '—'}</td>
+                <td>{s.current_period_end ? formatDate(s.current_period_end) : '—'}</td>
                 <td>{formatDate(s.created_at)}</td>
                 <td className="text-right whitespace-nowrap">
                   <button onClick={() => handleEdit(s)} className="btn btn-secondary btn-sm mr-2">{t('common:buttons.edit')}</button>
+                  <button
+                    onClick={() => { setRenewSub(s); setRenewYears(1) }}
+                    className="btn btn-primary btn-sm mr-2"
+                    title={t('subscriptions.renew')}
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    {t('subscriptions.renew')}
+                  </button>
                   <button onClick={() => handleViewAudit(s)} className="btn btn-secondary btn-sm">{t('common:buttons.audit')}</button>
                 </td>
               </tr>
@@ -208,6 +286,17 @@ export function SuperAdminSubscriptions() {
               <option value="cancelled">{t('common:status.cancelled')}</option>
             </select>
           </div>
+          {editForm.status === 'active' && (
+            <div>
+              <label className="label">{t('subscription:currentPeriodEnds')}</label>
+              <input
+                type="date"
+                value={editForm.current_period_end}
+                onChange={e => setEditForm({ ...editForm, current_period_end: e.target.value })}
+                className="input"
+              />
+            </div>
+          )}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -245,6 +334,59 @@ export function SuperAdminSubscriptions() {
           <div className="flex justify-end gap-3">
             <button onClick={() => setEditSub(null)} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
             <button onClick={handleSave} className="btn btn-primary">{t('common:buttons.save')}</button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Renew Modal */}
+      <Modal open={!!renewSub} onClose={() => setRenewSub(null)} title={t('subscriptions.modal.renewTitle')} size="md">
+        <div className="space-y-4">
+          <div className="rounded-lg bg-gray-50 p-3 text-sm">
+            <div className="flex justify-between mb-1">
+              <span className="text-gray-500">{t('subscriptions.columns.company')}</span>
+              <span className="font-medium">{renewSub?.company_name ?? '—'}</span>
+            </div>
+            <div className="flex justify-between mb-1">
+              <span className="text-gray-500">{t('subscriptions.columns.plan')}</span>
+              <span className="font-medium">{renewSub?.plan_name ?? '—'}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-500">{t('subscription:currentPeriodEnds')}</span>
+              <span className="font-medium">{renewSub?.current_period_end ? formatDate(renewSub.current_period_end) : '—'}</span>
+            </div>
+          </div>
+          <div>
+            <label className="label">{t('subscriptions.renewYears')}</label>
+            <select
+              value={renewYears}
+              onChange={e => setRenewYears(parseInt(e.target.value))}
+              className="input"
+            >
+              <option value={1}>1 {t('subscriptions.year')}</option>
+              <option value={2}>2 {t('subscriptions.years')}</option>
+              <option value={3}>3 {t('subscriptions.years')}</option>
+              <option value={5}>5 {t('subscriptions.years')}</option>
+            </select>
+          </div>
+          <div className="rounded-lg bg-brand-50 p-3 text-sm text-brand-800">
+            {t('subscriptions.renewPreview', {
+              date: (() => {
+                const now = new Date()
+                const currentEnd = renewSub?.current_period_end ? new Date(renewSub.current_period_end) : null
+                const baseDate = currentEnd && currentEnd > now ? currentEnd : now
+                const newEnd = new Date(baseDate)
+                newEnd.setFullYear(newEnd.getFullYear() + renewYears)
+                return formatDate(newEnd.toISOString())
+              })(),
+            })}
+          </div>
+          {error && <Alert type="error" message={error} />}
+          <div className="flex justify-end gap-3">
+            <button onClick={() => setRenewSub(null)} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
+            <button onClick={handleRenew} disabled={renewing} className="btn btn-primary">
+              <RefreshCw className="h-4 w-4" />
+              {renewing ? t('subscriptions.renewing') : t('subscriptions.renew')}
+            </button>
           </div>
         </div>
       </Modal>

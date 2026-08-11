@@ -86,7 +86,20 @@ export function SuperAdminDashboard() {
       if (kpiRes.error) {
         setError(kpiRes.error.message)
       } else if (kpiRes.data) {
-        setKpis(kpiRes.data as PlatformKpis)
+        const data = kpiRes.data as Partial<PlatformKpis>
+        // Ensure arrays exist to prevent crashes if RPC returns incomplete data
+        setKpis({
+          total_companies: data.total_companies ?? 0,
+          active_companies: data.active_companies ?? 0,
+          free_trials: data.free_trials ?? 0,
+          basic_companies: data.basic_companies ?? 0,
+          premium_companies: data.premium_companies ?? 0,
+          suspended_companies: data.suspended_companies ?? 0,
+          expiring_trials: data.expiring_trials ?? 0,
+          total_active_users: data.total_active_users ?? 0,
+          companies_near_user_limit: data.companies_near_user_limit ?? [],
+          recent_subscription_changes: data.recent_subscription_changes ?? [],
+        })
       }
       setPendingUpgrades(reqRes.count ?? 0)
       setLoading(false)

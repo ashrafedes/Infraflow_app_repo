@@ -147,11 +147,18 @@
     },
     "modal": {
       "auditTitle": "Subscription Audit Log",
-      "editTitle": "Edit Subscription"
+      "editTitle": "Edit Subscription",
+      "renewTitle": "Renew Subscription"
     },
     "override": "(override)",
     "overrideMaxUsers": "Override max users",
     "plan": "Plan",
+    "renew": "Renew",
+    "renewing": "Renewing...",
+    "renewYears": "Number of years",
+    "year": "year",
+    "years": "years",
+    "renewPreview": "New expiration date: {{date}}",
     "suspensionReason": "Suspension Reason",
     "suspensionReasonPlaceholder": "Enter suspension reason..."
   },

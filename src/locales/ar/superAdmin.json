@@ -147,11 +147,18 @@
     },
     "modal": {
       "auditTitle": "سجل تدقيق الاشتراك",
-      "editTitle": "تعديل الاشتراك"
+      "editTitle": "تعديل الاشتراك",
+      "renewTitle": "تجديد الاشتراك"
     },
     "override": "(تجاوز)",
     "overrideMaxUsers": "تجاوز الحد الأقصى للمستخدمين",
     "plan": "الباقة",
+    "renew": "تجديد",
+    "renewing": "جارٍ التجديد...",
+    "renewYears": "عدد السنوات",
+    "year": "سنة",
+    "years": "سنوات",
+    "renewPreview": "تاريخ الانتهاء الجديد: {{date}}",
     "suspensionReason": "سبب الإيقاف",
     "suspensionReasonPlaceholder": "أدخل سبب الإيقاف..."
   },
