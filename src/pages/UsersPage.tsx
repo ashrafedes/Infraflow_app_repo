@@ -144,7 +144,7 @@ export function UsersPage() {
   }, [])
 
   // ============================================================================
-  // Create User (Edge Function — preserved)
+  // Create User (RPC — replaces Edge Function to avoid CORS issues)
   // ============================================================================
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -153,30 +153,29 @@ export function UsersPage() {
     setCreating(true)
 
     try {
-      const { data: sessionData } = await supabase.auth.getSession()
-      const token = sessionData.session?.access_token
-      if (!token) throw new Error('No auth session')
+      const { data, error: rpcError } = await supabase.rpc('create_company_user', {
+        p_email: createForm.email,
+        p_full_name: createForm.full_name,
+        p_role: createForm.role,
+      })
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-company-user`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            full_name: createForm.full_name,
-            email: createForm.email,
-            role: createForm.role,
-          }),
-        }
+      if (rpcError) throw new Error(rpcError.message)
+
+      const result = data as { success: boolean; user_id: string; error: string | null }
+      if (!result.success) throw new Error(result.error || 'Failed to create user')
+
+      // Send password setup email via Supabase Auth (client-side, no CORS issue)
+      const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
+        createForm.email,
+        { redirectTo: `${window.location.origin}/` }
       )
 
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'Failed to create user')
-
-      setSuccess(`User created. Password setup email sent to ${createForm.email}.`)
+      if (resetErr) {
+        // User was created but email failed — still report success with a note
+        setSuccess(`User created. Password setup email could not be sent (${resetErr.message}). Please ask the user to use "Forgot Password".`)
+      } else {
+        setSuccess(`User created. Password setup email sent to ${createForm.email}.`)
+      }
       setCreateModalOpen(false)
       setCreateForm({ full_name: '', email: '', role: 'warehouse_man' })
       fetchData()
