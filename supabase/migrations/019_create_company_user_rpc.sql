@@ -36,6 +36,7 @@ CREATE OR REPLACE FUNCTION public.create_company_user(
     p_email     TEXT,
     p_full_name TEXT,
     p_role      TEXT,
+    p_password  TEXT DEFAULT NULL,
     p_scopes    JSONB DEFAULT NULL
 )
 RETURNS JSONB
@@ -51,7 +52,6 @@ DECLARE
     v_max_users        INTEGER;
     v_active_count     INTEGER;
     v_new_user_id      UUID;
-    v_temp_password    TEXT;
     v_scope_row        RECORD;
 BEGIN
     -- Get caller identity
@@ -89,6 +89,11 @@ BEGIN
         RETURN jsonb_build_object('success', false, 'error', 'Invalid role');
     END IF;
 
+    -- Validate password (admin sets it, min 8 chars)
+    IF p_password IS NULL OR length(p_password) < 8 THEN
+        RETURN jsonb_build_object('success', false, 'error', 'Password must be at least 8 characters');
+    END IF;
+
     -- Check for duplicate email in auth.users
     IF EXISTS (SELECT 1 FROM auth.users WHERE email = p_email AND deleted_at IS NULL) THEN
         RETURN jsonb_build_object('success', false, 'error', 'A user with this email already exists');
@@ -107,11 +112,9 @@ BEGIN
         );
     END IF;
 
-    -- Generate a random temporary password (32 chars)
-    v_temp_password := encode(gen_random_bytes(24), 'base64');
     v_new_user_id := gen_random_uuid();
 
-    -- Insert into auth.users
+    -- Insert into auth.users (password hashed with bcrypt)
     INSERT INTO auth.users (
         instance_id, id, aud, role, email,
         encrypted_password, email_confirmed_at,
@@ -128,7 +131,7 @@ BEGIN
         'authenticated',
         'authenticated',
         p_email,
-        crypt(v_temp_password, gen_salt('bf')),
+        crypt(p_password, gen_salt('bf')),
         now(),
         jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email')),
         jsonb_build_object(

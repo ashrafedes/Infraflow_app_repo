@@ -76,7 +76,7 @@ export function UsersPage() {
   // Create User modal (controlled — calls Edge Function)
   const [createModalOpen, setCreateModalOpen] = useState(false)
   const [creating, setCreating] = useState(false)
-  const [createForm, setCreateForm] = useState({ full_name: '', email: '', role: 'warehouse_man' as UserRole })
+  const [createForm, setCreateForm] = useState({ full_name: '', email: '', role: 'warehouse_man' as UserRole, password: '' })
 
   // SideDrawer for user detail + scope management
   const [drawerUser, setDrawerUser] = useState<UserProfile | null>(null)
@@ -144,7 +144,7 @@ export function UsersPage() {
   }, [])
 
   // ============================================================================
-  // Create User (RPC — replaces Edge Function to avoid CORS issues)
+  // Create User (RPC — admin sets initial password)
   // ============================================================================
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -157,6 +157,7 @@ export function UsersPage() {
         p_email: createForm.email,
         p_full_name: createForm.full_name,
         p_role: createForm.role,
+        p_password: createForm.password,
       })
 
       if (rpcError) throw new Error(rpcError.message)
@@ -164,20 +165,9 @@ export function UsersPage() {
       const result = data as { success: boolean; user_id: string; error: string | null }
       if (!result.success) throw new Error(result.error || 'Failed to create user')
 
-      // Send password setup email via Supabase Auth (client-side, no CORS issue)
-      const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
-        createForm.email,
-        { redirectTo: `${window.location.origin}/` }
-      )
-
-      if (resetErr) {
-        // User was created but email failed — still report success with a note
-        setSuccess(`User created. Password setup email could not be sent (${resetErr.message}). Please ask the user to use "Forgot Password".`)
-      } else {
-        setSuccess(`User created. Password setup email sent to ${createForm.email}.`)
-      }
+      setSuccess(`User "${createForm.full_name}" created. Share the password with the user so they can log in. They can change it after signing in.`)
       setCreateModalOpen(false)
-      setCreateForm({ full_name: '', email: '', role: 'warehouse_man' })
+      setCreateForm({ full_name: '', email: '', role: 'warehouse_man', password: '' })
       fetchData()
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Failed to create user'
@@ -399,7 +389,7 @@ export function UsersPage() {
         />
       </div>
 
-      {/* Create User Modal (controlled — Edge Function) */}
+      {/* Create User Modal (controlled — RPC) */}
       <Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} title="Add User">
         <form onSubmit={handleCreate} className="space-y-4">
           <div>
@@ -416,9 +406,13 @@ export function UsersPage() {
               {Object.entries(roleLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
             </select>
           </div>
-          <p className="text-xs text-gray-500">
-            A temporary password will be generated and a password setup email will be sent to the user.
-          </p>
+          <div>
+            <label className="label">Initial Password</label>
+            <input type="text" value={createForm.password} onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })} className="input" required minLength={8} placeholder="Min 8 characters" />
+            <p className="text-xs text-gray-500 mt-1">
+              Set an initial password and share it with the user (in person, phone, or your own email). The user can change it after logging in.
+            </p>
+          </div>
           {error && <Alert type="error" message={error} />}
           <div className="flex justify-end gap-3">
             <button type="button" onClick={() => setCreateModalOpen(false)} className="btn btn-secondary">Cancel</button>
