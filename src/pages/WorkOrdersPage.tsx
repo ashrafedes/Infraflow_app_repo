@@ -34,6 +34,7 @@ export function WorkOrdersPage() {
   const [materials, setMaterials] = useState<Material[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [projectFilter, setProjectFilter] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -183,16 +184,22 @@ export function WorkOrdersPage() {
   }, [isDirty, rows, saveHeader])
 
   const filteredRows = useMemo(() => {
-    if (!search.trim()) return rows
-    const q = search.toLowerCase()
-    return rows.filter(
-      (r) =>
-        r.work_order_number.toLowerCase().includes(q) ||
-        (r.site_code ?? '').toLowerCase().includes(q) ||
-        (r.project_name ?? '').toLowerCase().includes(q) ||
-        (r.work_location_name ?? '').toLowerCase().includes(q)
-    )
-  }, [rows, search])
+    let result = rows
+    if (projectFilter) {
+      result = result.filter((r) => r.project_id === projectFilter)
+    }
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter(
+        (r) =>
+          r.work_order_number.toLowerCase().includes(q) ||
+          (r.site_code ?? '').toLowerCase().includes(q) ||
+          (r.project_name ?? '').toLowerCase().includes(q) ||
+          (r.work_location_name ?? '').toLowerCase().includes(q)
+      )
+    }
+    return result
+  }, [rows, search, projectFilter])
 
   if (loading) return <LoadingSpinner />
 
@@ -219,6 +226,16 @@ export function WorkOrdersPage() {
               placeholder="Search work orders..."
               className="input pl-10"
             />
+          </div>
+          <div className="mb-3">
+            <select
+              value={projectFilter}
+              onChange={(e) => setProjectFilter(e.target.value)}
+              className="input"
+            >
+              <option value="">All Projects</option>
+              {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
           </div>
           <div ref={listRef} className="card flex-1 overflow-y-auto p-0">
             {filteredRows.length === 0 ? (
