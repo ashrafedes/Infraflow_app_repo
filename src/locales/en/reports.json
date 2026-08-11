@@ -1,0 +1,40 @@
+{
+  "title": "Reports",
+  "subtitle": "Inventory balances and material summaries — click column headers to sort",
+  "search": "Search...",
+  "tabs": {
+    "warehouse": "Warehouse Stock",
+    "workOrder": "Work Order Balances",
+    "contractor": "Contractor Balances",
+    "woSummary": "WO Material Summary"
+  },
+  "columns": {
+    "warehouse": "Warehouse",
+    "itemNumber": "Item #",
+    "description": "Description",
+    "uom": "UOM",
+    "received": "Received",
+    "issued": "Issued",
+    "balance": "Balance",
+    "onHand": "On-Hand",
+    "consumed": "Consumed",
+    "contractorName": "Contractor",
+    "transferredIn": "Transferred In",
+    "returned": "Returned",
+    "woNumber": "WO #",
+    "boq": "BOQ",
+    "issuedQty": "Issued",
+    "remaining": "On-Hand"
+  },
+  "empty": {
+    "warehouse": "No warehouse stock data",
+    "workOrder": "No work order balance data",
+    "contractor": "No contractor balance data",
+    "woSummary": "No WO material summary data"
+  },
+  "advanced": {
+    "title": "Advanced Reports",
+    "description": "Trend analysis, cost breakdowns, and forecasting are available with the advanced reports feature.",
+    "lockedMessage": "Advanced reports (trend analysis, cost breakdowns, forecasting) require a higher plan"
+  }
+}

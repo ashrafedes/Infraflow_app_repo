@@ -1,0 +1,30 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "workOrders": "Work Orders",
+    "movements": "Movements",
+    "reports": "Reports",
+    "projects": "Projects",
+    "workLocations": "Work Locations",
+    "warehouses": "Warehouses",
+    "materials": "Materials",
+    "suppliers": "Suppliers",
+    "contractors": "Contractors",
+    "users": "Users",
+    "subscription": "Subscription",
+    "companies": "Companies",
+    "subscriptions": "Subscriptions",
+    "plansFeatures": "Plans & Features",
+    "auditLog": "Audit Log",
+    "upgradeRequests": "Upgrade Requests"
+  },
+  "user": {
+    "superAdmin": "Super Admin",
+    "platformAdmin": "Platform Administrator",
+    "signOut": "Sign Out"
+  },
+  "language": {
+    "toggle": "العربية",
+    "label": "Language"
+  }
+}

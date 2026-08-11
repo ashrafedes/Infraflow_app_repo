@@ -1,0 +1,49 @@
+{
+  "title": "Users",
+  "subtitle": "Manage users and roles — inline editing, Ctrl+N for new user, click name for scopes",
+  "columns": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "active": "Active",
+    "created": "Created"
+  },
+  "buttons": {
+    "addUser": "Add User",
+    "saveAll": "Save All",
+    "deleteUser": "Delete user"
+  },
+  "create": {
+    "title": "Add User",
+    "fullName": "Full Name",
+    "email": "Email",
+    "role": "Role",
+    "passwordHint": "A temporary password will be generated and a password setup email will be sent to the user.",
+    "creating": "Creating...",
+    "createUser": "Create User",
+    "success": "User created. Password setup email sent to {{email}}."
+  },
+  "drawer": {
+    "userDetails": "User Details",
+    "scopeAssignments": "Scope Assignments",
+    "scopeDescription": "Control which data this user can access.",
+    "scopeType": "Scope Type",
+    "entity": "Entity",
+    "addScope": "Add Scope",
+    "noScopes": "No scope assignments yet.",
+    "scopeLabels": {
+      "warehouse": "Warehouse",
+      "workOrder": "Work Order",
+      "project": "Project",
+      "workLocation": "Work Location",
+      "deleted": "(deleted)"
+    }
+  },
+  "delete": {
+    "title": "Delete User",
+    "message": "Are you sure? This will remove the user and all their scope assignments."
+  },
+  "empty": "No users found. Click Add User to create one.",
+  "saved": "{{count}} user(s) updated",
+  "limitReached": "User limit reached ({{active}}/{{max}})"
+}

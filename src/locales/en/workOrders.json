@@ -1,0 +1,75 @@
+{
+  "title": "Work Orders",
+  "subtitle": "Master-detail — select a WO to edit header + BOQ. Ctrl+N for new, Ctrl+S to save.",
+  "search": "Search work orders...",
+  "columns": {
+    "woNumber": "WO Number",
+    "site": "Site",
+    "project": "Project",
+    "location": "Location",
+    "supervisor": "Supervisor",
+    "status": "Status",
+    "start": "Start"
+  },
+  "detail": {
+    "woNumber": "WO Number",
+    "siteCode": "Site Code",
+    "project": "Project",
+    "workLocation": "Work Location",
+    "supervisor": "Supervisor",
+    "contractor": "Contractor",
+    "status": "Status",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "saveHeader": "Save Header",
+    "deleteWo": "Delete WO"
+  },
+  "boq": {
+    "title": "Bill of Quantities",
+    "item": "Item",
+    "description": "Description",
+    "uom": "UOM",
+    "estQty": "Est. Qty",
+    "addLine": "Add Line",
+    "paste": "Paste",
+    "save": "Save",
+    "deleteLine": "Delete line",
+    "empty": "No BOQ items. Press Ctrl+N or Add Line to start.",
+    "saved": "{{count}} line(s) saved",
+    "pasted": "{{count}} line(s) pasted — review and Save",
+    "materialRequired": "Each line must have a material selected",
+    "qtyRequired": "Quantity must be greater than 0",
+    "duplicateMaterial": "Duplicate material: {{item}}. Each material can only appear once per work order.",
+    "removeTitle": "Remove BOQ Item",
+    "removeMessage": "Remove this material from the BOQ?"
+  },
+  "create": {
+    "title": "Add Work Order",
+    "woNumber": "WO Number",
+    "siteCode": "Site Code",
+    "project": "Project",
+    "workLocation": "Work Location",
+    "supervisor": "Supervisor",
+    "contractor": "Contractor",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "statusDefault": "Status defaults to \"Active\". You can change it later from the detail panel.",
+    "selectProject": "Select project...",
+    "selectLocation": "Select location...",
+    "noContractor": "No contractor"
+  },
+  "delete": {
+    "title": "Delete Work Order",
+    "message": "Are you sure? This will also delete associated BOQ items."
+  },
+  "empty": {
+    "noWorkOrders": "No work orders found",
+    "selectOrCreate": "Select a work order from the list, or create a new one."
+  },
+  "errors": {
+    "woNumberRequired": "WO Number is required",
+    "projectRequired": "Project is required",
+    "locationRequired": "Work Location is required",
+    "supervisorRequired": "Supervisor is required"
+  }
+}
