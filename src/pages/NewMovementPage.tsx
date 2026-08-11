@@ -8,7 +8,7 @@ import { Datasheet, comboboxEditor, numberEditor, textCellEditor, readOnlyCell }
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges'
 import { parseClipboard, transformers, validators, type ClipboardColumnSchema } from '@/lib/clipboard'
-import { Plus, Save, Trash2, ArrowLeft, ClipboardPaste, Copy } from 'lucide-react'
+import { Plus, Save, Trash2, ArrowLeft, ClipboardPaste, Copy, ScanLine, ListChecks } from 'lucide-react'
 import type { Column } from 'react-data-grid'
 import type { MovementType, Warehouse, WorkOrder, Supplier, Contractor, Material } from '@/types'
 
@@ -221,19 +221,186 @@ export function NewMovementPage() {
   }, [])
 
   const handleRowsChange = useCallback((newRows: MovementLineRow[]) => {
-    // Auto-derive description/UOM/available when material_id changes
-    setLines(newRows.map((nr) => {
+    // Auto-derive description/UOM/available when material_id changes.
+    // Also default quantity to 1 when a material is first picked on a fresh line.
+    setLines(newRows.map((nr, idx) => {
       if (!nr.material_id) return nr
       const mat = materials.find((m) => m.id === nr.material_id)
       if (!mat) return nr
+      // Detect a "fresh" pick: previous row had no material_id, new one does,
+      // and quantity is still null. Default to 1 so the user can just press Tab.
+      const prevRow = lines[idx]
+      const wasFreshPick = prevRow && !prevRow.material_id && nr.material_id
+      const quantity = (wasFreshPick && nr.quantity == null) ? 1 : nr.quantity
       return {
         ...nr,
         short_description: mat.short_description,
         uom: mat.uom,
         available_balance: balances[nr.material_id] ?? 0,
+        quantity,
       }
     }))
-  }, [materials, balances])
+  }, [materials, balances, lines])
+
+  // ============================================================================
+  // Fill from BOQ — pre-fill movement lines from a Work Order's Bill of
+  // Quantities, using remaining = planned - already consumed/issued/...
+  // ============================================================================
+  const [boqLoading, setBoqLoading] = useState(false)
+  const [boqInfo, setBoqInfo] = useState<string | null>(null)
+
+  const fillFromBoq = useCallback(async () => {
+    // Determine the work order to read BOQ from.
+    // For ISSUE: destination WO is the consumer → read its BOQ.
+    // For USAGE: source WO is the consumer → read its BOQ.
+    const woId = movementType === 'ISSUE' ? destWorkOrderId
+      : movementType === 'USAGE' ? sourceWorkOrderId
+      : ''
+    if (!woId) {
+      setBoqInfo('Select a Work Order first to fill from its BOQ.')
+      return
+    }
+    setBoqLoading(true)
+    setBoqInfo(null)
+    try {
+      // 1. Fetch BOQ rows for this work order
+      const { data: boqRows, error: boqErr } = await supabase
+        .from('work_order_boq')
+        .select('material_id, planned_quantity, materials!inner(item_number, short_description, uom)')
+        .eq('work_order_id', woId)
+        .order('created_at')
+      if (boqErr) throw boqErr
+
+      // 2. Fetch current on-hand/consumed totals for this work order
+      const { data: balRows } = await supabase
+        .from('v_work_order_balance')
+        .select('material_id, on_hand, consumed')
+        .eq('work_order_id', woId)
+      const consumedMap: Record<string, number> = {}
+      ;(balRows ?? []).forEach((b: { material_id: string; consumed: number }) => {
+        consumedMap[b.material_id] = Number(b.consumed)
+      })
+
+      // 3. Build lines for items with remaining > 0
+      const newLines: MovementLineRow[] = []
+      ;(boqRows ?? []).forEach((r) => {
+        const planned = Number((r as { planned_quantity: number }).planned_quantity)
+        const consumed = consumedMap[r.material_id] ?? 0
+        const remaining = planned - consumed
+        if (remaining <= 0) return
+        const matJoin = ((r as unknown) as { materials?: { item_number: string; short_description: string; uom: string } }).materials
+        const mat = materials.find((m) => m.id === r.material_id)
+        newLines.push({
+          _id: nextLineId(),
+          material_id: r.material_id,
+          quantity: remaining,
+          notes: '',
+          short_description: mat?.short_description ?? matJoin?.short_description ?? '',
+          uom: mat?.uom ?? matJoin?.uom ?? '',
+          available_balance: balances[r.material_id] ?? 0,
+        })
+      })
+
+      if (newLines.length === 0) {
+        setBoqInfo('No BOQ items with remaining quantity > 0 for this work order.')
+      } else {
+        // Replace any empty lines, keep existing filled lines
+        setLines((prev) => {
+          const hasData = prev.some((l) => l.material_id || l.quantity)
+          return hasData ? [...prev, ...newLines] : newLines
+        })
+        setBoqInfo(`Added ${newLines.length} line(s) from BOQ.`)
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to load BOQ'
+      setBoqInfo(`Error: ${msg}`)
+    }
+    setBoqLoading(false)
+  }, [movementType, destWorkOrderId, sourceWorkOrderId, materials, balances])
+
+  // ============================================================================
+  // Auto-select source warehouse for ISSUE when destination WO is picked
+  // (only if the project has exactly one main warehouse)
+  // ============================================================================
+  useEffect(() => {
+    if (movementType !== 'ISSUE' || !destWorkOrderId) return
+    const wo = workOrders.find((w) => w.id === destWorkOrderId)
+    if (!wo) return
+    // Find main warehouses for this project
+    const projectMainWh = warehouses.filter(
+      (w) => w.warehouse_type === 'main' && w.is_active
+    )
+    // We don't have a direct project→warehouse link, so we use work_location
+    // as the tie-breaker: prefer a main warehouse whose work_location_id
+    // matches the WO's work_location_id; otherwise, if exactly one main
+    // warehouse exists company-wide, pick it.
+    const matchingLoc = projectMainWh.find((w) => w.work_location_id === wo.work_location_id)
+    if (matchingLoc && !sourceWarehouseId) {
+      setSourceWarehouseId(matchingLoc.id)
+    } else if (projectMainWh.length === 1 && !sourceWarehouseId) {
+      setSourceWarehouseId(projectMainWh[0].id)
+    }
+  }, [movementType, destWorkOrderId, workOrders, warehouses, sourceWarehouseId])
+
+  // ============================================================================
+  // Barcode / USB scanner input — type or scan an item_number to add a line
+  // ============================================================================
+  const [barcodeInput, setBarcodeInput] = useState('')
+  const [barcodeError, setBarcodeError] = useState<string | null>(null)
+
+  const handleBarcodeSubmit = useCallback(() => {
+    const code = barcodeInput.trim()
+    if (!code) return
+    const mat = materials.find(
+      (m) => m.item_number.toLowerCase() === code.toLowerCase() && m.is_active
+    )
+    if (!mat) {
+      setBarcodeError(`No material with item number "${code}"`)
+      return
+    }
+    setBarcodeError(null)
+    setBarcodeInput('')
+    setLines((prev) => {
+      // If the material is already in a line, just bump its quantity by 1
+      const existing = prev.find((l) => l.material_id === mat.id)
+      if (existing) {
+        return prev.map((l) => l.material_id === mat.id
+          ? { ...l, quantity: (l.quantity ?? 0) + 1 }
+          : l)
+      }
+      const newLine: MovementLineRow = {
+        _id: nextLineId(),
+        material_id: mat.id,
+        quantity: 1,
+        notes: '',
+        short_description: mat.short_description,
+        uom: mat.uom,
+        available_balance: balances[mat.id] ?? 0,
+      }
+      // Replace the last empty line if present
+      const last = prev[prev.length - 1]
+      if (last && !last.material_id && !last.quantity) {
+        return [...prev.slice(0, -1), newLine]
+      }
+      return [...prev, newLine]
+    })
+  }, [barcodeInput, materials, balances])
+
+  // ============================================================================
+  // Auto-add row on Tab/Enter from last completed line
+  // ============================================================================
+  const handleAddRow = useCallback((row: unknown, columnKey: string) => {
+    const r = row as MovementLineRow
+    // Only auto-add if the current line is "complete enough"
+    if (!r.material_id || !r.quantity || r.quantity <= 0) return false
+    // Only trigger from the last row's last editable columns
+    const isLastRow = lines[lines.length - 1]?._id === r._id
+    if (!isLastRow) return false
+    const lastEditableKeys = ['quantity', 'notes']
+    if (!lastEditableKeys.includes(columnKey)) return false
+    setLines((prev) => [...prev, emptyLine()])
+    return true
+  }, [lines])
 
   // ============================================================================
   // Dirty state + unsaved changes guard
@@ -478,12 +645,15 @@ export function NewMovementPage() {
     }
 
     // Client-side stock validation for ISSUE/USAGE/TRANSFER/RETURN
+    // Hard block: do not allow over-issue. The backend (create_movement_with_lines
+    // + validate_movement_line trigger) re-checks atomically, so a race condition
+    // between two users will still be rejected server-side and surfaced here.
     if (['ISSUE', 'USAGE', 'TRANSFER', 'RETURN'].includes(movementType)) {
       for (const line of validLines) {
         const available = balances[line.material_id] ?? 0
         if (line.quantity! > available) {
           const mat = materials.find((m) => m.id === line.material_id)
-          setError(t('movements:new.quantityExceedsAvailable', { quantity: line.quantity, item: mat?.item_number ?? 'item', available }))
+          setError(t('movements:new.quantityExceedsAvailable', { quantity: line.quantity, item: mat?.item_number ?? 'item', available }) + ' — over-issue is not allowed. Reduce the quantity or receive more stock first.')
           return
         }
       }
@@ -726,7 +896,37 @@ export function NewMovementPage() {
             <h2 className="text-sm font-semibold text-gray-900">{t('movements:new.lines')}</h2>
             <span className="text-xs text-gray-400">{t('movements:new.lineCount', { filled: filledLineCount, total: lines.length })}</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Barcode / USB scanner input */}
+            <div className="flex items-center gap-1">
+              <div className="relative">
+                <ScanLine className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={barcodeInput}
+                  onChange={(e) => { setBarcodeInput(e.target.value); setBarcodeError(null) }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleBarcodeSubmit() } }}
+                  placeholder="Scan / type item #"
+                  className="h-8 w-40 rounded-md border border-gray-200 pl-7 pr-2 text-xs focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                  title="Scan a barcode with a USB scanner, or type an item number and press Enter"
+                />
+              </div>
+              <button onClick={handleBarcodeSubmit} className="btn btn-secondary btn-sm" title="Add line from scanned item number">
+                Add
+              </button>
+            </div>
+            {barcodeError && <span className="text-xs text-red-600">{barcodeError}</span>}
+            {/* Fill from BOQ — only for ISSUE / USAGE */}
+            {(movementType === 'ISSUE' || movementType === 'USAGE') && (
+              <button
+                onClick={fillFromBoq}
+                disabled={boqLoading}
+                className="btn btn-secondary btn-sm"
+                title="Pre-fill lines from the selected Work Order's Bill of Quantities (remaining quantities)"
+              >
+                <ListChecks className="h-3 w-3" /> {boqLoading ? 'Loading…' : 'Fill from BOQ'}
+              </button>
+            )}
             <button onClick={handlePaste} className="btn btn-secondary btn-sm" title={t('movements:new.pasteFromExcel')}>
               <ClipboardPaste className="h-3 w-3" /> {t('movements:new.paste')}
             </button>
@@ -735,12 +935,18 @@ export function NewMovementPage() {
             </button>
           </div>
         </div>
+        {(boqInfo || barcodeError) && (
+          <div className="shrink-0 px-4 pt-1">
+            {boqInfo && <Alert type={boqInfo.startsWith('Error') ? 'error' : 'info'} message={boqInfo} />}
+          </div>
+        )}
         <div className="min-h-0 flex-1 bg-white">
           <Datasheet<MovementLineRow>
             columns={columns}
             rows={lines}
             onRowsChange={handleRowsChange}
             rowKeyGetter={(row) => row._id}
+            onAddRow={handleAddRow}
             emptyMessage={t('movements:new.emptyLines')}
             rowHeight={36}
             className="h-full"

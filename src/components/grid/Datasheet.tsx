@@ -1,4 +1,4 @@
-import { useRef, useCallback, type ReactNode } from 'react'
+import { useRef, useCallback, createContext, useContext, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import DataGrid, {
   type Column,
@@ -9,6 +9,26 @@ import DataGrid, {
   textEditor,
   SelectColumn,
 } from 'react-data-grid'
+
+// ============================================================================
+// Type helpers for "auto-add row on Tab/Enter from last cell"
+// ----------------------------------------------------------------------------
+// When the user presses Tab or Enter while editing the last editable cell of
+// the last row, the parent can decide whether to append a new blank row. The
+// Datasheet calls `onAddRow` with the row that was just committed and the
+// column key; the parent returns `true` to suppress the default Tab/Enter
+// navigation (so focus stays in the grid for the new row), or `false`/`void`
+// to let react-data-grid's default behavior proceed.
+// ============================================================================
+export type AddRowDecision = (row: unknown, columnKey: string) => boolean
+
+// Context so cell editors (defined as standalone helpers below) can ask the
+// Datasheet whether to auto-add a row when the user presses Tab/Enter on the
+// last editable cell of the last row.
+const AddRowContext = createContext<AddRowDecision | null>(null)
+export function useAddRowHandler(): AddRowDecision | null {
+  return useContext(AddRowContext)
+}
 import { SearchableCombobox, type ComboboxItem } from '@/components/combobox/SearchableCombobox'
 import { cn } from '@/lib/utils'
 
@@ -54,6 +74,10 @@ export interface DatasheetProps<R> {
   className?: string
   // Height of rows
   rowHeight?: number
+  // Called when the user presses Tab/Enter from the last editable cell of the
+  // last row. Return `true` to indicate a new row was added (Datasheet will
+  // swallow the keypress so focus stays in the grid).
+  onAddRow?: AddRowDecision
 }
 
 export function Datasheet<R>({
@@ -70,6 +94,7 @@ export function Datasheet<R>({
   loading = false,
   className,
   rowHeight = 36,
+  onAddRow,
 }: DatasheetProps<R>) {
   const { t } = useTranslation()
   const emptyMsg = emptyMessage ?? t('common:messages.noData')
@@ -113,34 +138,36 @@ export function Datasheet<R>({
   )
 
   return (
-    <div className={cn('relative datasheet-container', className)}>
-      <DataGrid<R>
-        ref={gridRef as never}
-        columns={finalColumns}
-        rows={rows}
-        onRowsChange={onRowsChange ? handleRowsChange : undefined}
-        rowKeyGetter={rowKeyGetter}
-        rowClass={rowClass}
-        onCellClick={handleCellClick as never}
-        selectedRows={selectedRowKeys as never}
-        onSelectedRowsChange={onSelectedRowKeysChange as never}
-        rowHeight={rowHeight}
-        enableVirtualization
-        renderers={{
-          noRowsFallback: (
-            <div className="flex items-center justify-center py-16 text-center text-sm text-gray-400">
-              {emptyMsg}
-            </div>
-          ),
-        }}
-        style={{ height: '100%' }}
-      />
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-          <div className="text-sm text-gray-500">Loading...</div>
-        </div>
-      )}
-    </div>
+    <AddRowContext.Provider value={onAddRow ?? null}>
+      <div className={cn('relative datasheet-container', className)}>
+        <DataGrid<R>
+          ref={gridRef as never}
+          columns={finalColumns}
+          rows={rows}
+          onRowsChange={onRowsChange ? handleRowsChange : undefined}
+          rowKeyGetter={rowKeyGetter}
+          rowClass={rowClass}
+          onCellClick={handleCellClick as never}
+          selectedRows={selectedRowKeys as never}
+          onSelectedRowsChange={onSelectedRowKeysChange as never}
+          rowHeight={rowHeight}
+          enableVirtualization
+          renderers={{
+            noRowsFallback: (
+              <div className="flex items-center justify-center py-16 text-center text-sm text-gray-400">
+                {emptyMsg}
+              </div>
+            ),
+          }}
+          style={{ height: '100%' }}
+        />
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+            <div className="text-sm text-gray-500">Loading...</div>
+          </div>
+        )}
+      </div>
+    </AddRowContext.Provider>
   )
 }
 
@@ -186,6 +213,24 @@ export function numberEditor<R>(opts?: { min?: number; step?: string }) {
   const { min = 0, step = '0.001' } = opts ?? {}
   function editor({ row, column, onRowChange, onClose }: RenderEditCellProps<R>) {
     const currentValue = String((row as Record<string, unknown>)[column.key] ?? '')
+    const addRowHandler = useAddRowHandler()
+    const commitAndMaybeAddRow = (rawValue: string, key: 'Enter' | 'Tab') => {
+      const num = parseFloat(rawValue)
+      if (!isNaN(num) && num >= min) {
+        onRowChange({ ...row, [column.key]: num } as R, true)
+      }
+      if (addRowHandler && addRowHandler(row, column.key)) {
+        // Parent added a new row; swallow the keypress so focus stays in grid
+        if (key === 'Enter') {
+          onClose(true, false)
+        }
+        // For Tab, returning true from addRowHandler tells the parent to refocus;
+        // we still call onClose so react-data-grid doesn't try to navigate.
+        onClose(true, false)
+        return
+      }
+      onClose(true, false)
+    }
     return (
       <input
         type="number"
@@ -196,21 +241,13 @@ export function numberEditor<R>(opts?: { min?: number; step?: string }) {
         className="h-full w-full border-0 bg-white px-2 text-sm outline-none"
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            const target = e.target as HTMLInputElement
-            const num = parseFloat(target.value)
-            if (!isNaN(num) && num >= min) {
-              onRowChange({ ...row, [column.key]: num } as R, true)
-            }
-            onClose(true, false)
+            e.preventDefault()
+            commitAndMaybeAddRow((e.target as HTMLInputElement).value, 'Enter')
           } else if (e.key === 'Escape') {
             e.stopPropagation()
             onClose(false, false)
           } else if (e.key === 'Tab') {
-            const target = e.target as HTMLInputElement
-            const num = parseFloat(target.value)
-            if (!isNaN(num) && num >= min) {
-              onRowChange({ ...row, [column.key]: num } as R, true)
-            }
+            commitAndMaybeAddRow((e.target as HTMLInputElement).value, 'Tab')
           }
         }}
         onBlur={(e) => {
