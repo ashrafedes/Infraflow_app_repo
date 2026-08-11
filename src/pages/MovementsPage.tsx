@@ -34,10 +34,21 @@ export function MovementsPage() {
     fetchData()
   }, [typeFilter])
 
-  const filtered = items.filter(i =>
-    i.movement_number.toLowerCase().includes(search.toLowerCase()) ||
-    i.item_number.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = items.filter(i => {
+    if (!search) return true
+    const q = search.toLowerCase()
+    return (
+      i.movement_number?.toLowerCase().includes(q) ||
+      i.item_number?.toLowerCase().includes(q) ||
+      i.source_work_order_number?.toLowerCase().includes(q) ||
+      i.destination_work_order_number?.toLowerCase().includes(q) ||
+      i.source_site_code?.toLowerCase().includes(q) ||
+      i.destination_site_code?.toLowerCase().includes(q) ||
+      i.source_warehouse_code?.toLowerCase().includes(q) ||
+      i.destination_warehouse_code?.toLowerCase().includes(q) ||
+      i.short_description?.toLowerCase().includes(q)
+    )
+  })
 
   if (loading) return <LoadingSpinner />
 

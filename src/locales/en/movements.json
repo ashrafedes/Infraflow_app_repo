@@ -1,7 +1,7 @@
 {
   "title": "Movements",
   "subtitle": "Material movements log",
-  "search": "Search movements...",
+  "search": "Search by movement #, item, work order, site code...",
   "newMovement": "New Movement",
   "allTypes": "All Types",
   "consumed": "Consumed",
