@@ -25,7 +25,10 @@ export function MovementsPage() {
 
   useEffect(() => {
     async function fetchData() {
-      let query = supabase.from('v_movement_details').select('*').order('created_at', { ascending: false }).limit(200)
+      let query = supabase.from('v_movement_details')
+        .select('movement_id,line_id,movement_number,movement_date,movement_type,created_at,item_number,short_description,uom,quantity,source_warehouse_code,source_work_order_number,source_site_code,supplier_code,destination_warehouse_code,destination_work_order_number,destination_site_code,contractor_name')
+        .order('created_at', { ascending: false })
+        .limit(200)
       if (typeFilter) query = query.eq('movement_type', typeFilter)
       const { data } = await query
       setItems((data ?? []) as MovementDetail[])
