@@ -17,6 +17,9 @@ export function SuperAdminPlans() {
     description: '',
     default_max_users: '5',
     is_active: true,
+    price_amount: '',
+    price_currency: 'SAR',
+    billing_period: 'yearly' as 'monthly' | 'yearly',
   })
 
   const fetchData = async () => {
@@ -44,6 +47,9 @@ export function SuperAdminPlans() {
       description: p.description ?? '',
       default_max_users: p.default_max_users.toString(),
       is_active: p.is_active,
+      price_amount: p.price_amount != null ? p.price_amount.toString() : '',
+      price_currency: p.price_currency ?? 'SAR',
+      billing_period: p.billing_period ?? 'yearly',
     })
   }
 
@@ -58,6 +64,9 @@ export function SuperAdminPlans() {
         description: editForm.description || null,
         default_max_users: parseInt(editForm.default_max_users) || 5,
         is_active: editForm.is_active,
+        price_amount: editForm.price_amount ? parseFloat(editForm.price_amount) : null,
+        price_currency: editForm.price_currency || null,
+        billing_period: editForm.billing_period || null,
       })
       .eq('id', editPlan.id)
 
@@ -106,6 +115,9 @@ export function SuperAdminPlans() {
             <div className="space-y-1 text-sm">
               <div><span className="text-gray-500">{t('plans.code')}:</span> <span className="font-mono">{p.plan_code}</span></div>
               <div><span className="text-gray-500">{t('plans.maxUsers')}:</span> {p.default_max_users}</div>
+              {p.price_amount != null && (
+                <div><span className="text-gray-500">{t('plans.price')}:</span> <span className="font-medium">{Number(p.price_amount).toLocaleString()} {p.price_currency ?? 'SAR'} / {t(`subscription:billingPeriod.${p.billing_period ?? 'yearly'}`)}</span></div>
+              )}
               {p.trial_duration_days && <div><span className="text-gray-500">{t('plans.trial')}:</span> {p.trial_duration_days} {t('plans.days')}</div>}
               {p.is_system_plan && <div><span className="text-gray-500">{t('plans.systemPlan')}</span></div>}
             </div>
@@ -152,6 +164,21 @@ export function SuperAdminPlans() {
           <div>
             <label className="label">{t('plans.defaultMaxUsers')}</label>
             <input type="number" value={editForm.default_max_users} onChange={e => setEditForm({ ...editForm, default_max_users: e.target.value })} className="input" min="1" />
+          </div>
+          <div>
+            <label className="label">{t('plans.price')}</label>
+            <input type="number" step="0.01" value={editForm.price_amount} onChange={e => setEditForm({ ...editForm, price_amount: e.target.value })} className="input" placeholder="0" />
+          </div>
+          <div>
+            <label className="label">{t('plans.currency')}</label>
+            <input value={editForm.price_currency} onChange={e => setEditForm({ ...editForm, price_currency: e.target.value })} className="input" placeholder="SAR" />
+          </div>
+          <div>
+            <label className="label">{t('plans.billingPeriod')}</label>
+            <select value={editForm.billing_period} onChange={e => setEditForm({ ...editForm, billing_period: e.target.value as 'monthly' | 'yearly' })} className="input">
+              <option value="yearly">{t('subscription:billingPeriod.yearly')}</option>
+              <option value="monthly">{t('subscription:billingPeriod.monthly')}</option>
+            </select>
           </div>
           <div className="flex items-center gap-2">
             <input type="checkbox" id="plan_active" checked={editForm.is_active} onChange={e => setEditForm({ ...editForm, is_active: e.target.checked })} />

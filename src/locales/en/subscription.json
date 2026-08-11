@@ -58,6 +58,11 @@
   "trialDurationDays": "{{count}} days",
   "unknownPlan": "Unknown Plan",
   "upgradeNow": "Upgrade Now",
+  "free": "Free",
+  "billingPeriod": {
+    "monthly": "month",
+    "yearly": "year"
+  },
   "featureCategory": {
     "core": "Core",
     "advanced": "Advanced",

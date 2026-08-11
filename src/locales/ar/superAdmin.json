@@ -182,7 +182,10 @@
     },
     "noDescription": "بدون وصف",
     "systemPlan": "باقة النظام",
-    "trial": "تجريبي"
+    "trial": "تجريبي",
+    "price": "السعر",
+    "currency": "العملة",
+    "billingPeriod": "دورة الفوترة"
   },
   "auditLog": {
     "title": "سجل التدقيق",

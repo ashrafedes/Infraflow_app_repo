@@ -58,6 +58,11 @@
   "trialDurationDays": "{{count}} يوم",
   "unknownPlan": "باقة غير معروفة",
   "upgradeNow": "ترقية الآن",
+  "free": "مجاني",
+  "billingPeriod": {
+    "monthly": "شهر",
+    "yearly": "سنة"
+  },
   "featureCategory": {
     "core": "أساسي",
     "advanced": "متقدم",

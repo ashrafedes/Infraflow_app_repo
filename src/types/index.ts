@@ -328,6 +328,9 @@ export interface SubscriptionPlan {
   is_system_plan: boolean
   sort_order: number
   is_active: boolean
+  price_amount: number | null
+  price_currency: string | null
+  billing_period: 'monthly' | 'yearly' | null
   created_at: string
   updated_at: string
 }

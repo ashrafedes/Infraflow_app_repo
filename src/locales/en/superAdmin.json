@@ -182,7 +182,10 @@
     },
     "noDescription": "No description",
     "systemPlan": "System Plan",
-    "trial": "Trial"
+    "trial": "Trial",
+    "price": "Price",
+    "currency": "Currency",
+    "billingPeriod": "Billing Period"
   },
   "auditLog": {
     "title": "Audit Log",
