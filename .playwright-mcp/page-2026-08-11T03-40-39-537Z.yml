@@ -1,0 +1,71 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [active] [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e474]:
+      - generic [ref=f11e476]:
+        - heading "Super Admin Dashboard" [level=1] [ref=f11e477]
+        - paragraph [ref=f11e478]: Platform overview
+      - generic [ref=f11e479]:
+        - generic [ref=f11e482]:
+          - paragraph [ref=f11e483]: Total Companies
+          - paragraph [ref=f11e484]: "1"
+        - generic [ref=f11e491]:
+          - paragraph [ref=f11e492]: Active Companies
+          - paragraph [ref=f11e493]: "0"
+        - generic [ref=f11e499]:
+          - paragraph [ref=f11e500]: Free Trials
+          - paragraph [ref=f11e501]: "1"
+        - generic [ref=f11e507]:
+          - paragraph [ref=f11e508]: Basic Companies
+          - paragraph [ref=f11e509]: "1"
+        - generic [ref=f11e514]:
+          - paragraph [ref=f11e515]: Premium Companies
+          - paragraph [ref=f11e516]: "0"
+        - generic [ref=f11e521]:
+          - paragraph [ref=f11e522]: Expiring Trials
+          - paragraph [ref=f11e523]: "0"
+        - generic [ref=f11e528]:
+          - paragraph [ref=f11e529]: Suspended Companies
+          - paragraph [ref=f11e530]: "0"
+        - generic [ref=f11e535]:
+          - paragraph [ref=f11e536]: Total Active Users
+          - paragraph [ref=f11e537]: "2"
+      - generic [ref=f11e543]:
+        - generic [ref=f11e544]:
+          - heading "Companies Approaching User Limit" [level=2] [ref=f11e546]
+          - paragraph [ref=f11e550]: No companies are near their user limit
+        - generic [ref=f11e551]:
+          - generic [ref=f11e552]:
+            - heading "Recent Subscription Changes" [level=2] [ref=f11e553]
+            - link "View all" [ref=f11e554] [cursor=pointer]:
+              - /url: /admin/audit-log
+          - table [ref=f11e556]:
+            - rowgroup [ref=f11e557]:
+              - row [ref=f11e558]:
+                - columnheader "Company" [ref=f11e559]
+                - columnheader "Action" [ref=f11e560]
+                - columnheader "When" [ref=f11e561]
+            - rowgroup [ref=f11e562]:
+              - row [ref=f11e563]:
+                - cell [ref=f11e564]:
+                  - link "InfraFlow Test Company" [ref=f11e565] [cursor=pointer]:
+                    - /url: /admin/companies/4fbace07-dc70-4238-a727-e9a3883abf54
+                - cell "plan_changed" [ref=f11e566]
+                - cell "Aug 11, 2026, 06:40 AM" [ref=f11e568]

@@ -1,0 +1,103 @@
+- generic [ref=f5e5]:
+  - complementary [ref=f5e6]:
+    - generic [ref=f5e7]: InfraFlow
+    - navigation [ref=f5e19]:
+      - link "Dashboard" [ref=f5e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f5e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f5e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f5e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f5e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f5e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f5e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f5e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f5e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f5e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f5e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f5e72]:
+      - generic [ref=f5e73]:
+        - paragraph [ref=f5e74]: ashrafede@gmail.com
+        - paragraph [ref=f5e75]: ashrafede@gmail.com
+        - paragraph [ref=f5e76]: company admin
+      - button "Sign Out" [ref=f5e77] [cursor=pointer]
+  - main [ref=f5e82]:
+    - generic [ref=f5e83]:
+      - generic [ref=f5e84]:
+        - generic [ref=f5e85]:
+          - heading "Users" [level=1] [ref=f5e86]
+          - paragraph [ref=f5e87]: Manage users and roles — inline editing, Ctrl+N for new user, click name for scopes
+        - button "Add User" [ref=f5e88] [cursor=pointer]
+      - generic [ref=f5e90]:
+        - generic [ref=f5e91]:
+          - generic [ref=f5e92]:
+            - text: Plan
+            - paragraph [ref=f5e93]: Basic
+          - generic [ref=f5e94]:
+            - text: Users
+            - paragraph [ref=f5e95]: 2 / 10
+          - generic [ref=f5e96]:
+            - text: Trial ends
+            - paragraph [ref=f5e97]: Aug 21, 2026
+        - generic [ref=f5e98]: trial
+      - generic [ref=f5e99]:
+        - button "Save All" [disabled]
+      - grid [ref=f5e102]:
+        - row [ref=f5e103]:
+          - columnheader "Name" [ref=f5e104]
+          - columnheader "Email" [ref=f5e106]
+          - columnheader "Role" [ref=f5e108]
+          - columnheader "Active" [ref=f5e109]
+          - columnheader "Created" [ref=f5e110]
+          - columnheader [ref=f5e111]
+        - row [ref=f5e112]:
+          - gridcell [ref=f5e113]:
+            - button "ashrafede@gmail.com" [ref=f5e114] [cursor=pointer]
+          - gridcell "ashrafede@gmail.com" [ref=f5e115]
+          - gridcell "Company Admin" [ref=f5e116]
+          - gridcell [ref=f5e118]:
+            - checkbox [checked] [ref=f5e119] [cursor=pointer]
+          - gridcell "Aug 11, 2026" [ref=f5e120]
+          - gridcell [ref=f5e121]
+        - row [ref=f5e122]:
+          - gridcell [ref=f5e123]:
+            - button "Test Admin" [ref=f5e124] [cursor=pointer]
+          - gridcell "admin@infraflow.app" [ref=f5e125]
+          - gridcell "Company Admin" [ref=f5e126]
+          - gridcell [ref=f5e128]:
+            - checkbox [checked] [ref=f5e129] [cursor=pointer]
+          - gridcell "Aug 11, 2026" [ref=f5e130]
+          - gridcell [ref=f5e131]:
+            - button "Delete user" [ref=f5e132] [cursor=pointer]
+      - generic [ref=f5e163]:
+        - generic [ref=f5e164]:
+          - heading "Add User" [level=2] [ref=f5e165]
+          - button [ref=f5e166] [cursor=pointer]
+        - generic [ref=f5e171]:
+          - generic [ref=f5e172]:
+            - generic [ref=f5e173]: Full Name
+            - textbox [active] [ref=f5e174]
+          - generic [ref=f5e175]:
+            - generic [ref=f5e176]: Email
+            - textbox [ref=f5e177]
+          - generic [ref=f5e178]:
+            - generic [ref=f5e179]: Role
+            - combobox [ref=f5e180]:
+              - option "Company Admin"
+              - option "Warehouse Man" [selected]
+              - option "Inspector"
+              - option "Project Control"
+              - option "Project Manager"
+          - paragraph [ref=f5e181]: A temporary password will be generated and a password setup email will be sent to the user.
+          - generic [ref=f5e182]:
+            - button "Cancel" [ref=f5e183] [cursor=pointer]
+            - button "Create User" [ref=f5e184] [cursor=pointer]

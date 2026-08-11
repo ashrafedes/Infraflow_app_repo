@@ -1,0 +1,72 @@
+- generic [ref=f20e5]:
+  - complementary [ref=f20e6]:
+    - generic [ref=f20e7]: InfraFlow
+    - navigation [ref=f20e19]:
+      - link "Dashboard" [ref=f20e20] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f20e26] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f20e31] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f20e34] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f20e38] [cursor=pointer]:
+        - /url: /admin/audit-log
+      - link "Upgrade Requests" [ref=f20e42] [cursor=pointer]:
+        - /url: /admin/subscription-requests
+    - generic [ref=f20e47]:
+      - generic [ref=f20e48]:
+        - paragraph [ref=f20e49]: Super Admin
+        - paragraph [ref=f20e50]: Platform Administrator
+      - button "Sign Out" [ref=f20e51] [cursor=pointer]
+  - main [ref=f20e56]:
+    - generic [ref=f20e57]:
+      - generic [ref=f20e58]:
+        - generic [ref=f20e59]:
+          - heading "Upgrade Requests" [level=1] [ref=f20e60]
+          - paragraph [ref=f20e61]: Review company plan upgrade requests
+        - generic [ref=f20e62]: 1 pending
+      - generic [ref=f20e63]:
+        - button "Pending (1)" [ref=f20e64] [cursor=pointer]
+        - button "Approved (0)" [ref=f20e65] [cursor=pointer]
+        - button "Rejected (0)" [ref=f20e66] [cursor=pointer]
+        - button "All (1)" [ref=f20e67] [cursor=pointer]
+      - table [ref=f20e69]:
+        - rowgroup [ref=f20e70]:
+          - row [ref=f20e71]:
+            - columnheader "Company" [ref=f20e72]
+            - columnheader "Current Plan" [ref=f20e73]
+            - columnheader "Requested Plan" [ref=f20e74]
+            - columnheader "Requested By" [ref=f20e75]
+            - columnheader "Requested Date" [ref=f20e76]
+            - columnheader "Status" [ref=f20e77]
+            - columnheader "Reviewed" [ref=f20e78]
+            - columnheader "Actions" [ref=f20e79]
+        - rowgroup [ref=f20e80]:
+          - row [ref=f20e81]:
+            - cell "InfraFlow Test Company" [ref=f20e82]
+            - cell "Free Trial" [ref=f20e83]
+            - cell "Basic" [ref=f20e84]
+            - cell "ashrafede@gmail.com" [ref=f20e85]
+            - cell "Aug 11, 2026" [ref=f20e86]
+            - cell "pending" [ref=f20e87]
+            - cell "—" [ref=f20e89]
+            - cell [ref=f20e90]:
+              - button "Approve" [active] [ref=f20e91] [cursor=pointer]
+              - button "Reject" [ref=f20e94] [cursor=pointer]
+      - generic [ref=f20e99]:
+        - generic [ref=f20e100]:
+          - heading "Approve Upgrade Request" [level=2] [ref=f20e101]
+          - button [ref=f20e102] [cursor=pointer]
+        - generic [ref=f20e107]:
+          - generic [ref=f20e108]:
+            - generic [ref=f20e109]: "Company: InfraFlow Test Company"
+            - generic [ref=f20e110]: "Current Plan: Free Trial"
+            - generic [ref=f20e111]: "Requested Plan: Basic"
+            - generic [ref=f20e112]: "Requested By: ashrafede@gmail.com"
+          - generic [ref=f20e113]:
+            - generic [ref=f20e114]: Admin Notes (optional)
+            - textbox "Internal notes about this approval..." [ref=f20e115]
+          - generic [ref=f20e116]:
+            - button "Cancel" [ref=f20e117] [cursor=pointer]
+            - button "Approve Upgrade" [ref=f20e118] [cursor=pointer]

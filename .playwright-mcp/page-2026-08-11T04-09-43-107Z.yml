@@ -1,0 +1,69 @@
+- generic [ref=f4e5]:
+  - complementary [ref=f4e6]:
+    - generic [ref=f4e7]: InfraFlow
+    - navigation [ref=f4e19]:
+      - link "Dashboard" [ref=f4e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f4e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f4e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f4e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f4e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f4e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f4e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f4e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f4e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f4e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f4e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f4e72]:
+      - generic [ref=f4e73]:
+        - paragraph [ref=f4e74]: ashrafede@gmail.com
+        - paragraph [ref=f4e75]: ashrafede@gmail.com
+        - paragraph [ref=f4e76]: company admin
+      - button "Sign Out" [ref=f4e77] [cursor=pointer]
+  - main [ref=f4e82]:
+    - generic [ref=f4e83]:
+      - generic [ref=f4e84]:
+        - generic [ref=f4e85]:
+          - heading "Warehouses" [level=1] [ref=f4e86]
+          - paragraph [ref=f4e87]: Manage warehouse master data — inline editing, Ctrl+N for new row, Ctrl+S to save
+        - button "Add Row" [ref=f4e88] [cursor=pointer]
+      - generic [ref=f4e90]:
+        - textbox "Search warehouses..." [ref=f4e91]
+        - button "Save All" [ref=f4e118] [cursor=pointer]
+        - generic [ref=f4e123]: Unsaved changes
+      - grid [ref=f4e94]:
+        - row [ref=f4e95]:
+          - columnheader "Code" [ref=f4e96]
+          - columnheader "Name" [ref=f4e98]
+          - columnheader "Type" [ref=f4e100]
+          - columnheader "Work Location" [ref=f4e101]
+          - columnheader "Active" [ref=f4e103]
+          - columnheader [ref=f4e104]
+        - row [ref=f4e105]:
+          - gridcell "WH-001" [ref=f4e106]
+          - gridcell "Main Warehouse" [ref=f4e107]
+          - gridcell "Main" [ref=f4e108]
+          - gridcell [ref=f4e110]
+          - gridcell [ref=f4e111]:
+            - checkbox [checked] [ref=f4e112] [cursor=pointer]
+          - gridcell [ref=f4e113]:
+            - button "Delete" [ref=f4e114] [cursor=pointer]
+        - row [ref=f4e125]:
+          - gridcell [active] [selected] [ref=f4e126]
+          - gridcell [ref=f4e127]
+          - gridcell "Main" [ref=f4e128]
+          - gridcell [ref=f4e130]
+          - gridcell [ref=f4e131]:
+            - checkbox [checked] [ref=f4e132] [cursor=pointer]
+          - gridcell [ref=f4e133]:
+            - button "Delete" [ref=f4e134] [cursor=pointer]

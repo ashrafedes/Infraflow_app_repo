@@ -1,0 +1,53 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [active] [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e331]:
+      - generic [ref=f11e333]:
+        - heading "Audit Log" [level=1] [ref=f11e334]
+        - paragraph [ref=f11e335]: Platform-wide subscription change history
+      - generic [ref=f11e337]:
+        - generic [ref=f11e338]:
+          - generic [ref=f11e339]: Company
+          - combobox [ref=f11e340]:
+            - option "All Companies" [selected]
+            - option "InfraFlow Test Company"
+        - generic [ref=f11e341]:
+          - generic [ref=f11e342]: Action Type
+          - combobox [ref=f11e343]:
+            - option "All Actions" [selected]
+            - option "Plan Changed"
+            - option "User Limit Changed"
+            - option "Trial Expired"
+            - option "Status Changed"
+        - generic [ref=f11e344]:
+          - generic [ref=f11e345]: Search Company Name
+          - textbox "Filter by company name..." [ref=f11e346]
+      - table [ref=f11e348]:
+        - rowgroup [ref=f11e349]:
+          - row [ref=f11e350]:
+            - columnheader "Company" [ref=f11e351]
+            - columnheader "Action" [ref=f11e352]
+            - columnheader "Old Value" [ref=f11e353]
+            - columnheader "New Value" [ref=f11e354]
+            - columnheader "Performed By" [ref=f11e355]
+            - columnheader "When" [ref=f11e356]
+        - rowgroup [ref=f11e357]:
+          - row [ref=f11e358]:
+            - cell "No audit log entries found" [ref=f11e359]

@@ -1,0 +1,225 @@
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { supabase } from '@/lib/supabase'
+import { PageHeader, LoadingSpinner, Alert, DirtyBadge, ConfirmDialog } from '@/components/ui'
+import { Plus, Save, Trash2 } from 'lucide-react'
+import { Datasheet, textCellEditor, checkboxCell, readOnlyCell } from '@/components/grid/Datasheet'
+import { MobileCardList } from '@/components/grid/MobileCardList'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
+import type { Column } from 'react-data-grid'
+import type { Contractor } from '@/types'
+
+interface ContractorRow extends Contractor {
+  _isNew?: boolean
+  _dirty?: boolean
+  _tempId?: string
+}
+
+let tempIdCounter = 0
+function nextTempId(): string {
+  return `_new_${++tempIdCounter}`
+}
+
+export function ContractorsPage() {
+  const [rows, setRows] = useState<ContractorRow[]>([])
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const gridContainerRef = useRef<HTMLDivElement>(null)
+
+  const fetchData = async () => {
+    setLoading(true)
+    const { data } = await supabase.from('contractors').select('*').order('name')
+    setRows((data ?? []) as ContractorRow[])
+    setLoading(false)
+  }
+
+  useEffect(() => { fetchData() }, [])
+
+  const dirtyRowIds = useMemo(() => {
+    const ids = new Set<string>()
+    rows.forEach((r) => {
+      if (r._dirty) ids.add(r._isNew ? (r._tempId ?? '') : r.id)
+    })
+    return ids
+  }, [rows])
+
+  const isDirty = dirtyRowIds.size > 0
+
+  const rowKeyGetter = useCallback(
+    (row: ContractorRow) => (row._isNew ? (row._tempId ?? '') : row.id),
+    []
+  )
+
+  const saveRow = useCallback(async (row: ContractorRow) => {
+    setError(null)
+    if (!row.name?.trim()) { setError('Name is required'); return false }
+
+    const payload = {
+      name: row.name.trim(),
+      contact_info: row.contact_info?.trim() || null,
+      is_active: row.is_active,
+    }
+
+    if (row._isNew) {
+      const { data, error: err } = await supabase.from('contractors').insert(payload).select('*').single()
+      if (err) { setError(err.message); return false }
+      setRows((prev) => prev.map((r) => (r._tempId === row._tempId ? (data as ContractorRow) : r)))
+    } else {
+      const { data, error: err } = await supabase.from('contractors').update(payload).eq('id', row.id).select('*').single()
+      if (err) { setError(err.message); return false }
+      setRows((prev) => prev.map((r) => (r.id === row.id ? { ...(data as ContractorRow) } : r)))
+    }
+    return true
+  }, [])
+
+  const saveAll = useCallback(async () => {
+    const dirtyRows = rows.filter((r) => r._dirty)
+    if (dirtyRows.length === 0) return
+    setError(null)
+    let allOk = true
+    for (const row of dirtyRows) {
+      const ok = await saveRow(row)
+      if (!ok) { allOk = false; break }
+    }
+    if (allOk) {
+      setSuccess(`${dirtyRows.length} row(s) saved`)
+      setTimeout(() => setSuccess(null), 3000)
+    }
+  }, [rows, saveRow])
+
+  const addNewRow = useCallback(() => {
+    const tempId = nextTempId()
+    const newRow: ContractorRow = {
+      id: tempId,
+      company_id: '',
+      name: '',
+      contact_info: null,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      _isNew: true,
+      _dirty: true,
+      _tempId: tempId,
+    }
+    setRows((prev) => [...prev, newRow])
+  }, [])
+
+  const handleRowsChange = useCallback((newRows: ContractorRow[]) => {
+    setRows((prev) => {
+      return newRows.map((nr) => {
+        const prevRow = prev.find((pr) => rowKeyGetter(pr) === rowKeyGetter(nr))
+        if (prevRow && JSON.stringify(stripFlags(prevRow)) !== JSON.stringify(stripFlags(nr))) {
+          return { ...nr, _dirty: true }
+        }
+        return nr
+      })
+    })
+  }, [rowKeyGetter])
+
+  const handleDelete = async () => {
+    if (!deleteId) return
+    const row = rows.find((r) => r.id === deleteId)
+    if (row?._isNew) {
+      setRows((prev) => prev.filter((r) => r._tempId !== row._tempId))
+    } else {
+      await supabase.from('contractors').delete().eq('id', deleteId)
+      setRows((prev) => prev.filter((r) => r.id !== deleteId))
+    }
+    setDeleteId(null)
+  }
+
+  useKeyboardShortcuts({
+    onNew: addNewRow,
+    onSave: saveAll,
+    onCancel: () => { if (isDirty) fetchData() },
+  }, [isDirty, rows, saveAll])
+
+  const filteredRows = useMemo(() => {
+    if (!search.trim()) return rows
+    const q = search.toLowerCase()
+    return rows.filter((r) => r.name.toLowerCase().includes(q))
+  }, [rows, search])
+
+  const columns: readonly Column<ContractorRow>[] = useMemo(() => [
+    { key: 'name', name: 'Name', width: 260, resizable: true, editable: true, renderEditCell: textCellEditor<ContractorRow>(), cellClass: 'font-medium' },
+    { key: 'contact_info', name: 'Contact Info', width: 320, resizable: true, editable: true, renderEditCell: textCellEditor<ContractorRow>(), renderCell: readOnlyCell<ContractorRow>((v) => (v as string) || '—') },
+    { key: 'is_active', name: 'Active', width: 70, renderCell: checkboxCell<ContractorRow>() },
+    {
+      key: '_actions', name: '', width: 50, sortable: false, resizable: false,
+      renderCell: ({ row }) => (
+        <button
+          onClick={(e) => { e.stopPropagation(); setDeleteId(row._isNew ? (row._tempId ?? row.id) : row.id) }}
+          className="text-gray-400 hover:text-red-600"
+          title="Delete"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      ),
+    },
+  ], [])
+
+  if (loading) return <LoadingSpinner />
+
+  return (
+    <div className="flex h-full flex-col">
+      <PageHeader
+        title="Contractors"
+        subtitle="Manage contractor master data — inline editing, Ctrl+N for new row, Ctrl+S to save"
+        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> Add Row</button>}
+      />
+
+      <div className="mb-4 flex items-center gap-3 flex-wrap">
+        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search contractors..." className="input max-w-xs" />
+        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title="Save all changes (Ctrl+S)">
+          <Save className="h-4 w-4" /> Save All
+        </button>
+        <DirtyBadge dirty={isDirty} />
+      </div>
+
+      {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
+      {success && <div className="mb-4"><Alert type="success" message={success} /></div>}
+
+      <div ref={gridContainerRef} className="card flex-1 overflow-hidden p-0 hidden lg:block">
+        <Datasheet<ContractorRow>
+          columns={columns}
+          rows={filteredRows}
+          onRowsChange={handleRowsChange}
+          rowKeyGetter={rowKeyGetter}
+          dirtyRowIds={dirtyRowIds}
+          emptyMessage="No contractors found. Press Ctrl+N or click Add Row to start."
+          rowHeight={38}
+        />
+      </div>
+
+      <div className="lg:hidden">
+        <MobileCardList
+          rows={filteredRows as unknown as Record<string, unknown>[]}
+          titleKey="name"
+          fields={[
+            { key: 'contact_person', label: 'Contact' },
+            { key: 'phone', label: 'Phone' },
+            { key: 'is_active', label: 'Active', format: (v) => (v ? 'Yes' : 'No') },
+          ]}
+          emptyMessage="No contractors found. Click Add Row to start."
+        />
+      </div>
+
+      <ConfirmDialog
+        open={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleDelete}
+        title="Delete Contractor"
+        message="Are you sure? This action cannot be undone."
+        confirmLabel="Delete"
+        danger
+      />
+    </div>
+  )
+}
+
+function stripFlags(row: ContractorRow): Record<string, unknown> {
+  const { _isNew, _dirty, _tempId, ...rest } = row
+  void _isNew; void _dirty; void _tempId
+  return rest as Record<string, unknown>
+}

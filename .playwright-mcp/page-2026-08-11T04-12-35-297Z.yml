@@ -1,0 +1,99 @@
+- generic [ref=f5e5]:
+  - complementary [ref=f5e6]:
+    - generic [ref=f5e7]: InfraFlow
+    - navigation [ref=f5e19]:
+      - link "Dashboard" [ref=f5e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f5e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f5e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f5e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f5e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f5e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f5e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f5e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f5e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f5e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f5e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f5e72]:
+      - generic [ref=f5e73]:
+        - paragraph [ref=f5e74]: ashrafede@gmail.com
+        - paragraph [ref=f5e75]: ashrafede@gmail.com
+        - paragraph [ref=f5e76]: company admin
+      - button "Sign Out" [ref=f5e77] [cursor=pointer]
+  - main [ref=f5e82]:
+    - generic [ref=f5e83]:
+      - generic [ref=f5e84]:
+        - generic [ref=f5e85]:
+          - heading "Users" [level=1] [ref=f5e86]
+          - paragraph [ref=f5e87]: Manage users and roles — inline editing, Ctrl+N for new user, click name for scopes
+        - button "Add User" [ref=f5e88] [cursor=pointer]
+      - generic [ref=f5e90]:
+        - generic [ref=f5e91]:
+          - generic [ref=f5e92]:
+            - text: Plan
+            - paragraph [ref=f5e93]: Basic
+          - generic [ref=f5e94]:
+            - text: Users
+            - paragraph [ref=f5e95]: 2 / 10
+          - generic [ref=f5e96]:
+            - text: Trial ends
+            - paragraph [ref=f5e97]: Aug 21, 2026
+        - generic [ref=f5e98]: trial
+      - generic [ref=f5e99]:
+        - button "Save All" [disabled]
+      - grid [ref=f5e102]:
+        - row [ref=f5e103]:
+          - columnheader "Name" [ref=f5e104]
+          - columnheader "Email" [ref=f5e106]
+          - columnheader "Role" [ref=f5e108]
+          - columnheader "Active" [ref=f5e109]
+          - columnheader "Created" [ref=f5e110]
+          - columnheader [ref=f5e111]
+        - row [ref=f5e112]:
+          - gridcell [ref=f5e113]:
+            - button "ashrafede@gmail.com" [ref=f5e114] [cursor=pointer]
+          - gridcell "ashrafede@gmail.com" [ref=f5e115]
+          - gridcell "Company Admin" [ref=f5e116]
+          - gridcell [ref=f5e118]:
+            - checkbox [checked] [ref=f5e119] [cursor=pointer]
+          - gridcell "Aug 11, 2026" [ref=f5e120]
+          - gridcell [ref=f5e121]
+        - row [ref=f5e122]:
+          - gridcell [ref=f5e123]:
+            - button "Test Admin" [active] [ref=f5e124] [cursor=pointer]
+          - gridcell "admin@infraflow.app" [ref=f5e125]
+          - gridcell "Company Admin" [ref=f5e126]
+          - gridcell [ref=f5e128]:
+            - checkbox [checked] [ref=f5e129] [cursor=pointer]
+          - gridcell "Aug 11, 2026" [ref=f5e130]
+          - gridcell [ref=f5e131]:
+            - button "Delete user" [ref=f5e132] [cursor=pointer]
+      - generic [ref=f5e138]:
+        - generic [ref=f5e139]:
+          - heading "Test Admin" [level=2] [ref=f5e140]
+          - button [ref=f5e141] [cursor=pointer]
+        - generic [ref=f5e147]:
+          - heading "User Details" [level=3] [ref=f5e148]
+          - generic [ref=f5e149]:
+            - generic [ref=f5e150]:
+              - generic [ref=f5e151]: Email
+              - generic [ref=f5e152]: admin@infraflow.app
+            - generic [ref=f5e153]:
+              - generic [ref=f5e154]: Role
+              - generic [ref=f5e155]: Company Admin
+            - generic [ref=f5e156]:
+              - generic [ref=f5e157]: Status
+              - generic [ref=f5e158]: Active
+            - generic [ref=f5e159]:
+              - generic [ref=f5e160]: Created
+              - generic [ref=f5e161]: Aug 11, 2026

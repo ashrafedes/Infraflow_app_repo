@@ -1,0 +1,94 @@
+- generic [ref=f6e5]:
+  - complementary [ref=f6e6]:
+    - generic [ref=f6e7]: InfraFlow
+    - navigation [ref=f6e19]:
+      - link "Dashboard" [ref=f6e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f6e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f6e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f6e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f6e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f6e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f6e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f6e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f6e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f6e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f6e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f6e72]:
+      - generic [ref=f6e73]:
+        - paragraph [ref=f6e74]: ashrafede@gmail.com
+        - paragraph [ref=f6e75]: ashrafede@gmail.com
+        - paragraph [ref=f6e76]: company admin
+      - button "Sign Out" [ref=f6e77] [cursor=pointer]
+  - main [ref=f6e82]:
+    - generic [ref=f6e83]:
+      - button "Back to Movements" [ref=f6e84] [cursor=pointer]
+      - generic [ref=f6e87]:
+        - generic [ref=f6e88]:
+          - heading "New Movement" [level=1] [ref=f6e89]
+          - paragraph [ref=f6e90]: Header + spreadsheet lines — Ctrl+S to save, Ctrl+N to add line
+        - button "Save Movement" [ref=f6e91] [cursor=pointer]
+      - generic [ref=f6e96]:
+        - heading "Movement Details" [level=2] [ref=f6e97]
+        - generic [ref=f6e98]:
+          - generic [ref=f6e99]:
+            - generic [ref=f6e100]: Movement Type
+            - combobox [ref=f6e101]:
+              - option "Receipt (Supplier → Warehouse)" [selected]
+              - option "Issue (Warehouse → Work Order)"
+              - option "Usage (Work Order → Consumed)"
+              - option "Transfer"
+              - option "Return (WO/Contractor → Warehouse)"
+              - option "Adjustment (Warehouse correction)"
+          - generic [ref=f6e102]:
+            - generic [ref=f6e103]: Date
+            - textbox [ref=f6e104]: 2026-08-11
+        - generic [ref=f6e105]:
+          - generic [ref=f6e106]:
+            - generic [ref=f6e107]: Supplier
+            - textbox [ref=f6e174]: SUP-001 — SteelCo Supplies Ltd
+          - generic [ref=f6e116]:
+            - generic [ref=f6e117]: Destination Warehouse
+            - textbox [active] [ref=f6e182]: WH-001 — Main Warehouse
+      - generic [ref=f6e126]:
+        - generic [ref=f6e127]:
+          - generic [ref=f6e128]:
+            - heading "Material Lines" [level=2] [ref=f6e129]
+            - generic [ref=f6e175]: Unsaved changes
+          - generic [ref=f6e130]:
+            - button "Paste" [ref=f6e131] [cursor=pointer]
+            - button "Add Line" [ref=f6e136] [cursor=pointer]
+        - grid [ref=f6e139]:
+          - row [ref=f6e140]:
+            - columnheader "Item" [ref=f6e141]
+            - columnheader "Description" [ref=f6e143]
+            - columnheader "UOM" [ref=f6e145]
+            - columnheader "Available" [ref=f6e146]
+            - columnheader "Quantity" [ref=f6e147]
+            - columnheader "Notes" [ref=f6e148]
+            - columnheader [ref=f6e149]
+          - row [ref=f6e150]:
+            - gridcell [ref=f6e151]
+            - gridcell "—" [ref=f6e152]
+            - gridcell "—" [ref=f6e153]
+            - gridcell "—" [ref=f6e154]
+            - gridcell [ref=f6e155]
+            - gridcell "—" [ref=f6e156]
+            - gridcell [ref=f6e157]:
+              - button "Duplicate" [ref=f6e159] [cursor=pointer]
+      - generic [ref=f6e163]:
+        - generic [ref=f6e164]: Movement Notes
+        - textbox [ref=f6e165]
+      - generic [ref=f6e166]:
+        - button "Cancel" [ref=f6e167] [cursor=pointer]
+        - button "Save Movement" [ref=f6e168] [cursor=pointer]

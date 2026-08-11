@@ -1,0 +1,16 @@
+- generic [ref=f19e359]:
+  - generic [ref=f19e360]:
+    - heading "InfraFlow" [level=1] [ref=f19e372]
+    - paragraph [ref=f19e373]: Material Control & Work Order System
+  - generic [ref=f19e374]:
+    - generic [ref=f19e375]:
+      - button "Sign In" [ref=f19e376] [cursor=pointer]
+      - button "Register" [ref=f19e377] [cursor=pointer]
+    - generic [ref=f19e378]:
+      - generic [ref=f19e379]:
+        - generic [ref=f19e380]: Email
+        - textbox [ref=f19e381]: superadmin@infraflow.app
+      - generic [ref=f19e382]:
+        - generic [ref=f19e383]: Password
+        - textbox [ref=f19e384]: SuperAdmin123!
+      - button "Sign In" [ref=f19e385] [cursor=pointer]

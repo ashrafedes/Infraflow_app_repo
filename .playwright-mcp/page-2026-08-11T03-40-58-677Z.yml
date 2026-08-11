@@ -1,0 +1,184 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e737]:
+      - generic [ref=f11e739]:
+        - heading "Subscription Plans" [level=1] [ref=f11e740]
+        - paragraph [ref=f11e741]: Manage plans and feature entitlements
+      - generic [ref=f11e742]:
+        - generic [ref=f11e743]:
+          - generic [ref=f11e744]:
+            - heading "Free Trial" [level=3] [ref=f11e745]
+            - generic [ref=f11e746]: Active
+          - paragraph [ref=f11e747]: Full access for 10 days
+          - generic [ref=f11e748]:
+            - generic [ref=f11e749]: "Code: free_trial"
+            - generic [ref=f11e750]: "Max Users: 5"
+            - generic [ref=f11e751]: "Trial: 10 days"
+            - generic [ref=f11e752]: System plan
+          - button "Edit Plan" [ref=f11e754] [cursor=pointer]
+          - generic [ref=f11e755]:
+            - paragraph [ref=f11e756]: Features
+            - generic [ref=f11e757]:
+              - generic [ref=f11e758] [cursor=pointer]:
+                - checkbox "Advanced Analytics advanced" [checked] [ref=f11e759]
+                - generic [ref=f11e760]: Advanced Analytics
+                - generic [ref=f11e761]: advanced
+              - generic [ref=f11e762] [cursor=pointer]:
+                - checkbox "Advanced Dashboard advanced" [checked] [ref=f11e763]
+                - generic [ref=f11e764]: Advanced Dashboard
+                - generic [ref=f11e765]: advanced
+              - generic [ref=f11e766] [cursor=pointer]:
+                - checkbox "Advanced Reports advanced" [checked] [ref=f11e767]
+                - generic [ref=f11e768]: Advanced Reports
+                - generic [ref=f11e769]: advanced
+              - generic [ref=f11e770] [cursor=pointer]:
+                - checkbox "Data Exports advanced" [checked] [ref=f11e771]
+                - generic [ref=f11e772]: Data Exports
+                - generic [ref=f11e773]: advanced
+              - generic [ref=f11e774] [cursor=pointer]:
+                - checkbox "BOQ Management core" [checked] [ref=f11e775]
+                - generic [ref=f11e776]: BOQ Management
+                - generic [ref=f11e777]: core
+              - generic [ref=f11e778] [cursor=pointer]:
+                - checkbox "Contractor Tracking core" [checked] [ref=f11e779]
+                - generic [ref=f11e780]: Contractor Tracking
+                - generic [ref=f11e781]: core
+              - generic [ref=f11e782] [cursor=pointer]:
+                - checkbox "Material Movements core" [checked] [ref=f11e783]
+                - generic [ref=f11e784]: Material Movements
+                - generic [ref=f11e785]: core
+              - generic [ref=f11e786] [cursor=pointer]:
+                - checkbox "Multi Warehouse core" [checked] [ref=f11e787]
+                - generic [ref=f11e788]: Multi Warehouse
+                - generic [ref=f11e789]: core
+              - generic [ref=f11e790] [cursor=pointer]:
+                - checkbox "Reports core" [checked] [ref=f11e791]
+                - generic [ref=f11e792]: Reports
+                - generic [ref=f11e793]: core
+              - generic [ref=f11e794] [cursor=pointer]:
+                - checkbox "Work Orders core" [checked] [ref=f11e795]
+                - generic [ref=f11e796]: Work Orders
+                - generic [ref=f11e797]: core
+        - generic [ref=f11e798]:
+          - generic [ref=f11e799]:
+            - heading "Basic" [level=3] [ref=f11e800]
+            - generic [ref=f11e801]: Active
+          - paragraph [ref=f11e802]: Standard plan with core features
+          - generic [ref=f11e803]:
+            - generic [ref=f11e804]: "Code: basic"
+            - generic [ref=f11e805]: "Max Users: 10"
+            - generic [ref=f11e806]: System plan
+          - button "Edit Plan" [ref=f11e808] [cursor=pointer]
+          - generic [ref=f11e809]:
+            - paragraph [ref=f11e810]: Features
+            - generic [ref=f11e811]:
+              - generic [ref=f11e812] [cursor=pointer]:
+                - checkbox "Advanced Analytics advanced" [checked] [ref=f11e813]
+                - generic [ref=f11e814]: Advanced Analytics
+                - generic [ref=f11e815]: advanced
+              - generic [ref=f11e816] [cursor=pointer]:
+                - checkbox "Advanced Dashboard advanced" [ref=f11e817]
+                - generic [ref=f11e818]: Advanced Dashboard
+                - generic [ref=f11e819]: advanced
+              - generic [ref=f11e820] [cursor=pointer]:
+                - checkbox "Advanced Reports advanced" [ref=f11e821]
+                - generic [ref=f11e822]: Advanced Reports
+                - generic [ref=f11e823]: advanced
+              - generic [ref=f11e824] [cursor=pointer]:
+                - checkbox "Data Exports advanced" [ref=f11e825]
+                - generic [ref=f11e826]: Data Exports
+                - generic [ref=f11e827]: advanced
+              - generic [ref=f11e828] [cursor=pointer]:
+                - checkbox "BOQ Management core" [checked] [ref=f11e829]
+                - generic [ref=f11e830]: BOQ Management
+                - generic [ref=f11e831]: core
+              - generic [ref=f11e832] [cursor=pointer]:
+                - checkbox "Contractor Tracking core" [checked] [ref=f11e833]
+                - generic [ref=f11e834]: Contractor Tracking
+                - generic [ref=f11e835]: core
+              - generic [ref=f11e836] [cursor=pointer]:
+                - checkbox "Material Movements core" [checked] [ref=f11e837]
+                - generic [ref=f11e838]: Material Movements
+                - generic [ref=f11e839]: core
+              - generic [ref=f11e840] [cursor=pointer]:
+                - checkbox "Multi Warehouse core" [checked] [ref=f11e841]
+                - generic [ref=f11e842]: Multi Warehouse
+                - generic [ref=f11e843]: core
+              - generic [ref=f11e844] [cursor=pointer]:
+                - checkbox "Reports core" [checked] [ref=f11e845]
+                - generic [ref=f11e846]: Reports
+                - generic [ref=f11e847]: core
+              - generic [ref=f11e848] [cursor=pointer]:
+                - checkbox "Work Orders core" [checked] [ref=f11e849]
+                - generic [ref=f11e850]: Work Orders
+                - generic [ref=f11e851]: core
+        - generic [ref=f11e852]:
+          - generic [ref=f11e853]:
+            - heading "Premium" [level=3] [ref=f11e854]
+            - generic [ref=f11e855]: Active
+          - paragraph [ref=f11e856]: Full access with advanced features
+          - generic [ref=f11e857]:
+            - generic [ref=f11e858]: "Code: premium"
+            - generic [ref=f11e859]: "Max Users: 50"
+          - button "Edit Plan" [ref=f11e861] [cursor=pointer]
+          - generic [ref=f11e862]:
+            - paragraph [ref=f11e863]: Features
+            - generic [ref=f11e864]:
+              - generic [ref=f11e865] [cursor=pointer]:
+                - checkbox "Advanced Analytics advanced" [checked] [ref=f11e866]
+                - generic [ref=f11e867]: Advanced Analytics
+                - generic [ref=f11e868]: advanced
+              - generic [ref=f11e869] [cursor=pointer]:
+                - checkbox "Advanced Dashboard advanced" [checked] [ref=f11e870]
+                - generic [ref=f11e871]: Advanced Dashboard
+                - generic [ref=f11e872]: advanced
+              - generic [ref=f11e873] [cursor=pointer]:
+                - checkbox "Advanced Reports advanced" [checked] [ref=f11e874]
+                - generic [ref=f11e875]: Advanced Reports
+                - generic [ref=f11e876]: advanced
+              - generic [ref=f11e877] [cursor=pointer]:
+                - checkbox "Data Exports advanced" [checked] [ref=f11e878]
+                - generic [ref=f11e879]: Data Exports
+                - generic [ref=f11e880]: advanced
+              - generic [ref=f11e881] [cursor=pointer]:
+                - checkbox "BOQ Management core" [checked] [ref=f11e882]
+                - generic [ref=f11e883]: BOQ Management
+                - generic [ref=f11e884]: core
+              - generic [ref=f11e885] [cursor=pointer]:
+                - checkbox "Contractor Tracking core" [checked] [ref=f11e886]
+                - generic [ref=f11e887]: Contractor Tracking
+                - generic [ref=f11e888]: core
+              - generic [ref=f11e889] [cursor=pointer]:
+                - checkbox "Material Movements core" [checked] [ref=f11e890]
+                - generic [ref=f11e891]: Material Movements
+                - generic [ref=f11e892]: core
+              - generic [ref=f11e893] [cursor=pointer]:
+                - checkbox "Multi Warehouse core" [checked] [ref=f11e894]
+                - generic [ref=f11e895]: Multi Warehouse
+                - generic [ref=f11e896]: core
+              - generic [ref=f11e897] [cursor=pointer]:
+                - checkbox "Reports core" [checked] [ref=f11e898]
+                - generic [ref=f11e899]: Reports
+                - generic [ref=f11e900]: core
+              - generic [ref=f11e901] [cursor=pointer]:
+                - checkbox "Work Orders core" [checked] [ref=f11e902]
+                - generic [ref=f11e903]: Work Orders
+                - generic [ref=f11e904]: core

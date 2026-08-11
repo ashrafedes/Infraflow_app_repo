@@ -1,0 +1,45 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e410]:
+      - generic [ref=f11e412]:
+        - heading "Subscriptions" [level=1] [ref=f11e413]
+        - paragraph [ref=f11e414]: Manage company subscriptions
+      - table [ref=f11e416]:
+        - rowgroup [ref=f11e417]:
+          - row [ref=f11e418]:
+            - columnheader "Company" [ref=f11e419]
+            - columnheader "Plan" [ref=f11e420]
+            - columnheader "Status" [ref=f11e421]
+            - columnheader "Max Users" [ref=f11e422]
+            - columnheader "Trial Ends" [ref=f11e423]
+            - columnheader "Created" [ref=f11e424]
+            - columnheader "Actions" [ref=f11e425]
+        - rowgroup [ref=f11e426]:
+          - row [ref=f11e427]:
+            - cell "InfraFlow Test Company" [ref=f11e428]
+            - cell "Basic" [ref=f11e429]
+            - cell "trial" [ref=f11e430]
+            - cell "10 (plan)" [ref=f11e432]
+            - cell "Aug 21, 2026" [ref=f11e433]
+            - cell "Aug 11, 2026" [ref=f11e434]
+            - cell [ref=f11e435]:
+              - button "Edit" [ref=f11e436] [cursor=pointer]
+              - button "Audit" [ref=f11e437] [cursor=pointer]

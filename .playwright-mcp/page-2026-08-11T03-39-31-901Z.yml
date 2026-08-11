@@ -1,0 +1,159 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e186]:
+      - generic [ref=f11e187]:
+        - generic [ref=f11e188]:
+          - heading "InfraFlow Test Company" [level=1] [ref=f11e189]
+          - paragraph [ref=f11e190]: Company Inspection
+        - link "Back to Companies" [ref=f11e191] [cursor=pointer]:
+          - /url: /admin/companies
+      - generic [ref=f11e194]:
+        - generic [ref=f11e195]:
+          - heading "Company Overview" [level=2] [ref=f11e196]
+          - generic [ref=f11e197]:
+            - generic [ref=f11e198]:
+              - generic [ref=f11e199]: "Company ID:"
+              - generic [ref=f11e200]: 4fbace07-dc70-4238-a727-e9a3883abf54
+            - generic [ref=f11e201]:
+              - generic [ref=f11e202]: "Name:"
+              - generic [ref=f11e203]: InfraFlow Test Company
+            - generic [ref=f11e204]:
+              - generic [ref=f11e205]: "Created:"
+              - generic [ref=f11e206]: Aug 11, 2026
+            - generic [ref=f11e207]:
+              - generic [ref=f11e208]: "Total Users:"
+              - generic [ref=f11e209]: "2"
+            - generic [ref=f11e210]:
+              - generic [ref=f11e211]: "Active Users:"
+              - generic [ref=f11e212]: "2"
+        - generic [ref=f11e213]:
+          - heading "Subscription" [level=2] [ref=f11e214]
+          - generic [ref=f11e215]:
+            - generic [ref=f11e216]:
+              - generic [ref=f11e217]: "Plan:"
+              - generic [ref=f11e218]: Free Trial (free_trial)
+            - generic [ref=f11e219]:
+              - generic [ref=f11e220]: "Status:"
+              - generic [ref=f11e221]: trial
+            - generic [ref=f11e222]:
+              - generic [ref=f11e223]: "Trial Start:"
+              - generic [ref=f11e224]: Aug 11, 2026
+            - generic [ref=f11e225]:
+              - generic [ref=f11e226]: "Trial End:"
+              - generic [ref=f11e227]: Aug 21, 2026
+            - generic [ref=f11e228]:
+              - generic [ref=f11e229]: "Current Period:"
+              - generic [ref=f11e230]: — — —
+        - generic [ref=f11e231]:
+          - heading "User Limit" [level=2] [ref=f11e232]
+          - generic [ref=f11e233]:
+            - generic [ref=f11e234]:
+              - generic [ref=f11e235]: "Active Users:"
+              - generic [ref=f11e236]: "2"
+            - generic [ref=f11e237]:
+              - generic [ref=f11e238]: "Max Users:"
+              - generic [ref=f11e239]: "5"
+            - generic [ref=f11e240]:
+              - generic [ref=f11e241]: "Utilization:"
+              - generic [ref=f11e242]: 40%
+            - generic [ref=f11e243]:
+              - generic [ref=f11e244]: "Status:"
+              - generic [ref=f11e245]: Healthy
+            - paragraph [ref=f11e248]: Informational only — does not change subscription limits or user permissions.
+        - generic [ref=f11e249]:
+          - heading "Feature Entitlements" [level=2] [ref=f11e250]
+          - generic [ref=f11e251]:
+            - generic [ref=f11e252]:
+              - generic [ref=f11e253]:
+                - generic [ref=f11e254]: Material Movements
+                - generic [ref=f11e255]: core
+              - generic [ref=f11e256]: Enabled
+            - generic [ref=f11e257]:
+              - generic [ref=f11e258]:
+                - generic [ref=f11e259]: Work Orders
+                - generic [ref=f11e260]: core
+              - generic [ref=f11e261]: Enabled
+            - generic [ref=f11e262]:
+              - generic [ref=f11e263]:
+                - generic [ref=f11e264]: BOQ Management
+                - generic [ref=f11e265]: core
+              - generic [ref=f11e266]: Enabled
+            - generic [ref=f11e267]:
+              - generic [ref=f11e268]:
+                - generic [ref=f11e269]: Reports
+                - generic [ref=f11e270]: core
+              - generic [ref=f11e271]: Enabled
+            - generic [ref=f11e272]:
+              - generic [ref=f11e273]:
+                - generic [ref=f11e274]: Multi Warehouse
+                - generic [ref=f11e275]: core
+              - generic [ref=f11e276]: Enabled
+            - generic [ref=f11e277]:
+              - generic [ref=f11e278]:
+                - generic [ref=f11e279]: Contractor Tracking
+                - generic [ref=f11e280]: core
+              - generic [ref=f11e281]: Enabled
+            - generic [ref=f11e282]:
+              - generic [ref=f11e283]:
+                - generic [ref=f11e284]: Advanced Reports
+                - generic [ref=f11e285]: advanced
+              - generic [ref=f11e286]: Enabled
+            - generic [ref=f11e287]:
+              - generic [ref=f11e288]:
+                - generic [ref=f11e289]: Advanced Dashboard
+                - generic [ref=f11e290]: advanced
+              - generic [ref=f11e291]: Enabled
+            - generic [ref=f11e292]:
+              - generic [ref=f11e293]:
+                - generic [ref=f11e294]: Advanced Analytics
+                - generic [ref=f11e295]: advanced
+              - generic [ref=f11e296]: Enabled
+            - generic [ref=f11e297]:
+              - generic [ref=f11e298]:
+                - generic [ref=f11e299]: Data Exports
+                - generic [ref=f11e300]: advanced
+              - generic [ref=f11e301]: Enabled
+      - generic [ref=f11e302]:
+        - heading "Users (2)" [level=2] [ref=f11e303]
+        - table [ref=f11e305]:
+          - rowgroup [ref=f11e306]:
+            - row [ref=f11e307]:
+              - columnheader "Name" [ref=f11e308]
+              - columnheader "Email" [ref=f11e309]
+              - columnheader "Role" [ref=f11e310]
+              - columnheader "Active" [ref=f11e311]
+              - columnheader "Created" [ref=f11e312]
+          - rowgroup [ref=f11e313]:
+            - row [ref=f11e314]:
+              - cell "ashrafede@gmail.com" [ref=f11e315]
+              - cell "ashrafede@gmail.com" [ref=f11e316]
+              - cell "Company Admin" [ref=f11e317]
+              - cell "Active" [ref=f11e318]
+              - cell "Aug 11, 2026" [ref=f11e320]
+            - row [ref=f11e321]:
+              - cell "Test Admin" [ref=f11e322]
+              - cell "admin@infraflow.app" [ref=f11e323]
+              - cell "Company Admin" [ref=f11e324]
+              - cell "Active" [ref=f11e325]
+              - cell "Aug 11, 2026" [ref=f11e327]
+      - generic [ref=f11e328]:
+        - heading "Audit History" [level=2] [ref=f11e329]
+        - paragraph [ref=f11e330]: No audit entries for this company

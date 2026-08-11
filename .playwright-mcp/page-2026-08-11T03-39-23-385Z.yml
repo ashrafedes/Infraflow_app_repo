@@ -1,0 +1,45 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [active] [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e160]:
+      - generic [ref=f11e162]:
+        - heading "Companies" [level=1] [ref=f11e163]
+        - paragraph [ref=f11e164]: All registered companies on the platform
+      - table [ref=f11e166]:
+        - rowgroup [ref=f11e167]:
+          - row [ref=f11e168]:
+            - columnheader "Company" [ref=f11e169]
+            - columnheader "Plan" [ref=f11e170]
+            - columnheader "Status" [ref=f11e171]
+            - columnheader "Trial Ends" [ref=f11e172]
+            - columnheader "Created" [ref=f11e173]
+            - columnheader "Actions" [ref=f11e174]
+        - rowgroup [ref=f11e175]:
+          - row [ref=f11e176]:
+            - cell [ref=f11e177]:
+              - link "InfraFlow Test Company" [ref=f11e178] [cursor=pointer]:
+                - /url: /admin/companies/4fbace07-dc70-4238-a727-e9a3883abf54
+            - cell "Free Trial" [ref=f11e179]
+            - cell "trial" [ref=f11e180]
+            - cell "Aug 21, 2026" [ref=f11e182]
+            - cell "Aug 11, 2026" [ref=f11e183]
+            - cell [ref=f11e184]:
+              - link "View" [ref=f11e185] [cursor=pointer]:
+                - /url: /admin/companies/4fbace07-dc70-4238-a727-e9a3883abf54

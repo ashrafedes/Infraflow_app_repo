@@ -1,0 +1,23 @@
+- generic [ref=f19e386]:
+  - complementary [ref=f19e387]:
+    - generic [ref=f19e388]: InfraFlow
+    - navigation [ref=f19e400]:
+      - link "Dashboard" [ref=f19e401] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f19e407] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f19e412] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f19e415] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f19e419] [cursor=pointer]:
+        - /url: /admin/audit-log
+      - link "Upgrade Requests" [ref=f19e423] [cursor=pointer]:
+        - /url: /admin/subscription-requests
+    - generic [ref=f19e428]:
+      - generic [ref=f19e429]:
+        - paragraph [ref=f19e430]: Super Admin
+        - paragraph [ref=f19e431]: Platform Administrator
+      - button "Sign Out" [ref=f19e432] [cursor=pointer]
+  - main [ref=f19e437]:
+    - generic [ref=f19e438]: Loading...

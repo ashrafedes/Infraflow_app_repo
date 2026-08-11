@@ -1,0 +1,183 @@
+- generic [ref=f19e33]:
+  - complementary [ref=f19e34]:
+    - generic [ref=f19e35]: InfraFlow
+    - navigation [ref=f19e47]:
+      - link "Dashboard" [ref=f19e48] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f19e54] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f19e58] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f19e62] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f19e66] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f19e69] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f19e73] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f19e77] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f19e82] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f19e88] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f19e94] [cursor=pointer]:
+        - /url: /users
+      - link "Subscription" [ref=f19e100] [cursor=pointer]:
+        - /url: /subscription
+    - generic [ref=f19e103]:
+      - generic [ref=f19e104]:
+        - paragraph [ref=f19e105]: ashrafede@gmail.com
+        - paragraph [ref=f19e106]: ashrafede@gmail.com
+        - paragraph [ref=f19e107]: company admin
+      - button "Sign Out" [ref=f19e108] [cursor=pointer]
+  - main [ref=f19e113]:
+    - generic [ref=f19e114]:
+      - generic [ref=f19e116]:
+        - heading "Subscription" [level=1] [ref=f19e117]
+        - paragraph [ref=f19e118]: Manage your plan and request upgrades
+      - generic [ref=f19e120]:
+        - generic [ref=f19e124]:
+          - paragraph [ref=f19e125]: 10 days remaining in your free trial
+          - paragraph [ref=f19e126]: Your trial expires on Aug 21, 2026. Upgrade now to avoid interruption.
+        - button "Upgrade Now" [ref=f19e127] [cursor=pointer]
+      - generic [ref=f19e131]:
+        - generic [ref=f19e132]:
+          - heading "Current Plan" [level=2] [ref=f19e136]
+          - generic [ref=f19e137]: trial
+        - generic [ref=f19e138]:
+          - generic [ref=f19e139]:
+            - paragraph [ref=f19e140]: Plan
+            - paragraph [ref=f19e141]: Free Trial
+          - generic [ref=f19e142]:
+            - paragraph [ref=f19e143]: Max Users
+            - paragraph [ref=f19e144]: "5"
+          - generic [ref=f19e145]:
+            - paragraph [ref=f19e146]: Active Users
+            - paragraph [ref=f19e147]: "1"
+          - generic [ref=f19e148]:
+            - paragraph [ref=f19e149]: Trial Ends
+            - paragraph [ref=f19e150]: Aug 21, 2026
+      - generic [ref=f19e151]:
+        - heading "Available Plans" [level=2] [ref=f19e152]
+        - generic [ref=f19e153]:
+          - generic [ref=f19e154]:
+            - generic [ref=f19e155]: Current Plan
+            - heading "Free Trial" [level=3] [ref=f19e157]
+            - paragraph [ref=f19e158]: Full access for 10 days
+            - generic [ref=f19e159]:
+              - generic [ref=f19e160]: "Max Users: 5"
+              - generic [ref=f19e161]:
+                - text: "Trial Duration:"
+                - generic [ref=f19e162]: 10 days
+            - generic [ref=f19e163]:
+              - paragraph [ref=f19e164]: Features
+              - generic [ref=f19e165]:
+                - generic [ref=f19e166]:
+                  - generic [ref=f19e169]: Advanced Analytics
+                  - generic [ref=f19e170]: advanced
+                - generic [ref=f19e171]:
+                  - generic [ref=f19e174]: Advanced Dashboard
+                  - generic [ref=f19e175]: advanced
+                - generic [ref=f19e176]:
+                  - generic [ref=f19e179]: Advanced Reports
+                  - generic [ref=f19e180]: advanced
+                - generic [ref=f19e181]:
+                  - generic [ref=f19e184]: Data Exports
+                  - generic [ref=f19e185]: advanced
+                - generic [ref=f19e186]:
+                  - generic [ref=f19e189]: BOQ Management
+                  - generic [ref=f19e190]: core
+                - generic [ref=f19e191]:
+                  - generic [ref=f19e194]: Contractor Tracking
+                  - generic [ref=f19e195]: core
+                - generic [ref=f19e196]:
+                  - generic [ref=f19e199]: Material Movements
+                  - generic [ref=f19e200]: core
+                - generic [ref=f19e201]:
+                  - generic [ref=f19e204]: Multi Warehouse
+                  - generic [ref=f19e205]: core
+                - generic [ref=f19e206]:
+                  - generic [ref=f19e209]: Reports
+                  - generic [ref=f19e210]: core
+                - generic [ref=f19e211]:
+                  - generic [ref=f19e214]: Work Orders
+                  - generic [ref=f19e215]: core
+            - button "Current Plan" [disabled]
+          - generic [ref=f19e216]:
+            - heading "Basic" [level=3] [ref=f19e217]
+            - paragraph [ref=f19e218]: Standard plan with core features
+            - generic [ref=f19e219]: "Max Users: 10"
+            - generic [ref=f19e221]:
+              - paragraph [ref=f19e222]: Features
+              - generic [ref=f19e223]:
+                - generic [ref=f19e224]:
+                  - generic [ref=f19e227]: Advanced Analytics
+                  - generic [ref=f19e228]: advanced
+                - generic [ref=f19e229]:
+                  - generic [ref=f19e233]: Advanced Dashboard
+                  - generic [ref=f19e234]: advanced
+                - generic [ref=f19e235]:
+                  - generic [ref=f19e239]: Advanced Reports
+                  - generic [ref=f19e240]: advanced
+                - generic [ref=f19e241]:
+                  - generic [ref=f19e245]: Data Exports
+                  - generic [ref=f19e246]: advanced
+                - generic [ref=f19e247]:
+                  - generic [ref=f19e250]: BOQ Management
+                  - generic [ref=f19e251]: core
+                - generic [ref=f19e252]:
+                  - generic [ref=f19e255]: Contractor Tracking
+                  - generic [ref=f19e256]: core
+                - generic [ref=f19e257]:
+                  - generic [ref=f19e260]: Material Movements
+                  - generic [ref=f19e261]: core
+                - generic [ref=f19e262]:
+                  - generic [ref=f19e265]: Multi Warehouse
+                  - generic [ref=f19e266]: core
+                - generic [ref=f19e267]:
+                  - generic [ref=f19e270]: Reports
+                  - generic [ref=f19e271]: core
+                - generic [ref=f19e272]:
+                  - generic [ref=f19e275]: Work Orders
+                  - generic [ref=f19e276]: core
+            - button "Request Upgrade" [ref=f19e277] [cursor=pointer]
+          - generic [ref=f19e281]:
+            - heading "Premium" [level=3] [ref=f19e282]
+            - paragraph [ref=f19e283]: Full access with advanced features
+            - generic [ref=f19e284]: "Max Users: 50"
+            - generic [ref=f19e286]:
+              - paragraph [ref=f19e287]: Features
+              - generic [ref=f19e288]:
+                - generic [ref=f19e289]:
+                  - generic [ref=f19e292]: Advanced Analytics
+                  - generic [ref=f19e293]: advanced
+                - generic [ref=f19e294]:
+                  - generic [ref=f19e297]: Advanced Dashboard
+                  - generic [ref=f19e298]: advanced
+                - generic [ref=f19e299]:
+                  - generic [ref=f19e302]: Advanced Reports
+                  - generic [ref=f19e303]: advanced
+                - generic [ref=f19e304]:
+                  - generic [ref=f19e307]: Data Exports
+                  - generic [ref=f19e308]: advanced
+                - generic [ref=f19e309]:
+                  - generic [ref=f19e312]: BOQ Management
+                  - generic [ref=f19e313]: core
+                - generic [ref=f19e314]:
+                  - generic [ref=f19e317]: Contractor Tracking
+                  - generic [ref=f19e318]: core
+                - generic [ref=f19e319]:
+                  - generic [ref=f19e322]: Material Movements
+                  - generic [ref=f19e323]: core
+                - generic [ref=f19e324]:
+                  - generic [ref=f19e327]: Multi Warehouse
+                  - generic [ref=f19e328]: core
+                - generic [ref=f19e329]:
+                  - generic [ref=f19e332]: Reports
+                  - generic [ref=f19e333]: core
+                - generic [ref=f19e334]:
+                  - generic [ref=f19e337]: Work Orders
+                  - generic [ref=f19e338]: core
+            - button "Request Upgrade" [ref=f19e339] [cursor=pointer]

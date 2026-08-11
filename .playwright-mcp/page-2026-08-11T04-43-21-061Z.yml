@@ -1,0 +1,53 @@
+- generic [ref=f20e5]:
+  - complementary [ref=f20e6]:
+    - generic [ref=f20e7]: InfraFlow
+    - navigation [ref=f20e19]:
+      - link "Dashboard" [ref=f20e20] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f20e26] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f20e31] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f20e34] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f20e38] [cursor=pointer]:
+        - /url: /admin/audit-log
+      - link "Upgrade Requests" [ref=f20e42] [cursor=pointer]:
+        - /url: /admin/subscription-requests
+    - generic [ref=f20e47]:
+      - generic [ref=f20e48]:
+        - paragraph [ref=f20e49]: Super Admin
+        - paragraph [ref=f20e50]: Platform Administrator
+      - button "Sign Out" [ref=f20e51] [cursor=pointer]
+  - main [ref=f20e56]:
+    - generic [ref=f20e119]:
+      - generic [ref=f20e121]:
+        - heading "Upgrade Requests" [level=1] [ref=f20e122]
+        - paragraph [ref=f20e123]: Review company plan upgrade requests
+      - generic [ref=f20e124]: Request approved. Plan changed to basic.
+      - generic [ref=f20e126]:
+        - button "Pending (0)" [ref=f20e127] [cursor=pointer]
+        - button "Approved (1)" [active] [ref=f20e128] [cursor=pointer]
+        - button "Rejected (0)" [ref=f20e129] [cursor=pointer]
+        - button "All (1)" [ref=f20e130] [cursor=pointer]
+      - table [ref=f20e132]:
+        - rowgroup [ref=f20e133]:
+          - row [ref=f20e134]:
+            - columnheader "Company" [ref=f20e135]
+            - columnheader "Current Plan" [ref=f20e136]
+            - columnheader "Requested Plan" [ref=f20e137]
+            - columnheader "Requested By" [ref=f20e138]
+            - columnheader "Requested Date" [ref=f20e139]
+            - columnheader "Status" [ref=f20e140]
+            - columnheader "Reviewed" [ref=f20e141]
+            - columnheader "Actions" [ref=f20e142]
+        - rowgroup [ref=f20e143]:
+          - row [ref=f20e146]:
+            - cell "InfraFlow Test Company" [ref=f20e147]
+            - cell "Free Trial" [ref=f20e148]
+            - cell "Basic" [ref=f20e149]
+            - cell "ashrafede@gmail.com" [ref=f20e150]
+            - cell "Aug 11, 2026" [ref=f20e151]
+            - cell "approved" [ref=f20e152]
+            - cell "Aug 11, 2026" [ref=f20e154]
+            - cell "—" [ref=f20e155]

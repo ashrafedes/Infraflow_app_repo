@@ -1,0 +1,76 @@
+- generic [ref=f6e5]:
+  - complementary [ref=f6e6]:
+    - generic [ref=f6e7]: InfraFlow
+    - navigation [ref=f6e19]:
+      - link "Dashboard" [ref=f6e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f6e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f6e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f6e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f6e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f6e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f6e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f6e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f6e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f6e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f6e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f6e72]:
+      - generic [ref=f6e73]:
+        - paragraph [ref=f6e74]: ashrafede@gmail.com
+        - paragraph [ref=f6e75]: ashrafede@gmail.com
+        - paragraph [ref=f6e76]: company admin
+      - button "Sign Out" [ref=f6e77] [cursor=pointer]
+  - main [ref=f6e82]:
+    - generic [ref=f6e206]:
+      - link "Back to Movements" [ref=f6e207] [cursor=pointer]:
+        - /url: /movements
+      - generic [ref=f6e211]:
+        - heading "MOV-000007" [level=1] [ref=f6e212]
+        - paragraph [ref=f6e213]: RECEIPT — Aug 11, 2026
+      - generic [ref=f6e214]:
+        - generic [ref=f6e215]:
+          - paragraph [ref=f6e216]: Type
+          - paragraph [ref=f6e217]:
+            - generic [ref=f6e218]: RECEIPT
+        - generic [ref=f6e219]:
+          - paragraph [ref=f6e220]: Date
+          - paragraph [ref=f6e221]: Aug 11, 2026
+        - generic [ref=f6e222]:
+          - paragraph [ref=f6e223]: Responsible
+          - paragraph [ref=f6e224]: ashrafede@gmail.com
+        - generic [ref=f6e225]:
+          - paragraph [ref=f6e226]: Created
+          - paragraph [ref=f6e227]: Aug 11, 2026, 06:09 AM
+      - generic [ref=f6e228]:
+        - generic [ref=f6e229]:
+          - heading "Source" [level=3] [ref=f6e230]
+          - paragraph [ref=f6e231]: SUP-001 — SteelCo Supplies Ltd
+        - generic [ref=f6e232]:
+          - heading "Destination" [level=3] [ref=f6e233]
+          - paragraph [ref=f6e234]: WH-001 — Main Warehouse
+      - heading "Material Lines" [level=2] [ref=f6e235]
+      - table [ref=f6e237]:
+        - rowgroup [ref=f6e238]:
+          - row [ref=f6e239]:
+            - 'columnheader "Item #" [ref=f6e240]'
+            - columnheader "Description" [ref=f6e241]
+            - columnheader "UOM" [ref=f6e242]
+            - columnheader "Quantity" [ref=f6e243]
+            - columnheader "Notes" [ref=f6e244]
+        - rowgroup [ref=f6e245]:
+          - row [ref=f6e246]:
+            - cell "MAT-001" [ref=f6e247]
+            - cell "Steel Rebar 12mm" [ref=f6e248]
+            - cell "pcs" [ref=f6e249]
+            - cell "100 pcs" [ref=f6e250]
+            - cell "—" [ref=f6e251]

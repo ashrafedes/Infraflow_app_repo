@@ -1,0 +1,60 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [active] [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e438]:
+      - generic [ref=f11e440]:
+        - heading "Audit Log" [level=1] [ref=f11e441]
+        - paragraph [ref=f11e442]: Platform-wide subscription change history
+      - generic [ref=f11e444]:
+        - generic [ref=f11e445]:
+          - generic [ref=f11e446]: Company
+          - combobox [ref=f11e447]:
+            - option "All Companies" [selected]
+            - option "InfraFlow Test Company"
+        - generic [ref=f11e448]:
+          - generic [ref=f11e449]: Action Type
+          - combobox [ref=f11e450]:
+            - option "All Actions" [selected]
+            - option "Plan Changed"
+            - option "User Limit Changed"
+            - option "Trial Expired"
+            - option "Status Changed"
+        - generic [ref=f11e451]:
+          - generic [ref=f11e452]: Search Company Name
+          - textbox "Filter by company name..." [ref=f11e453]
+      - table [ref=f11e455]:
+        - rowgroup [ref=f11e456]:
+          - row [ref=f11e457]:
+            - columnheader "Company" [ref=f11e458]
+            - columnheader "Action" [ref=f11e459]
+            - columnheader "Old Value" [ref=f11e460]
+            - columnheader "New Value" [ref=f11e461]
+            - columnheader "Performed By" [ref=f11e462]
+            - columnheader "When" [ref=f11e463]
+        - rowgroup [ref=f11e464]:
+          - row [ref=f11e465]:
+            - cell [ref=f11e466]:
+              - link "InfraFlow Test Company" [ref=f11e467] [cursor=pointer]:
+                - /url: /admin/companies/4fbace07-dc70-4238-a727-e9a3883abf54
+            - cell "plan_changed" [ref=f11e468]
+            - 'cell "{\"status\":\"trial\",\"max_users\":null,\"plan_code\":\"free_trial\",\"max_users_override\":false}" [ref=f11e470]'
+            - 'cell "{\"status\":\"trial\",\"max_users\":null,\"plan_code\":\"basic\",\"max_users_override\":false}" [ref=f11e471]'
+            - cell "7271e5a0..." [ref=f11e472]
+            - cell "Aug 11, 2026, 06:40 AM" [ref=f11e473]

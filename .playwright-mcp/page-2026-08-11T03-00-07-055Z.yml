@@ -1,0 +1,34 @@
+- generic [ref=f2e31]:
+  - complementary [ref=f2e32]:
+    - generic [ref=f2e33]: InfraFlow
+    - navigation [ref=f2e45]:
+      - link "Dashboard" [ref=f2e46] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f2e52] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f2e56] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f2e60] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f2e64] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f2e67] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f2e71] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f2e75] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f2e80] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f2e86] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f2e92] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f2e98]:
+      - generic [ref=f2e99]:
+        - paragraph [ref=f2e100]: ashrafede@gmail.com
+        - paragraph [ref=f2e101]: ashrafede@gmail.com
+        - paragraph [ref=f2e102]: company admin
+      - button "Sign Out" [ref=f2e103] [cursor=pointer]
+  - main [ref=f2e108]:
+    - generic [ref=f2e109]: Loading...

@@ -1,0 +1,56 @@
+- generic [ref=e5]:
+  - complementary [ref=e6]:
+    - generic [ref=e7]: InfraFlow
+    - navigation [ref=e19]:
+      - link "Dashboard" [ref=e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - paragraph [ref=e74]: ashrafede@gmail.com
+        - paragraph [ref=e75]: ashrafede@gmail.com
+        - paragraph [ref=e76]: company admin
+      - button "Sign Out" [ref=e77] [cursor=pointer]
+  - main [ref=e82]:
+    - generic [ref=e83]:
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - heading "Projects" [level=1] [ref=e86]
+          - paragraph [ref=e87]: Manage project master data — inline editing, Ctrl+N for new row, Ctrl+S to save
+        - button "Add Row" [ref=e88] [cursor=pointer]
+      - generic [ref=e90]:
+        - textbox "Search projects..." [ref=e91]
+        - button "Save All" [disabled]
+      - grid [ref=e94]:
+        - row [ref=e95]:
+          - columnheader "Code" [ref=e96]
+          - columnheader "Name" [ref=e98]
+          - columnheader "Active" [ref=e100]
+          - columnheader [ref=e101]
+        - row [ref=e102]:
+          - gridcell [selected] [ref=e112]:
+            - textbox [active] [ref=e113]: PRJ-001
+          - gridcell "Tower Construction Project" [ref=e104]
+          - gridcell [ref=e105]:
+            - checkbox [checked] [ref=e106] [cursor=pointer]
+          - gridcell [ref=e107]:
+            - button "Delete" [ref=e108] [cursor=pointer]

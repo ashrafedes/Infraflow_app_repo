@@ -1,0 +1,16 @@
+- generic [ref=f18e4]:
+  - generic [ref=f18e5]:
+    - heading "InfraFlow" [level=1] [ref=f18e17]
+    - paragraph [ref=f18e18]: Material Control & Work Order System
+  - generic [ref=f18e19]:
+    - generic [ref=f18e20]:
+      - button "Sign In" [ref=f18e21] [cursor=pointer]
+      - button "Register" [ref=f18e22] [cursor=pointer]
+    - generic [ref=f18e23]:
+      - generic [ref=f18e24]:
+        - generic [ref=f18e25]: Email
+        - textbox [ref=f18e26]
+      - generic [ref=f18e27]:
+        - generic [ref=f18e28]: Password
+        - textbox [ref=f18e29]
+      - button "Sign In" [ref=f18e30] [cursor=pointer]

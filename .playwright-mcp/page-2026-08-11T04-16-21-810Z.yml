@@ -1,0 +1,111 @@
+- generic [ref=f6e5]:
+  - complementary [ref=f6e6]:
+    - generic [ref=f6e7]: InfraFlow
+    - navigation [ref=f6e19]:
+      - link "Dashboard" [ref=f6e20] [cursor=pointer]:
+        - /url: /
+      - link "Work Orders" [ref=f6e26] [cursor=pointer]:
+        - /url: /work-orders
+      - link "Movements" [ref=f6e30] [cursor=pointer]:
+        - /url: /movements
+      - link "Reports" [ref=f6e34] [cursor=pointer]:
+        - /url: /reports
+      - link "Projects" [ref=f6e38] [cursor=pointer]:
+        - /url: /projects
+      - link "Work Locations" [ref=f6e41] [cursor=pointer]:
+        - /url: /work-locations
+      - link "Warehouses" [ref=f6e45] [cursor=pointer]:
+        - /url: /warehouses
+      - link "Materials" [ref=f6e49] [cursor=pointer]:
+        - /url: /materials
+      - link "Suppliers" [ref=f6e54] [cursor=pointer]:
+        - /url: /suppliers
+      - link "Contractors" [ref=f6e60] [cursor=pointer]:
+        - /url: /contractors
+      - link "Users" [ref=f6e66] [cursor=pointer]:
+        - /url: /users
+    - generic [ref=f6e72]:
+      - generic [ref=f6e73]:
+        - paragraph [ref=f6e74]: ashrafede@gmail.com
+        - paragraph [ref=f6e75]: ashrafede@gmail.com
+        - paragraph [ref=f6e76]: company admin
+      - button "Sign Out" [ref=f6e77] [cursor=pointer]
+  - main [ref=f6e82]:
+    - generic [ref=f6e83]:
+      - generic [ref=f6e84]:
+        - generic [ref=f6e85]:
+          - heading "Work Orders" [level=1] [ref=f6e86]
+          - paragraph [ref=f6e87]: Master-detail — select a WO to edit header + BOQ. Ctrl+N for new, Ctrl+S to save.
+        - button "Add Work Order" [ref=f6e88] [cursor=pointer]
+      - generic [ref=f6e90]:
+        - generic [ref=f6e91]:
+          - textbox "Search work orders..." [ref=f6e96]
+          - list [ref=f6e98]:
+            - listitem [ref=f6e99]:
+              - button "WO-001 active" [ref=f6e100] [cursor=pointer]:
+                - generic [ref=f6e101]:
+                  - generic [ref=f6e102]: WO-001
+                  - generic [ref=f6e103]: active
+        - generic [ref=f6e105]:
+          - generic [ref=f6e106]:
+            - generic [ref=f6e107]:
+              - generic [ref=f6e108]:
+                - heading "WO-001" [level=2] [ref=f6e109]
+                - paragraph [ref=f6e110]: —
+              - generic [ref=f6e111]:
+                - button "Save Header" [disabled]
+                - button "Delete WO" [ref=f6e112] [cursor=pointer]
+            - generic [ref=f6e116]:
+              - generic [ref=f6e117]:
+                - generic [ref=f6e118]: WO Number
+                - paragraph [ref=f6e119]: WO-001
+              - generic [ref=f6e120]:
+                - generic [ref=f6e121]: Site Code
+                - paragraph [ref=f6e122]: SITE-A-01
+              - generic [ref=f6e123]:
+                - generic [ref=f6e124]: Project
+                - paragraph
+              - generic [ref=f6e125]:
+                - generic [ref=f6e126]: Work Location
+                - paragraph
+              - generic [ref=f6e127]:
+                - generic [ref=f6e128]: Supervisor
+                - textbox [active] [ref=f6e129]: John Smith
+              - generic [ref=f6e130]:
+                - generic [ref=f6e131]: Contractor
+                - combobox [ref=f6e132]:
+                  - option "No contractor"
+                  - option "BuildRight Construction Co" [selected]
+              - generic [ref=f6e133]:
+                - generic [ref=f6e134]: Status
+                - combobox [ref=f6e135]:
+                  - option "Active" [selected]
+                  - option "Completed"
+                  - option "On Hold"
+                  - option "Cancelled"
+              - generic [ref=f6e136]:
+                - generic [ref=f6e137]: Start Date
+                - textbox [ref=f6e138]: 2026-08-11
+              - generic [ref=f6e139]:
+                - generic [ref=f6e140]: End Date
+                - textbox [ref=f6e141]: 2026-12-31
+          - generic [ref=f6e143]:
+            - generic [ref=f6e144]:
+              - heading "Bill of Quantities" [level=3] [ref=f6e145]
+              - button "Add Line" [ref=f6e146] [cursor=pointer]
+              - button "Paste" [ref=f6e148] [cursor=pointer]
+              - button "Save" [disabled]
+            - grid [ref=f6e155]:
+              - row [ref=f6e156]:
+                - columnheader "Item" [ref=f6e157]
+                - columnheader "Description" [ref=f6e159]
+                - columnheader "UOM" [ref=f6e161]
+                - columnheader "Est. Qty" [ref=f6e162]
+                - columnheader [ref=f6e163]
+              - row [ref=f6e164]:
+                - gridcell "MAT-001 — Steel Rebar 12mm" [ref=f6e165]
+                - gridcell "—" [ref=f6e166]
+                - gridcell "—" [ref=f6e167]
+                - gridcell "500" [ref=f6e168]
+                - gridcell [ref=f6e169]:
+                  - button "Delete line" [ref=f6e170] [cursor=pointer]

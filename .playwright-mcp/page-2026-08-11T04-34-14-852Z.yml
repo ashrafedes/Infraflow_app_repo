@@ -1,0 +1,17 @@
+- generic [ref=f19e4]:
+  - generic [ref=f19e5]:
+    - heading "InfraFlow" [level=1] [ref=f19e17]
+    - paragraph [ref=f19e18]: Material Control & Work Order System
+  - generic [ref=f19e19]:
+    - generic [ref=f19e20]:
+      - button "Sign In" [ref=f19e21] [cursor=pointer]
+      - button "Register" [ref=f19e22] [cursor=pointer]
+    - generic [ref=f19e23]:
+      - generic [ref=f19e24]:
+        - generic [ref=f19e25]: Email
+        - textbox [ref=f19e26]: admin@infraflow.app
+      - generic [ref=f19e27]:
+        - generic [ref=f19e28]: Password
+        - textbox [ref=f19e29]: Admin123!
+      - generic [ref=f19e31]: Database error querying schema
+      - button "Sign In" [ref=f19e30] [cursor=pointer]

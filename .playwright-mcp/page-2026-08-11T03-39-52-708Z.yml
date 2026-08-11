@@ -1,0 +1,70 @@
+- generic [ref=f11e31]:
+  - complementary [ref=f11e32]:
+    - generic [ref=f11e33]: InfraFlow
+    - navigation [ref=f11e45]:
+      - link "Dashboard" [ref=f11e46] [cursor=pointer]:
+        - /url: /admin
+      - link "Companies" [ref=f11e52] [cursor=pointer]:
+        - /url: /admin/companies
+      - link "Subscriptions" [ref=f11e57] [cursor=pointer]:
+        - /url: /admin/subscriptions
+      - link "Plans & Features" [ref=f11e60] [cursor=pointer]:
+        - /url: /admin/plans
+      - link "Audit Log" [ref=f11e64] [cursor=pointer]:
+        - /url: /admin/audit-log
+    - generic [ref=f11e68]:
+      - generic [ref=f11e69]:
+        - paragraph [ref=f11e70]: Super Admin
+        - paragraph [ref=f11e71]: Platform Administrator
+      - button "Sign Out" [ref=f11e72] [cursor=pointer]
+  - main [ref=f11e77]:
+    - generic [ref=f11e360]:
+      - generic [ref=f11e362]:
+        - heading "Subscriptions" [level=1] [ref=f11e363]
+        - paragraph [ref=f11e364]: Manage company subscriptions
+      - table [ref=f11e366]:
+        - rowgroup [ref=f11e367]:
+          - row [ref=f11e368]:
+            - columnheader "Company" [ref=f11e369]
+            - columnheader "Plan" [ref=f11e370]
+            - columnheader "Status" [ref=f11e371]
+            - columnheader "Max Users" [ref=f11e372]
+            - columnheader "Trial Ends" [ref=f11e373]
+            - columnheader "Created" [ref=f11e374]
+            - columnheader "Actions" [ref=f11e375]
+        - rowgroup [ref=f11e376]:
+          - row [ref=f11e377]:
+            - cell "InfraFlow Test Company" [ref=f11e378]
+            - cell "Free Trial" [ref=f11e379]
+            - cell "trial" [ref=f11e380]
+            - cell "5 (plan)" [ref=f11e382]
+            - cell "Aug 21, 2026" [ref=f11e383]
+            - cell "Aug 11, 2026" [ref=f11e384]
+            - cell [ref=f11e385]:
+              - button "Edit" [active] [ref=f11e386] [cursor=pointer]
+              - button "Audit" [ref=f11e387] [cursor=pointer]
+      - generic [ref=f11e389]:
+        - generic [ref=f11e390]:
+          - heading "Edit Subscription" [level=2] [ref=f11e391]
+          - button [ref=f11e392] [cursor=pointer]
+        - generic [ref=f11e397]:
+          - generic [ref=f11e398]:
+            - generic [ref=f11e399]: Plan
+            - combobox [ref=f11e400]:
+              - option "Free Trial (free_trial)" [selected]
+              - option "Basic (basic)"
+              - option "Premium (premium)"
+          - generic [ref=f11e401]:
+            - generic [ref=f11e402]: Status
+            - combobox [ref=f11e403]:
+              - option "Trial" [selected]
+              - option "Active"
+              - option "Suspended"
+              - option "Expired"
+              - option "Cancelled"
+          - generic [ref=f11e404]:
+            - checkbox "Override max users" [ref=f11e405]
+            - generic [ref=f11e406]: Override max users
+          - generic [ref=f11e407]:
+            - button "Cancel" [ref=f11e408] [cursor=pointer]
+            - button "Save" [ref=f11e409] [cursor=pointer]
