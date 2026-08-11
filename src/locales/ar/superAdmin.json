@@ -1,0 +1,114 @@
+{
+  "dashboard": {
+    "title": "Super Admin Dashboard",
+    "subtitle": "Platform overview and statistics",
+    "stats": {
+      "totalCompanies": "Total Companies",
+      "activeSubscriptions": "Active Subscriptions",
+      "trialCompanies": "Trial Companies",
+      "totalRevenue": "Total Revenue",
+      "totalUsers": "Total Users",
+      "suspendedCompanies": "Suspended Companies"
+    },
+    "sections": {
+      "recentCompanies": "Recent Companies",
+      "revenueByPlan": "Revenue by Plan",
+      "companiesByStatus": "Companies by Status"
+    }
+  },
+  "companies": {
+    "title": "Companies",
+    "subtitle": "Manage all companies on the platform",
+    "search": "Search companies...",
+    "columns": {
+      "name": "Name",
+      "plan": "Plan",
+      "status": "Status",
+      "users": "Users",
+      "created": "Created"
+    },
+    "detail": {
+      "title": "Company Detail",
+      "info": "Company Info",
+      "subscription": "Subscription",
+      "users": "Users",
+      "auditLog": "Audit Log",
+      "name": "Name",
+      "plan": "Plan",
+      "status": "Status",
+      "trialEnds": "Trial Ends",
+      "maxUsers": "Max Users",
+      "createdAt": "Created At",
+      "suspend": "Suspend",
+      "activate": "Activate",
+      "resetTrial": "Reset Trial"
+    },
+    "empty": "No companies found"
+  },
+  "subscriptions": {
+    "title": "Subscriptions",
+    "subtitle": "Manage all subscriptions",
+    "columns": {
+      "company": "Company",
+      "plan": "Plan",
+      "status": "Status",
+      "trialEnds": "Trial Ends",
+      "users": "Users"
+    },
+    "empty": "No subscriptions found"
+  },
+  "plans": {
+    "title": "Plans & Features",
+    "subtitle": "Manage subscription plans and features",
+    "columns": {
+      "name": "Plan Name",
+      "price": "Price",
+      "status": "Status",
+      "sortOrder": "Sort Order"
+    },
+    "features": {
+      "title": "Features",
+      "name": "Feature Name",
+      "key": "Feature Key",
+      "description": "Description"
+    }
+  },
+  "auditLog": {
+    "title": "Audit Log",
+    "subtitle": "System audit trail",
+    "columns": {
+      "timestamp": "Timestamp",
+      "action": "Action",
+      "entity": "Entity",
+      "user": "User",
+      "details": "Details"
+    },
+    "empty": "No audit log entries"
+  },
+  "upgradeRequests": {
+    "title": "Upgrade Requests",
+    "subtitle": "Review and process subscription upgrade requests",
+    "columns": {
+      "company": "Company",
+      "currentPlan": "Current Plan",
+      "requestedPlan": "Requested Plan",
+      "status": "Status",
+      "requestedBy": "Requested By",
+      "date": "Date"
+    },
+    "actions": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "adminNotes": "Admin Notes",
+      "rejectionReason": "Rejection Reason",
+      "confirm": "Confirm"
+    },
+    "filters": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "empty": "No upgrade requests"
+  }
+}

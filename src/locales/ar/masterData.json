@@ -1,0 +1,69 @@
+{
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Manage project master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
+    "search": "Search projects...",
+    "columns": {
+      "code": "Code",
+      "name": "Name",
+      "isActive": "Active"
+    },
+    "empty": "No projects found. Press Ctrl+N or click Add Row to start.",
+    "deleteTitle": "Delete Project",
+    "deleteMessage": "Are you sure you want to delete this project?"
+  },
+  "workLocations": {
+    "title": "Work Locations",
+    "subtitle": "Manage work location master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
+    "search": "Search work locations...",
+    "columns": {
+      "code": "Code",
+      "name": "Name",
+      "isActive": "Active"
+    },
+    "empty": "No work locations found. Press Ctrl+N or click Add Row to start.",
+    "deleteTitle": "Delete Work Location",
+    "deleteMessage": "Are you sure you want to delete this work location?"
+  },
+  "warehouses": {
+    "title": "Warehouses",
+    "subtitle": "Manage warehouse master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
+    "search": "Search warehouses...",
+    "columns": {
+      "code": "Code",
+      "name": "Name",
+      "isActive": "Active"
+    },
+    "empty": "No warehouses found. Press Ctrl+N or click Add Row to start.",
+    "deleteTitle": "Delete Warehouse",
+    "deleteMessage": "Are you sure you want to delete this warehouse?"
+  },
+  "suppliers": {
+    "title": "Suppliers",
+    "subtitle": "Manage supplier master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
+    "search": "Search suppliers...",
+    "columns": {
+      "name": "Name",
+      "contactPerson": "Contact",
+      "phone": "Phone",
+      "isActive": "Active"
+    },
+    "empty": "No suppliers found. Press Ctrl+N or click Add Row to start.",
+    "deleteTitle": "Delete Supplier",
+    "deleteMessage": "Are you sure you want to delete this supplier?"
+  },
+  "contractors": {
+    "title": "Contractors",
+    "subtitle": "Manage contractor master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
+    "search": "Search contractors...",
+    "columns": {
+      "name": "Name",
+      "contactPerson": "Contact",
+      "phone": "Phone",
+      "isActive": "Active"
+    },
+    "empty": "No contractors found. Press Ctrl+N or click Add Row to start.",
+    "deleteTitle": "Delete Contractor",
+    "deleteMessage": "Are you sure you want to delete this contractor?"
+  }
+}

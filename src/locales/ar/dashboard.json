@@ -1,0 +1,47 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome back, {{name}}",
+  "stats": {
+    "activeWorkOrders": "Active Work Orders",
+    "activeMaterials": "Active Materials",
+    "totalMovements": "Total Movements",
+    "lowStock": "Low/No Stock Items"
+  },
+  "sections": {
+    "recentMovements": "Recent Movements",
+    "warehouseStock": "Warehouse Stock Levels",
+    "advancedAnalytics": "Advanced Analytics",
+    "viewAll": "View all"
+  },
+  "columns": {
+    "number": "Number",
+    "date": "Date",
+    "type": "Type",
+    "item": "Item",
+    "qty": "Qty",
+    "balance": "Balance"
+  },
+  "empty": {
+    "noMovements": "No movements yet",
+    "noStock": "No stock data yet"
+  },
+  "quickActions": {
+    "newMovement": "New Movement",
+    "workOrders": "Work Orders",
+    "materials": "Materials",
+    "reports": "Reports"
+  },
+  "advanced": {
+    "movementTrend": "Movement Trend (30d)",
+    "stockValue": "Stock Value",
+    "woUtilization": "WO Utilization",
+    "lowStockAlerts": "Low Stock Alerts",
+    "total": "total",
+    "active": "active",
+    "items": "items",
+    "enableStockValue": "Enable to see stock value by warehouse",
+    "enableUtilization": "Enable to see utilization breakdown",
+    "enableReorder": "Enable to see reorder recommendations",
+    "lockedMessage": "Advanced dashboard charts (trends, cost analysis, utilization graphs) require a higher plan"
+  }
+}

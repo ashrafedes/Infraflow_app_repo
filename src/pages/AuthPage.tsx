@@ -21,7 +21,11 @@ export function AuthPage() {
       if (error) {
         setError(error)
       } else {
-        setError('Check your email for confirmation link, or sign in if email confirmation is disabled.')
+        // Auto-confirm emails are enabled on the backend, so sign in immediately
+        const { error: signInError } = await signIn(email, password)
+        if (signInError) {
+          setError(signInError)
+        }
       }
     } else {
       const { error } = await signIn(email, password)
