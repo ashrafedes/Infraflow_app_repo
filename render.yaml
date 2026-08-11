@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: infraflow
+    name: inforaflow
     runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./out
