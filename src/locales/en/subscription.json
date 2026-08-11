@@ -57,5 +57,30 @@
   "trialDuration": "Trial Duration",
   "trialDurationDays": "{{count}} days",
   "unknownPlan": "Unknown Plan",
-  "upgradeNow": "Upgrade Now"
+  "upgradeNow": "Upgrade Now",
+  "featureCategory": {
+    "core": "Core",
+    "advanced": "Advanced",
+    "addon": "Add-on"
+  },
+  "featureNames": {
+    "material_movements": "Material Movements",
+    "work_orders": "Work Orders",
+    "boq_management": "BOQ Management",
+    "reports": "Reports",
+    "multi_warehouse": "Multi Warehouse",
+    "contractor_tracking": "Contractor Tracking",
+    "advanced_reports": "Advanced Reports",
+    "advanced_dashboard": "Advanced Dashboard",
+    "advanced_analytics": "Advanced Analytics",
+    "exports": "Data Exports",
+    "trend_analysis": "Trend Analysis",
+    "cost_breakdown": "Cost Breakdown",
+    "forecasting": "Forecasting"
+  },
+  "featureDescriptions": {
+    "trend_analysis": "Analyze movement trends over time with visual charts",
+    "cost_breakdown": "Detailed cost breakdown by project, work order, and material",
+    "forecasting": "Forecast future material needs based on historical usage patterns"
+  }
 }

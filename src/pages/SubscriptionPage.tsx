@@ -338,7 +338,7 @@ export function SubscriptionPage() {
                             <X className="h-3.5 w-3.5 text-gray-300" />
                           )}
                           <span className={isEnabled ? 'text-gray-700' : 'text-gray-400'}>
-                            {f.feature_name}
+                            {t(`subscription:featureNames.${f.feature_key}`, { defaultValue: f.feature_name })}
                           </span>
                           <span className={`badge ${f.category === 'core' ? 'badge-blue' : 'badge-gray'} text-xs`}>
                             {t(`subscription:featureCategory.${f.category}`)}

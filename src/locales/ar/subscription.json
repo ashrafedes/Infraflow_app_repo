@@ -57,5 +57,30 @@
   "trialDuration": "مدة التجربة",
   "trialDurationDays": "{{count}} يوم",
   "unknownPlan": "باقة غير معروفة",
-  "upgradeNow": "ترقية الآن"
+  "upgradeNow": "ترقية الآن",
+  "featureCategory": {
+    "core": "أساسي",
+    "advanced": "متقدم",
+    "addon": "إضافي"
+  },
+  "featureNames": {
+    "material_movements": "حركات المواد",
+    "work_orders": "أوامر العمل",
+    "boq_management": "إدارة كمية المواد",
+    "reports": "التقارير",
+    "multi_warehouse": "متعدد المستودعات",
+    "contractor_tracking": "تتبع المقاولين",
+    "advanced_reports": "التقارير المتقدمة",
+    "advanced_dashboard": "لوحة التحكم المتقدمة",
+    "advanced_analytics": "التحليلات المتقدمة",
+    "exports": "تصدير البيانات",
+    "trend_analysis": "تحليل الاتجاهات",
+    "cost_breakdown": "تفصيل التكاليف",
+    "forecasting": "التنبؤ"
+  },
+  "featureDescriptions": {
+    "trend_analysis": "تحليل الاتجاهات وتفصيل التكاليف والتنبؤ متاح مع ميزة التقارير المتقدمة",
+    "cost_breakdown": "تفصيل التكاليف حسب المشروع وأمر العمل والمادة",
+    "forecasting": "التنبؤ باحتياجات المواد المستقبلية بناءً على أنماط الاستخدام التاريخية"
+  }
 }
