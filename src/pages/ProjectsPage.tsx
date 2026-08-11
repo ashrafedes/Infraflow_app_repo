@@ -32,7 +32,7 @@ export function ProjectsPage() {
 
   const fetchData = async () => {
     setLoading(true)
-    const { data } = await supabase.from('projects').select('*').order('name')
+    const { data } = await supabase.from('projects').select('*').order('name').limit(500)
     setRows((data ?? []) as ProjectRow[])
     setLoading(false)
   }

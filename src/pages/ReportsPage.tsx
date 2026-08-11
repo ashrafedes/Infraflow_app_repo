@@ -28,16 +28,16 @@ export function ReportsPage() {
     async function fetchData() {
       setLoading(true)
       if (tab === 'warehouse') {
-        const { data } = await supabase.from('v_warehouse_balance').select('*').order('current_balance', { ascending: true })
+        const { data } = await supabase.from('v_warehouse_balance').select('*').order('current_balance', { ascending: true }).limit(500)
         setWhBalances((data ?? []) as unknown as WarehouseBalance[])
       } else if (tab === 'work_order') {
-        const { data } = await supabase.from('v_work_order_balance').select('*').order('on_hand', { ascending: false })
+        const { data } = await supabase.from('v_work_order_balance').select('*').order('on_hand', { ascending: false }).limit(500)
         setWoBalances((data ?? []) as unknown as WorkOrderBalance[])
       } else if (tab === 'contractor') {
-        const { data } = await supabase.from('v_contractor_balance').select('*').order('current_balance', { ascending: false })
+        const { data } = await supabase.from('v_contractor_balance').select('*').order('current_balance', { ascending: false }).limit(500)
         setConBalances((data ?? []) as unknown as ContractorBalance[])
       } else if (tab === 'wo_summary') {
-        const { data } = await supabase.from('v_wo_material_summary').select('*').order('work_order_number')
+        const { data } = await supabase.from('v_wo_material_summary').select('*').order('work_order_number').limit(1000)
         setWoSummary((data ?? []) as unknown as WOMaterialSummary[])
       }
       setLoading(false)

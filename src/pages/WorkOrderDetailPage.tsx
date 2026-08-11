@@ -24,8 +24,8 @@ export function WorkOrderDetailPage() {
     setLoading(true)
     const [woData, boqData, matData] = await Promise.all([
       supabase.from('work_orders').select('*, projects!inner(name, code), work_locations!inner(name, code), contractors(name)').eq('id', id).single(),
-      supabase.from('work_order_boq').select('*, materials!inner(item_number, short_description, uom)').eq('work_order_id', id).order('created_at'),
-      supabase.from('materials').select('*').eq('is_active', true).order('item_number'),
+      supabase.from('work_order_boq').select('*, materials!inner(item_number, short_description, uom)').eq('work_order_id', id).order('created_at').limit(500),
+      supabase.from('materials').select('*').eq('is_active', true).order('item_number').limit(1000),
     ])
     setWo(woData.data as WorkOrder)
     setBoq((boqData.data ?? []) as WorkOrderBOQ[])

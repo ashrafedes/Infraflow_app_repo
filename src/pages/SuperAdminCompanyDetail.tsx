@@ -93,9 +93,10 @@ export function SuperAdminCompanyDetail() {
           .from('user_profiles')
           .select('*')
           .eq('company_id', id)
-          .order('full_name'),
+          .order('full_name')
+          .limit(500),
         supabase.rpc('get_company_features_for', { p_company_id: id }),
-        supabase.from('features').select('*').order('category, feature_key'),
+        supabase.from('features').select('*').order('category, feature_key').limit(100),
         supabase
           .from('subscription_audit_log')
           .select('*')

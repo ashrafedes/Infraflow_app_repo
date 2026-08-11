@@ -88,11 +88,11 @@ export function NewMovementPage() {
   useEffect(() => {
     async function fetchRefData() {
       const [wh, wo, sup, con, mat] = await Promise.all([
-        supabase.from('warehouses').select('*').eq('is_active', true).order('name'),
-        supabase.from('work_orders').select('*, projects!inner(name, code), work_locations!inner(name, code), contractors(name)').eq('status', 'active').order('work_order_number'),
-        supabase.from('suppliers').select('*').eq('is_active', true).order('name'),
-        supabase.from('contractors').select('*').eq('is_active', true).order('name'),
-        supabase.from('materials').select('*').eq('is_active', true).order('item_number'),
+        supabase.from('warehouses').select('*').eq('is_active', true).order('name').limit(500),
+        supabase.from('work_orders').select('*, projects!inner(name, code), work_locations!inner(name, code), contractors(name)').eq('status', 'active').order('work_order_number').limit(1000),
+        supabase.from('suppliers').select('*').eq('is_active', true).order('name').limit(500),
+        supabase.from('contractors').select('*').eq('is_active', true).order('name').limit(500),
+        supabase.from('materials').select('*').eq('is_active', true).order('item_number').limit(1000),
       ])
       setWarehouses((wh.data ?? []) as unknown as Warehouse[])
       setWorkOrders((wo.data ?? []) as unknown as WorkOrder[])
@@ -168,6 +168,7 @@ export function NewMovementPage() {
           .from('v_warehouse_balance')
           .select('material_id, current_balance')
           .eq('warehouse_id', sourceContextId)
+          .limit(1000)
         const map: Record<string, number> = {}
         ;(data ?? []).forEach((b: { material_id: string; current_balance: number }) => {
           map[b.material_id] = Number(b.current_balance)
@@ -178,6 +179,7 @@ export function NewMovementPage() {
           .from('v_work_order_balance')
           .select('material_id, on_hand')
           .eq('work_order_id', sourceContextId)
+          .limit(1000)
         const map: Record<string, number> = {}
         ;(data ?? []).forEach((b: { material_id: string; on_hand: number }) => {
           map[b.material_id] = Number(b.on_hand)
@@ -269,6 +271,7 @@ export function NewMovementPage() {
         .select('material_id, planned_quantity, materials!inner(item_number, short_description, uom)')
         .eq('work_order_id', woId)
         .order('created_at')
+        .limit(500)
       if (boqErr) throw boqErr
 
       // 2. Fetch current on-hand/consumed totals for this work order
@@ -276,6 +279,7 @@ export function NewMovementPage() {
         .from('v_work_order_balance')
         .select('material_id, on_hand, consumed')
         .eq('work_order_id', woId)
+        .limit(1000)
       const consumedMap: Record<string, number> = {}
       ;(balRows ?? []).forEach((b: { material_id: string; consumed: number }) => {
         consumedMap[b.material_id] = Number(b.consumed)

@@ -23,9 +23,9 @@ export function SuperAdminCompanies() {
   useEffect(() => {
     async function fetchData() {
       const [compRes, subRes, plansRes] = await Promise.all([
-        supabase.from('companies').select('*').order('created_at', { ascending: false }),
-        supabase.from('subscriptions').select('*'),
-        supabase.from('subscription_plans').select('*'),
+        supabase.from('companies').select('*').order('created_at', { ascending: false }).limit(1000),
+        supabase.from('subscriptions').select('*').limit(1000),
+        supabase.from('subscription_plans').select('*').limit(100),
       ])
 
       if (compRes.error) { setError(compRes.error.message); setLoading(false); return }

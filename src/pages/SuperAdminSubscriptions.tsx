@@ -33,9 +33,9 @@ export function SuperAdminSubscriptions() {
   const fetchData = async () => {
     setLoading(true)
     const [subRes, planRes, compRes] = await Promise.all([
-      supabase.from('subscriptions').select('*').order('created_at', { ascending: false }),
-      supabase.from('subscription_plans').select('*').order('sort_order'),
-      supabase.from('companies').select('id, name') as unknown as Promise<{ data: { id: string; name: string }[] | null }>,
+      supabase.from('subscriptions').select('*').order('created_at', { ascending: false }).limit(1000),
+      supabase.from('subscription_plans').select('*').order('sort_order').limit(100),
+      supabase.from('companies').select('id, name').limit(1000) as unknown as Promise<{ data: { id: string; name: string }[] | null }>,
     ])
 
     if (subRes.error) { setError(subRes.error.message); setLoading(false); return }

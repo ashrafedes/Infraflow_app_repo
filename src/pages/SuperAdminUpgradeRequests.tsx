@@ -34,9 +34,10 @@ export function SuperAdminUpgradeRequests() {
       supabase
         .from('subscription_upgrade_requests')
         .select('*')
-        .order('created_at', { ascending: false }),
-      supabase.from('subscription_plans').select('*').order('sort_order'),
-      supabase.from('companies').select('id, name') as unknown as Promise<{ data: { id: string; name: string }[] | null }>,
+        .order('created_at', { ascending: false })
+        .limit(1000),
+      supabase.from('subscription_plans').select('*').order('sort_order').limit(100),
+      supabase.from('companies').select('id, name').limit(1000) as unknown as Promise<{ data: { id: string; name: string }[] | null }>,
     ])
 
     if (reqRes.error) {

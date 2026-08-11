@@ -61,11 +61,11 @@ export function WorkOrdersPage() {
   const fetchData = async () => {
     setLoading(true)
     const [wo, pr, wl, con, mat] = await Promise.all([
-      supabase.from('work_orders').select('*, projects!inner(name, code), work_locations!inner(name, code), contractors(name)').order('work_order_number'),
-      supabase.from('projects').select('*').eq('is_active', true).order('name'),
-      supabase.from('work_locations').select('*').eq('is_active', true).order('name'),
-      supabase.from('contractors').select('*').eq('is_active', true).order('name'),
-      supabase.from('materials').select('*').eq('is_active', true).order('item_number'),
+      supabase.from('work_orders').select('*, projects!inner(name, code), work_locations!inner(name, code), contractors(name)').order('work_order_number').limit(1000),
+      supabase.from('projects').select('*').eq('is_active', true).order('name').limit(500),
+      supabase.from('work_locations').select('*').eq('is_active', true).order('name').limit(500),
+      supabase.from('contractors').select('*').eq('is_active', true).order('name').limit(500),
+      supabase.from('materials').select('*').eq('is_active', true).order('item_number').limit(1000),
     ])
 
     const flatRows = ((wo.data ?? []) as any[]).map((r) => ({

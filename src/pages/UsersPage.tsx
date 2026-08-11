@@ -94,7 +94,7 @@ export function UsersPage() {
 
   const fetchData = async () => {
     setLoading(true)
-    const { data } = await supabase.from('user_profiles').select('*').order('full_name')
+    const { data } = await supabase.from('user_profiles').select('*').order('full_name').limit(500)
     setRows((data ?? []) as UserRow[])
     setLoading(false)
   }

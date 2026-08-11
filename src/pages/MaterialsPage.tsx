@@ -53,8 +53,8 @@ export function MaterialsPage() {
   const fetchData = async () => {
     setLoading(true)
     const [mat, cat] = await Promise.all([
-      supabase.from('materials').select('*, material_categories!inner(name)').order('item_number'),
-      supabase.from('material_categories').select('*').order('name'),
+      supabase.from('materials').select('*, material_categories!inner(name)').order('item_number').limit(1000),
+      supabase.from('material_categories').select('*').order('name').limit(100),
     ])
     setRows((mat.data ?? []) as MaterialRow[])
     setCategories((cat.data ?? []) as MaterialCategory[])

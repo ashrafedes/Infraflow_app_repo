@@ -28,9 +28,9 @@ export function SubscriptionPage() {
   useEffect(() => {
     async function fetchData() {
       const [planRes, featRes, pfRes, reqRes] = await Promise.all([
-        supabase.from('subscription_plans').select('*').order('sort_order'),
-        supabase.from('features').select('*').order('category, feature_key'),
-        supabase.from('plan_features').select('*'),
+        supabase.from('subscription_plans').select('*').order('sort_order').limit(100),
+        supabase.from('features').select('*').order('category, feature_key').limit(100),
+        supabase.from('plan_features').select('*').limit(500),
         supabase
           .from('subscription_upgrade_requests')
           .select('*')

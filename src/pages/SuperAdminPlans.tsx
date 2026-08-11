@@ -22,9 +22,9 @@ export function SuperAdminPlans() {
   const fetchData = async () => {
     setLoading(true)
     const [planRes, featRes, pfRes] = await Promise.all([
-      supabase.from('subscription_plans').select('*').order('sort_order'),
-      supabase.from('features').select('*').order('category, feature_key'),
-      supabase.from('plan_features').select('*'),
+      supabase.from('subscription_plans').select('*').order('sort_order').limit(100),
+      supabase.from('features').select('*').order('category, feature_key').limit(100),
+      supabase.from('plan_features').select('*').limit(500),
     ])
 
     if (planRes.error) { setError(planRes.error.message); setLoading(false); return }

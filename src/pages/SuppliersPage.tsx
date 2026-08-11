@@ -32,7 +32,7 @@ export function SuppliersPage() {
 
   const fetchData = async () => {
     setLoading(true)
-    const { data } = await supabase.from('suppliers').select('*').order('name')
+    const { data } = await supabase.from('suppliers').select('*').order('name').limit(1000)
     setRows((data ?? []) as SupplierRow[])
     setLoading(false)
   }

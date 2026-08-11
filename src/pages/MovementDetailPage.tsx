@@ -30,6 +30,7 @@ export function MovementDetailPage() {
         .select('*')
         .eq('movement_id', id)
         .order('item_number')
+        .limit(1000)
       setLines((data ?? []) as MovementDetail[])
       setLoading(false)
     }

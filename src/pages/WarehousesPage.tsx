@@ -73,8 +73,8 @@ export function WarehousesPage() {
   const fetchData = async () => {
     setLoading(true)
     const [wh, loc] = await Promise.all([
-      supabase.from('warehouses').select('*, work_locations(name, code)').order('name'),
-      supabase.from('work_locations').select('*').eq('is_active', true).order('name'),
+      supabase.from('warehouses').select('*, work_locations(name, code)').order('name').limit(500),
+      supabase.from('work_locations').select('*').eq('is_active', true).order('name').limit(500),
     ])
     // Flatten the joined work_locations into work_location_name/code
     const flatRows = ((wh.data ?? []) as Array<Warehouse & { work_locations: { name: string; code: string } | null }>).map((r) => ({
