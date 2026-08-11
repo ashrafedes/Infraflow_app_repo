@@ -131,6 +131,8 @@ export interface WorkOrder {
   start_date: string | null
   end_date: string | null
   created_at: string
+  class: string | null
+  subclass: string | null
   // Joined fields
   project_name?: string
   project_code?: string

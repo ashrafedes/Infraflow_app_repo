@@ -50,6 +50,7 @@ export function WorkOrdersPage() {
   const [createForm, setCreateForm] = useState({
     work_order_number: '', site_code: '', project_id: '', work_location_id: '',
     supervisor: '', contractor_id: '', start_date: '', end_date: '',
+    class: '', subclass: '',
   })
 
   const [addingContractor, setAddingContractor] = useState(false)
@@ -167,11 +168,13 @@ export function WorkOrdersPage() {
       status: 'active' as WorkOrderStatus,
       start_date: createForm.start_date || null,
       end_date: createForm.end_date || null,
+      class: createForm.class || null,
+      subclass: createForm.subclass || null,
     }
     const { data, error: err } = await supabase.from('work_orders').insert(payload).select('*').single()
     if (err) { setError(err.message); return }
     setCreateModalOpen(false)
-    setCreateForm({ work_order_number: '', site_code: '', project_id: '', work_location_id: '', supervisor: '', contractor_id: '', start_date: '', end_date: '' })
+    setCreateForm({ work_order_number: '', site_code: '', project_id: '', work_location_id: '', supervisor: '', contractor_id: '', start_date: '', end_date: '', class: '', subclass: '' })
     fetchData()
     // Select the new WO
     if (data) setSelectedId((data as WorkOrder).id)
@@ -270,7 +273,7 @@ export function WorkOrdersPage() {
                         <span className={cn('badge text-xs', statusColors[wo.status])}>{t(`common:status.${wo.status}`)}</span>
                       </div>
                       <div className="text-xs text-gray-500 mt-1">{wo.project_name}</div>
-                      <div className="text-xs text-gray-400">{wo.work_location_name}</div>
+                      <div className="text-xs text-gray-400">{wo.work_location_name}{wo.subclass ? ` · ${wo.subclass}` : ''}</div>
                       {wo._dirty && <DirtyBadge dirty />}
                     </button>
                   </li>
@@ -318,6 +321,14 @@ export function WorkOrdersPage() {
                   <div>
                     <label className="label">{t('workOrders:detail.workLocation')}</label>
                     <p className="text-sm font-medium">{selectedWo.work_location_name}</p>
+                  </div>
+                  <div>
+                    <label className="label">Class</label>
+                    <p className="text-sm font-medium">{selectedWo.class ?? '—'}</p>
+                  </div>
+                  <div>
+                    <label className="label">Subclass</label>
+                    <p className="text-sm font-medium">{selectedWo.subclass ?? '—'}</p>
                   </div>
 
                   {/* Editable fields */}
@@ -478,6 +489,14 @@ export function WorkOrdersPage() {
             <div>
               <label className="label">{t('workOrders:detail.endDate')}</label>
               <input type="date" value={createForm.end_date} onChange={(e) => setCreateForm({ ...createForm, end_date: e.target.value })} className="input" />
+            </div>
+            <div>
+              <label className="label">Class</label>
+              <input value={createForm.class} onChange={(e) => setCreateForm({ ...createForm, class: e.target.value })} className="input" placeholder="e.g. OSP" />
+            </div>
+            <div>
+              <label className="label">Subclass</label>
+              <input value={createForm.subclass} onChange={(e) => setCreateForm({ ...createForm, subclass: e.target.value })} className="input" placeholder="e.g. Civil, Fiber" />
             </div>
           </div>
           {error && <Alert type="error" message={error} />}
