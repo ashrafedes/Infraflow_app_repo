@@ -22,6 +22,8 @@
     "status": "Status",
     "startDate": "Start Date",
     "endDate": "End Date",
+    "class": "Class",
+    "subclass": "Subclass",
     "saveHeader": "Save Header",
     "deleteWo": "Delete WO",
     "addNewContractor": "+ Add new contractor...",

@@ -21,6 +21,8 @@
     "status": "الحالة",
     "startDate": "تاريخ البدء",
     "endDate": "تاريخ الانتهاء",
+    "class": "التصنيف",
+    "subclass": "التصنيف الفرعي",
     "saveHeader": "حفظ الترويسة",
     "deleteWo": "حذف أمر العمل",
     "addNewContractor": "+ إضافة مقاول جديد...",

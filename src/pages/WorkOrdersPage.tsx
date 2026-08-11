@@ -121,6 +121,8 @@ export function WorkOrdersPage() {
         contractor_id: row.contractor_id || null,
         start_date: row.start_date || null,
         end_date: row.end_date || null,
+        class: row.class || null,
+        subclass: row.subclass || null,
       }
       const { error: err } = await supabase.from('work_orders').update(payload).eq('id', row.id)
       if (err) { setError(err.message); allOk = false; break }
@@ -323,12 +325,22 @@ export function WorkOrdersPage() {
                     <p className="text-sm font-medium">{selectedWo.work_location_name}</p>
                   </div>
                   <div>
-                    <label className="label">Class</label>
-                    <p className="text-sm font-medium">{selectedWo.class ?? '—'}</p>
+                    <label className="label">{t('workOrders:detail.class')}</label>
+                    <input
+                      type="text"
+                      value={selectedWo.class ?? ''}
+                      onChange={(e) => handleHeaderFieldChange('class', e.target.value || null)}
+                      className="input"
+                    />
                   </div>
                   <div>
-                    <label className="label">Subclass</label>
-                    <p className="text-sm font-medium">{selectedWo.subclass ?? '—'}</p>
+                    <label className="label">{t('workOrders:detail.subclass')}</label>
+                    <input
+                      type="text"
+                      value={selectedWo.subclass ?? ''}
+                      onChange={(e) => handleHeaderFieldChange('subclass', e.target.value || null)}
+                      className="input"
+                    />
                   </div>
 
                   {/* Editable fields */}
@@ -491,11 +503,11 @@ export function WorkOrdersPage() {
               <input type="date" value={createForm.end_date} onChange={(e) => setCreateForm({ ...createForm, end_date: e.target.value })} className="input" />
             </div>
             <div>
-              <label className="label">Class</label>
+              <label className="label">{t('workOrders:detail.class')}</label>
               <input value={createForm.class} onChange={(e) => setCreateForm({ ...createForm, class: e.target.value })} className="input" placeholder="e.g. OSP" />
             </div>
             <div>
-              <label className="label">Subclass</label>
+              <label className="label">{t('workOrders:detail.subclass')}</label>
               <input value={createForm.subclass} onChange={(e) => setCreateForm({ ...createForm, subclass: e.target.value })} className="input" placeholder="e.g. Civil, Fiber" />
             </div>
           </div>
