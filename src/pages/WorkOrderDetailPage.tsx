@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, Modal, ConfirmDialog, LoadingSpinner, EmptyState, Alert } from '@/components/ui'
@@ -7,6 +8,7 @@ import { formatNumber } from '@/lib/utils'
 import type { WorkOrder, WorkOrderBOQ, Material } from '@/types'
 
 export function WorkOrderDetailPage() {
+  const { t } = useTranslation('workOrders')
   const { id } = useParams<{ id: string }>()
   const [wo, setWo] = useState<WorkOrder | null>(null)
   const [boq, setBoq] = useState<WorkOrderBOQ[]>([])
@@ -52,34 +54,34 @@ export function WorkOrderDetailPage() {
   }
 
   if (loading) return <LoadingSpinner />
-  if (!wo) return <EmptyState message="Work order not found" />
+  if (!wo) return <EmptyState message={t('workOrders:empty.notFound')} />
 
   return (
     <div>
       <Link to="/work-orders" className="mb-4 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700">
-        <ArrowLeft className="h-4 w-4" /> Back to Work Orders
+        <ArrowLeft className="h-4 w-4" /> {t('workOrders:detail.backToWorkOrders')}
       </Link>
 
       <PageHeader
-        title={`WO: ${wo.work_order_number}`}
+        title={t('workOrders:detail.woPrefix', { number: wo.work_order_number })}
         subtitle={`${wo.project_name} — ${wo.work_location_name}`}
-        action={<button onClick={() => setModalOpen(true)} className="btn btn-primary"><Plus className="h-4 w-4" /> Add BOQ Item</button>}
+        action={<button onClick={() => setModalOpen(true)} className="btn btn-primary"><Plus className="h-4 w-4" /> {t('workOrders:boq.addLine')}</button>}
       />
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <div className="card p-4"><p className="text-xs text-gray-500">Site Code</p><p className="font-medium mt-1">{wo.site_code ?? '—'}</p></div>
-        <div className="card p-4"><p className="text-xs text-gray-500">Supervisor</p><p className="font-medium mt-1">{wo.supervisor}</p></div>
-        <div className="card p-4"><p className="text-xs text-gray-500">Contractor</p><p className="font-medium mt-1">{wo.contractor_name ?? '—'}</p></div>
-        <div className="card p-4"><p className="text-xs text-gray-500">Status</p><p className="font-medium mt-1 capitalize">{wo.status.replace('_', ' ')}</p></div>
+        <div className="card p-4"><p className="text-xs text-gray-500">{t('workOrders:detail.siteCode')}</p><p className="font-medium mt-1">{wo.site_code ?? '—'}</p></div>
+        <div className="card p-4"><p className="text-xs text-gray-500">{t('workOrders:detail.supervisor')}</p><p className="font-medium mt-1">{wo.supervisor}</p></div>
+        <div className="card p-4"><p className="text-xs text-gray-500">{t('workOrders:detail.contractor')}</p><p className="font-medium mt-1">{wo.contractor_name ?? '—'}</p></div>
+        <div className="card p-4"><p className="text-xs text-gray-500">{t('workOrders:detail.status')}</p><p className="font-medium mt-1 capitalize">{t(`common:status.${wo.status}`)}</p></div>
       </div>
 
-      <h2 className="font-semibold mb-3">Bill of Quantities (BOQ)</h2>
+      <h2 className="font-semibold mb-3">{t('workOrders:boq.title')}</h2>
       {boq.length === 0 ? (
-        <EmptyState message="No BOQ items yet" action={<button onClick={() => setModalOpen(true)} className="btn btn-primary"><Plus className="h-4 w-4" /> Add BOQ Item</button>} />
+        <EmptyState message={t('workOrders:boq.empty')} action={<button onClick={() => setModalOpen(true)} className="btn btn-primary"><Plus className="h-4 w-4" /> {t('workOrders:boq.addLine')}</button>} />
       ) : (
         <div className="card table-container">
           <table className="table">
-            <thead><tr><th>Item #</th><th>Description</th><th>UOM</th><th className="text-right">Planned Qty</th><th className="text-right">Actions</th></tr></thead>
+            <thead><tr><th>{t('workOrders:boq.itemNumber')}</th><th>{t('workOrders:boq.description')}</th><th>{t('workOrders:boq.uom')}</th><th className="text-right">{t('workOrders:boq.plannedQty')}</th><th className="text-right">{t('common:labels.actions')}</th></tr></thead>
             <tbody>
               {boq.map(b => (
                 <tr key={b.id}>
@@ -95,22 +97,22 @@ export function WorkOrderDetailPage() {
         </div>
       )}
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Add BOQ Item">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={t('workOrders:boq.addLine')}>
         <form onSubmit={handleAddBoq} className="space-y-4">
           <div>
-            <label className="label">Material</label>
+            <label className="label">{t('workOrders:boq.material')}</label>
             <select value={form.material_id} onChange={e => setForm({ ...form, material_id: e.target.value })} className="input" required>
-              <option value="">Select material...</option>
+              <option value="">{t('workOrders:boq.selectMaterial')}</option>
               {materials.map(m => <option key={m.id} value={m.id}>{m.item_number} — {m.short_description}</option>)}
             </select>
           </div>
-          <div><label className="label">Planned Quantity</label><input type="number" step="0.001" value={form.planned_quantity} onChange={e => setForm({ ...form, planned_quantity: e.target.value })} className="input" required /></div>
+          <div><label className="label">{t('workOrders:boq.plannedQuantity')}</label><input type="number" step="0.001" value={form.planned_quantity} onChange={e => setForm({ ...form, planned_quantity: e.target.value })} className="input" required /></div>
           {error && <Alert type="error" message={error} />}
-          <div className="flex justify-end gap-3"><button type="button" onClick={() => setModalOpen(false)} className="btn btn-secondary">Cancel</button><button type="submit" className="btn btn-primary">Add</button></div>
+          <div className="flex justify-end gap-3"><button type="button" onClick={() => setModalOpen(false)} className="btn btn-secondary">{t('common:buttons.cancel')}</button><button type="submit" className="btn btn-primary">{t('common:buttons.add')}</button></div>
         </form>
       </Modal>
 
-      <ConfirmDialog open={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={handleDeleteBoq} title="Remove BOQ Item" message="Remove this material from the BOQ?" confirmLabel="Remove" danger />
+      <ConfirmDialog open={!!deleteId} onClose={() => setDeleteId(null)} onConfirm={handleDeleteBoq} title={t('workOrders:boq.deleteTitle')} message={t('workOrders:boq.deleteMessage')} confirmLabel={t('common:buttons.remove')} danger />
     </div>
   )
 }

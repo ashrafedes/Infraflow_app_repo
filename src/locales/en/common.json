@@ -23,7 +23,9 @@
     "view": "View",
     "back": "Back",
     "manageScopes": "Manage Scopes",
-    "scopes": "Scopes"
+    "scopes": "Scopes",
+    "audit": "Audit",
+    "loadMore": "Load More"
   },
   "labels": {
     "name": "Name",
@@ -61,6 +63,7 @@
   },
   "status": {
     "active": "Active",
+    "inactive": "Inactive",
     "completed": "Completed",
     "on_hold": "On Hold",
     "cancelled": "Cancelled",
@@ -70,7 +73,8 @@
     "suspended": "Suspended",
     "pending": "Pending",
     "approved": "Approved",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "expired": "Expired"
   },
   "movementTypes": {
     "receive_to_warehouse": "Receive to Warehouse",
@@ -79,7 +83,13 @@
     "issue_to_contractor": "Issue to Contractor",
     "return_from_contractor": "Return from Contractor",
     "return_to_warehouse": "Return to Warehouse",
-    "consume_on_work_order": "Consume on Work Order"
+    "consume_on_work_order": "Consume on Work Order",
+    "ADJUSTMENT": "Adjustment",
+    "ISSUE": "Issue",
+    "RECEIPT": "Receipt",
+    "RETURN": "Return",
+    "TRANSFER": "Transfer",
+    "USAGE": "Usage"
   },
   "roles": {
     "company_admin": "Company Admin",
@@ -110,5 +120,9 @@
     "plan": "Plan",
     "users": "Users",
     "trialEnds": "Trial ends"
+  },
+  "validation": {
+    "codeRequired": "Code is required",
+    "nameRequired": "Name is required"
   }
 }

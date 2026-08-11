@@ -2,6 +2,7 @@
   "title": "Work Orders",
   "subtitle": "Master-detail — select a WO to edit header + BOQ. Ctrl+N for new, Ctrl+S to save.",
   "search": "Search work orders...",
+  "allProjects": "All Projects",
   "columns": {
     "woNumber": "WO Number",
     "site": "Site",
@@ -22,7 +23,13 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "saveHeader": "Save Header",
-    "deleteWo": "Delete WO"
+    "deleteWo": "Delete WO",
+    "addNewContractor": "+ Add new contractor...",
+    "backToWorkOrders": "Back to Work Orders",
+    "contractorNamePlaceholder": "Enter contractor name...",
+    "saveHeaderTitle": "Save header changes",
+    "saveSuccess": "Header saved successfully",
+    "woPrefix": "WO: {{number}}"
   },
   "boq": {
     "title": "Bill of Quantities",
@@ -41,7 +48,29 @@
     "qtyRequired": "Quantity must be greater than 0",
     "duplicateMaterial": "Duplicate material: {{item}}. Each material can only appear once per work order.",
     "removeTitle": "Remove BOQ Item",
-    "removeMessage": "Remove this material from the BOQ?"
+    "removeMessage": "Remove this material from the BOQ?",
+    "addLineTitle": "Add new BOQ line (Ctrl+N)",
+    "deleteMessage": "Are you sure you want to delete this BOQ item?",
+    "deleteTitle": "Delete BOQ Item",
+    "errors": {
+      "clipboardFailed": "Failed to read clipboard. Make sure you copied material data.",
+      "duplicateMaterial": "Duplicate material: {{item}}. Each material can only appear once per work order.",
+      "materialNotFound": "Material not found: {{item}}",
+      "materialRequired": "Material is required for all lines",
+      "quantityPositive": "Quantity must be greater than 0"
+    },
+    "itemNumber": "Item #",
+    "loading": "Loading BOQ...",
+    "material": "Material",
+    "pasteErrorRow": "Row {{row}}: {{message}}",
+    "pasteErrors": "Paste errors:",
+    "pasteSuccess": "{{count}} line(s) pasted",
+    "pasteTitle": "Paste from clipboard",
+    "plannedQty": "Planned Qty",
+    "plannedQuantity": "Planned Quantity",
+    "saveSuccess": "{{count}} BOQ item(s) saved",
+    "saveTitle": "Save changes (Ctrl+S)",
+    "selectMaterial": "Select material..."
   },
   "create": {
     "title": "Add Work Order",
@@ -56,7 +85,13 @@
     "statusDefault": "Status defaults to \"Active\". You can change it later from the detail panel.",
     "selectProject": "Select project...",
     "selectLocation": "Select location...",
-    "noContractor": "No contractor"
+    "noContractor": "No contractor",
+    "errors": {
+      "projectRequired": "Project is required",
+      "supervisorRequired": "Supervisor is required",
+      "woNumberRequired": "WO Number is required",
+      "workLocationRequired": "Work Location is required"
+    }
   },
   "delete": {
     "title": "Delete Work Order",
@@ -64,7 +99,8 @@
   },
   "empty": {
     "noWorkOrders": "No work orders found",
-    "selectOrCreate": "Select a work order from the list, or create a new one."
+    "selectOrCreate": "Select a work order from the list, or create a new one.",
+    "notFound": "Work order not found"
   },
   "errors": {
     "woNumberRequired": "WO Number is required",

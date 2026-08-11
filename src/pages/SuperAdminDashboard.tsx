@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert } from '@/components/ui'
@@ -48,6 +49,7 @@ interface PlatformKpis {
 // Tier badge — renders the server-provided tier only; no client-side calc
 // ============================================================================
 function TierBadge({ tier }: { tier: CompanyNearLimit['tier'] }) {
+  const { t } = useTranslation('superAdmin')
   if (!tier) return <span className="badge badge-gray">—</span>
   const styles: Record<string, string> = {
     warning: 'badge badge-yellow',
@@ -55,9 +57,9 @@ function TierBadge({ tier }: { tier: CompanyNearLimit['tier'] }) {
     limit_reached: 'badge badge-red',
   }
   const labels: Record<string, string> = {
-    warning: 'Warning',
-    critical: 'Critical',
-    limit_reached: 'Limit Reached',
+    warning: t('dashboard.tier.warning'),
+    critical: t('dashboard.tier.critical'),
+    limit_reached: t('dashboard.tier.limitReached'),
   }
   return <span className={styles[tier]}>{labels[tier]}</span>
 }
@@ -66,6 +68,7 @@ function TierBadge({ tier }: { tier: CompanyNearLimit['tier'] }) {
 // Component
 // ============================================================================
 export function SuperAdminDashboard() {
+  const { t } = useTranslation('superAdmin')
   const [kpis, setKpis] = useState<PlatformKpis | null>(null)
   const [pendingUpgrades, setPendingUpgrades] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -96,7 +99,7 @@ export function SuperAdminDashboard() {
   if (error) {
     return (
       <div>
-        <PageHeader title="Super Admin Dashboard" subtitle="Platform overview" />
+        <PageHeader title={t('dashboard.title')} subtitle={t('dashboard.subtitle')} />
         <div className="mb-4"><Alert type="error" message={error} /></div>
       </div>
     )
@@ -105,25 +108,25 @@ export function SuperAdminDashboard() {
   if (!kpis) {
     return (
       <div>
-        <PageHeader title="Super Admin Dashboard" subtitle="Platform overview" />
-        <div className="mb-4"><Alert type="error" message="Failed to load platform KPIs." /></div>
+        <PageHeader title={t('dashboard.title')} subtitle={t('dashboard.subtitle')} />
+        <div className="mb-4"><Alert type="error" message={t('dashboard.errors.loadFailed')} /></div>
       </div>
     )
   }
 
   const statCards = [
-    { label: 'Total Companies',      value: kpis.total_companies,      icon: Building2,     color: 'text-blue-600' },
-    { label: 'Active Companies',     value: kpis.active_companies,     icon: CheckCircle,   color: 'text-green-600' },
-    { label: 'Free Trials',          value: kpis.free_trials,          icon: Clock,         color: 'text-blue-600' },
-    { label: 'Basic Companies',      value: kpis.basic_companies,      icon: Zap,           color: 'text-gray-600' },
-    { label: 'Premium Companies',    value: kpis.premium_companies,    icon: Crown,         color: 'text-purple-600' },
-    { label: 'Expiring Trials',      value: kpis.expiring_trials,      icon: AlertTriangle, color: 'text-yellow-600' },
-    { label: 'Suspended Companies',  value: kpis.suspended_companies,  icon: PauseCircle,   color: 'text-red-600' },
-    { label: 'Total Active Users',   value: kpis.total_active_users,   icon: Users,         color: 'text-indigo-600' },
+    { label: t('dashboard.stats.totalCompanies'),      value: kpis.total_companies,      icon: Building2,     color: 'text-blue-600' },
+    { label: t('dashboard.stats.activeCompanies'),     value: kpis.active_companies,     icon: CheckCircle,   color: 'text-green-600' },
+    { label: t('dashboard.stats.freeTrials'),          value: kpis.free_trials,          icon: Clock,         color: 'text-blue-600' },
+    { label: t('dashboard.stats.basicCompanies'),      value: kpis.basic_companies,      icon: Zap,           color: 'text-gray-600' },
+    { label: t('dashboard.stats.premiumCompanies'),    value: kpis.premium_companies,    icon: Crown,         color: 'text-purple-600' },
+    { label: t('dashboard.stats.expiringTrials'),      value: kpis.expiring_trials,      icon: AlertTriangle, color: 'text-yellow-600' },
+    { label: t('dashboard.stats.suspendedCompanies'),  value: kpis.suspended_companies,  icon: PauseCircle,   color: 'text-red-600' },
+    { label: t('dashboard.stats.totalActiveUsers'),    value: kpis.total_active_users,   icon: Users,         color: 'text-indigo-600' },
   ]
 
   const pendingCard = {
-    label: 'Pending Upgrade Requests',
+    label: t('dashboard.stats.pendingUpgrades'),
     value: pendingUpgrades,
     icon: FileUp,
     color: 'text-amber-600',
@@ -131,7 +134,7 @@ export function SuperAdminDashboard() {
 
   return (
     <div>
-      <PageHeader title="Super Admin Dashboard" subtitle="Platform overview" />
+      <PageHeader title={t('dashboard.title')} subtitle={t('dashboard.subtitle')} />
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 gap-4 mb-6 lg:grid-cols-4">
@@ -162,23 +165,23 @@ export function SuperAdminDashboard() {
         {/* Companies Approaching User Limit */}
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Companies Approaching User Limit</h2>
+            <h2 className="font-semibold">{t('dashboard.sections.companiesNearLimit')}</h2>
             <TrendingUp className="h-5 w-5 text-gray-400" />
           </div>
           {kpis.companies_near_user_limit.length === 0 ? (
             <p className="text-sm text-gray-500 py-8 text-center">
-              No companies are near their user limit
+              {t('dashboard.empty.nearLimit')}
             </p>
           ) : (
             <div className="table-container">
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Company</th>
-                    <th className="text-right">Active</th>
-                    <th className="text-right">Max</th>
-                    <th className="text-right">Utilization</th>
-                    <th>Status</th>
+                    <th>{t('dashboard.columns.company')}</th>
+                    <th className="text-right">{t('dashboard.columns.active')}</th>
+                    <th className="text-right">{t('dashboard.columns.max')}</th>
+                    <th className="text-right">{t('dashboard.columns.utilization')}</th>
+                    <th>{t('dashboard.columns.status')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -207,23 +210,23 @@ export function SuperAdminDashboard() {
         {/* Recent Subscription Changes */}
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Recent Subscription Changes</h2>
+            <h2 className="font-semibold">{t('dashboard.sections.recentChanges')}</h2>
             <Link to="/admin/audit-log" className="text-sm text-brand-600 hover:underline">
-              View all
+              {t('dashboard.viewAll')}
             </Link>
           </div>
           {kpis.recent_subscription_changes.length === 0 ? (
             <p className="text-sm text-gray-500 py-8 text-center">
-              No subscription changes recorded
+              {t('dashboard.empty.noChanges')}
             </p>
           ) : (
             <div className="table-container">
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Company</th>
-                    <th>Action</th>
-                    <th>When</th>
+                    <th>{t('dashboard.columns.company')}</th>
+                    <th>{t('dashboard.columns.action')}</th>
+                    <th>{t('dashboard.columns.when')}</th>
                   </tr>
                 </thead>
                 <tbody>

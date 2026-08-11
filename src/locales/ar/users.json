@@ -1,49 +1,61 @@
 {
-  "title": "Users",
-  "subtitle": "Manage users and roles — inline editing, Ctrl+N for new user, click name for scopes",
+  "title": "المستخدمون",
+  "subtitle": "إدارة المستخدمين والأدوار — تحرير مباشر، Ctrl+N لمستخدم جديد، انقر على الاسم للنطاقات",
   "columns": {
-    "name": "Name",
-    "email": "Email",
-    "role": "Role",
-    "active": "Active",
-    "created": "Created"
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "active": "نشط",
+    "created": "تاريخ الإنشاء"
   },
   "buttons": {
-    "addUser": "Add User",
-    "saveAll": "Save All",
-    "deleteUser": "Delete user"
+    "addUser": "إضافة مستخدم",
+    "saveAll": "حفظ الكل",
+    "deleteUser": "حذف المستخدم"
   },
   "create": {
-    "title": "Add User",
-    "fullName": "Full Name",
-    "email": "Email",
-    "role": "Role",
-    "passwordHint": "A temporary password will be generated and a password setup email will be sent to the user.",
-    "creating": "Creating...",
-    "createUser": "Create User",
-    "success": "User created. Password setup email sent to {{email}}."
+    "title": "إضافة مستخدم",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "passwordHint": "سيتم إنشاء كلمة مرور مؤقتة وإرسال بريد إلكتروني لإعداد كلمة المرور للمستخدم.",
+    "creating": "جارٍ الإنشاء...",
+    "createUser": "إنشاء مستخدم",
+    "success": "تم إنشاء المستخدم. تم إرسال بريد إعداد كلمة المرور إلى {{email}}.",
+    "initialPassword": "كلمة المرور الأولية",
+    "passwordPlaceholder": "أدخل كلمة المرور المؤقتة"
   },
   "drawer": {
-    "userDetails": "User Details",
-    "scopeAssignments": "Scope Assignments",
-    "scopeDescription": "Control which data this user can access.",
-    "scopeType": "Scope Type",
-    "entity": "Entity",
-    "addScope": "Add Scope",
-    "noScopes": "No scope assignments yet.",
+    "userDetails": "تفاصيل المستخدم",
+    "scopeAssignments": "تعيينات النطاق",
+    "scopeDescription": "تحكم في البيانات التي يمكن لهذا المستخدم الوصول إليها.",
+    "scopeType": "نوع النطاق",
+    "entity": "الكيان",
+    "addScope": "إضافة نطاق",
+    "noScopes": "لا توجد تعيينات نطاق بعد.",
     "scopeLabels": {
-      "warehouse": "Warehouse",
-      "workOrder": "Work Order",
-      "project": "Project",
-      "workLocation": "Work Location",
-      "deleted": "(deleted)"
-    }
+      "warehouse": "مخزن",
+      "workOrder": "أمر عمل",
+      "project": "مشروع",
+      "workLocation": "موقع عمل",
+      "deleted": "(محذوف)",
+      "location": "الموقع",
+      "locationDeleted": "الموقع (محذوف)",
+      "projectDeleted": "المشروع (محذوف)",
+      "unknown": "غير معروف",
+      "warehouseDeleted": "المخزن (محذوف)",
+      "workOrderDeleted": "أمر العمل (محذوف)"
+    },
+    "selectEntity": "اختر الكيان..."
   },
   "delete": {
-    "title": "Delete User",
-    "message": "Are you sure? This will remove the user and all their scope assignments."
+    "title": "حذف المستخدم",
+    "message": "هل أنت متأكد؟ سيتم إزالة المستخدم وجميع تعيينات نطاقه.",
+    "confirm": "حذف"
   },
-  "empty": "No users found. Click Add User to create one.",
-  "saved": "{{count}} user(s) updated",
-  "limitReached": "User limit reached ({{active}}/{{max}})"
+  "empty": "لا يوجد مستخدمون. انقر على إضافة مستخدم لإنشاء واحد.",
+  "saved": "تم تحديث {{count}} مستخدم",
+  "limitReached": "تم بلوغ حد المستخدمين ({{active}}/{{max}})",
+  "addUserTooltip": "إضافة مستخدم جديد",
+  "saveAllTooltip": "حفظ كل التغييرات"
 }

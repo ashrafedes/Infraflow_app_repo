@@ -1,11 +1,23 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
+import i18n from '@/i18n'
 import type { UserProfile, UserRole } from '@/types'
 
 async function checkSuperAdmin(): Promise<boolean> {
   const { data } = await supabase.rpc('is_super_admin')
   return data === true
+}
+
+// Sync user's preferred_language from profile to i18next + localStorage
+function syncLanguageFromProfile(profile: UserProfile | null) {
+  if (profile?.preferred_language) {
+    const lang = profile.preferred_language
+    localStorage.setItem('infraflow-lang', lang)
+    i18n.changeLanguage(lang)
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
+    document.documentElement.lang = lang
+  }
 }
 
 interface AuthContextValue {
@@ -64,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) {
         const p = await fetchProfile(session.user.id)
         setProfile(p)
+        syncLanguageFromProfile(p)
       }
 
       setLoading(false)
@@ -77,6 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (session?.user) {
           const p = await fetchProfile(session.user.id)
           setProfile(p)
+          syncLanguageFromProfile(p)
         } else {
           setProfile(null)
         }

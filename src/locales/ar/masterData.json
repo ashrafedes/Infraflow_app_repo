@@ -1,69 +1,80 @@
 {
   "projects": {
-    "title": "Projects",
-    "subtitle": "Manage project master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
-    "search": "Search projects...",
+    "title": "المشاريع",
+    "subtitle": "إدارة بيانات المشاريع — تحرير مباشر، Ctrl+N لصف جديد، Ctrl+S للحفظ",
+    "search": "بحث المشاريع...",
     "columns": {
-      "code": "Code",
-      "name": "Name",
-      "isActive": "Active"
+      "code": "الرمز",
+      "name": "الاسم",
+      "isActive": "نشط"
     },
-    "empty": "No projects found. Press Ctrl+N or click Add Row to start.",
-    "deleteTitle": "Delete Project",
-    "deleteMessage": "Are you sure you want to delete this project?"
+    "empty": "لا توجد مشاريع. اضغط Ctrl+N أو إضافة صف للبدء.",
+    "deleteTitle": "حذف المشروع",
+    "deleteMessage": "هل أنت متأكد من حذف هذا المشروع؟",
+    "saved": "تم حفظ {{count}} مشروع"
   },
   "workLocations": {
-    "title": "Work Locations",
-    "subtitle": "Manage work location master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
-    "search": "Search work locations...",
+    "title": "مواقع العمل",
+    "subtitle": "إدارة بيانات مواقع العمل — تحرير مباشر، Ctrl+N لصف جديد، Ctrl+S للحفظ",
+    "search": "بحث مواقع العمل...",
     "columns": {
-      "code": "Code",
-      "name": "Name",
-      "isActive": "Active"
+      "code": "الرمز",
+      "name": "الاسم",
+      "isActive": "نشط"
     },
-    "empty": "No work locations found. Press Ctrl+N or click Add Row to start.",
-    "deleteTitle": "Delete Work Location",
-    "deleteMessage": "Are you sure you want to delete this work location?"
+    "empty": "لا توجد مواقع عمل. اضغط Ctrl+N أو إضافة صف للبدء.",
+    "deleteTitle": "حذف موقع العمل",
+    "deleteMessage": "هل أنت متأكد من حذف هذا الموقع؟",
+    "saved": "تم حفظ {{count}} موقع عمل"
   },
   "warehouses": {
-    "title": "Warehouses",
-    "subtitle": "Manage warehouse master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
-    "search": "Search warehouses...",
+    "title": "المخازن",
+    "subtitle": "إدارة بيانات المخازن — تحرير مباشر، Ctrl+N لصف جديد، Ctrl+S للحفظ",
+    "search": "بحث المخازن...",
     "columns": {
-      "code": "Code",
-      "name": "Name",
-      "isActive": "Active"
+      "code": "الرمز",
+      "name": "الاسم",
+      "isActive": "نشط"
     },
-    "empty": "No warehouses found. Press Ctrl+N or click Add Row to start.",
-    "deleteTitle": "Delete Warehouse",
-    "deleteMessage": "Are you sure you want to delete this warehouse?"
+    "empty": "لا توجد مخازن. اضغط Ctrl+N أو إضافة صف للبدء.",
+    "deleteTitle": "حذف المخزن",
+    "deleteMessage": "هل أنت متأكد من حذف هذا المخزن؟",
+    "saved": "تم حفظ {{count}} مخزن",
+    "selectLocation": "اختر موقعاً...",
+    "subRequiresLocation": "المخازن الفرعية تتطلب موقع عمل",
+    "type": "النوع",
+    "typeMain": "رئيسي",
+    "typeSub": "فرعي",
+    "workLocation": "موقع العمل"
   },
   "suppliers": {
-    "title": "Suppliers",
-    "subtitle": "Manage supplier master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
-    "search": "Search suppliers...",
+    "title": "الموردون",
+    "subtitle": "إدارة بيانات الموردين — تحرير مباشر، Ctrl+N لصف جديد، Ctrl+S للحفظ",
+    "search": "بحث الموردين...",
     "columns": {
-      "name": "Name",
-      "contactPerson": "Contact",
-      "phone": "Phone",
-      "isActive": "Active"
+      "name": "الاسم",
+      "contactPerson": "مسؤول التواصل",
+      "phone": "الهاتف",
+      "isActive": "نشط"
     },
-    "empty": "No suppliers found. Press Ctrl+N or click Add Row to start.",
-    "deleteTitle": "Delete Supplier",
-    "deleteMessage": "Are you sure you want to delete this supplier?"
+    "empty": "لا يوجد موردون. اضغط Ctrl+N أو إضافة صف للبدء.",
+    "deleteTitle": "حذف المورد",
+    "deleteMessage": "هل أنت متأكد من حذف هذا المورد؟",
+    "saved": "تم حفظ {{count}} مورد"
   },
   "contractors": {
-    "title": "Contractors",
-    "subtitle": "Manage contractor master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
-    "search": "Search contractors...",
+    "title": "المقاولون",
+    "subtitle": "إدارة بيانات المقاولين — تحرير مباشر، Ctrl+N لصف جديد، Ctrl+S للحفظ",
+    "search": "بحث المقاولين...",
     "columns": {
-      "name": "Name",
-      "contactPerson": "Contact",
-      "phone": "Phone",
-      "isActive": "Active"
+      "name": "الاسم",
+      "contactPerson": "مسؤول التواصل",
+      "phone": "الهاتف",
+      "isActive": "نشط"
     },
-    "empty": "No contractors found. Press Ctrl+N or click Add Row to start.",
-    "deleteTitle": "Delete Contractor",
-    "deleteMessage": "Are you sure you want to delete this contractor?"
+    "empty": "لا يوجد مقاولون. اضغط Ctrl+N أو إضافة صف للبدء.",
+    "deleteTitle": "حذف المقاول",
+    "deleteMessage": "هل أنت متأكد من حذف هذا المقاول؟",
+    "saved": "تم حفظ {{count}} مقاول"
   }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, Modal } from '@/components/ui'
 import { formatDate } from '@/lib/utils'
@@ -15,6 +16,7 @@ interface EnrichedRequest extends SubscriptionUpgradeRequest {
 }
 
 export function SuperAdminUpgradeRequests() {
+  const { t } = useTranslation('superAdmin')
   const [requests, setRequests] = useState<EnrichedRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -119,12 +121,12 @@ export function SuperAdminUpgradeRequests() {
 
       const result = data as { success: boolean; error: string | null; new_plan_code: string }
       if (!result.success) {
-        setError(result.error ?? 'Failed to approve request')
+        setError(result.error ?? t('upgradeRequests.errors.approveFailed'))
         setSubmitting(false)
         return
       }
 
-      setSuccess(`Request approved. Plan changed to ${result.new_plan_code}.`)
+      setSuccess(t('upgradeRequests.success.approved', { plan: result.new_plan_code }))
     } else {
       const { data, error: rpcError } = await supabase.rpc('reject_plan_upgrade', {
         p_request_id: actionRequest.id,
@@ -139,12 +141,12 @@ export function SuperAdminUpgradeRequests() {
 
       const result = data as { success: boolean; error: string | null }
       if (!result.success) {
-        setError(result.error ?? 'Failed to reject request')
+        setError(result.error ?? t('upgradeRequests.errors.rejectFailed'))
         setSubmitting(false)
         return
       }
 
-      setSuccess('Request rejected.')
+      setSuccess(t('upgradeRequests.success.rejected'))
     }
 
     setSubmitting(false)
@@ -155,19 +157,19 @@ export function SuperAdminUpgradeRequests() {
   if (loading) return <LoadingSpinner />
 
   const tabs: { key: FilterTab; label: string; count: number }[] = [
-    { key: 'pending', label: 'Pending', count: requests.filter(r => r.status === 'pending').length },
-    { key: 'approved', label: 'Approved', count: requests.filter(r => r.status === 'approved').length },
-    { key: 'rejected', label: 'Rejected', count: requests.filter(r => r.status === 'rejected').length },
-    { key: 'all', label: 'All', count: requests.length },
+    { key: 'pending', label: t('upgradeRequests.filters.pending'), count: requests.filter(r => r.status === 'pending').length },
+    { key: 'approved', label: t('upgradeRequests.filters.approved'), count: requests.filter(r => r.status === 'approved').length },
+    { key: 'rejected', label: t('upgradeRequests.filters.rejected'), count: requests.filter(r => r.status === 'rejected').length },
+    { key: 'all', label: t('upgradeRequests.filters.all'), count: requests.length },
   ]
 
   return (
     <div>
       <PageHeader
-        title="Upgrade Requests"
-        subtitle="Review company plan upgrade requests"
+        title={t('upgradeRequests.title')}
+        subtitle={t('upgradeRequests.subtitle')}
         action={pendingCount > 0 ? (
-          <span className="badge badge-blue">{pendingCount} pending</span>
+          <span className="badge badge-blue">{t('upgradeRequests.pendingCount', { count: pendingCount })}</span>
         ) : undefined}
       />
 
@@ -194,21 +196,21 @@ export function SuperAdminUpgradeRequests() {
         <table className="table">
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Current Plan</th>
-              <th>Requested Plan</th>
-              <th>Requested By</th>
-              <th>Requested Date</th>
-              <th>Status</th>
-              <th>Reviewed</th>
-              <th className="text-right">Actions</th>
+              <th>{t('upgradeRequests.columns.company')}</th>
+              <th>{t('upgradeRequests.columns.currentPlan')}</th>
+              <th>{t('upgradeRequests.columns.requestedPlan')}</th>
+              <th>{t('upgradeRequests.columns.requestedBy')}</th>
+              <th>{t('upgradeRequests.columns.date')}</th>
+              <th>{t('upgradeRequests.columns.status')}</th>
+              <th>{t('upgradeRequests.columns.reviewed')}</th>
+              <th className="text-right">{t('upgradeRequests.columns.actions')}</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan={8} className="text-center py-8 text-gray-500">
-                  No {filter !== 'all' ? filter : ''} upgrade requests
+                  {t('upgradeRequests.empty', { filter: filter !== 'all' ? t(`upgradeRequests.filters.${filter}`) : '' })}
                 </td>
               </tr>
             ) : (
@@ -229,7 +231,7 @@ export function SuperAdminUpgradeRequests() {
                       r.status === 'rejected' ? 'badge-gray' :
                       'badge-gray'
                     }`}>
-                      {r.status}
+                      {t(`common:status.${r.status}`)}
                     </span>
                   </td>
                   <td className="text-sm">
@@ -243,20 +245,20 @@ export function SuperAdminUpgradeRequests() {
                           className="btn btn-primary btn-sm mr-2"
                         >
                           <Check className="h-3.5 w-3.5" />
-                          Approve
+                          {t('upgradeRequests.actions.approve')}
                         </button>
                         <button
                           onClick={() => openAction(r, 'reject')}
                           className="btn btn-danger btn-sm"
                         >
                           <X className="h-3.5 w-3.5" />
-                          Reject
+                          {t('upgradeRequests.actions.reject')}
                         </button>
                       </>
                     ) : (
                       <span className="text-xs text-gray-400">
                         {r.status === 'rejected' && r.rejection_reason
-                          ? `Reason: ${r.rejection_reason}`
+                          ? `${t('upgradeRequests.actions.rejectionReason')}: ${r.rejection_reason}`
                           : r.admin_notes ?? '—'}
                       </span>
                     )}
@@ -272,35 +274,35 @@ export function SuperAdminUpgradeRequests() {
       <Modal
         open={!!actionRequest && actionType === 'approve'}
         onClose={closeAction}
-        title="Approve Upgrade Request"
+        title={t('upgradeRequests.modal.approveTitle')}
       >
         {actionRequest && (
           <div className="space-y-4">
             <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
-              <div><span className="text-gray-500">Company:</span> <span className="font-medium">{actionRequest.company_name}</span></div>
-              <div><span className="text-gray-500">Current Plan:</span> <span className="font-medium">{actionRequest.current_plan_name}</span></div>
-              <div><span className="text-gray-500">Requested Plan:</span> <span className="font-medium">{actionRequest.requested_plan_name}</span></div>
-              <div><span className="text-gray-500">Requested By:</span> <span className="font-medium">{actionRequest.requested_by_email}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.company')}:</span> <span className="font-medium">{actionRequest.company_name}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.currentPlan')}:</span> <span className="font-medium">{actionRequest.current_plan_name}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.requestedPlan')}:</span> <span className="font-medium">{actionRequest.requested_plan_name}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.requestedBy')}:</span> <span className="font-medium">{actionRequest.requested_by_email}</span></div>
             </div>
             <div>
-              <label className="label">Admin Notes (optional)</label>
+              <label className="label">{t('upgradeRequests.actions.adminNotes')}</label>
               <textarea
                 value={adminNotes}
                 onChange={e => setAdminNotes(e.target.value)}
                 className="input"
                 rows={3}
-                placeholder="Internal notes about this approval..."
+                placeholder={t('upgradeRequests.modal.adminNotesPlaceholder')}
               />
             </div>
             {error && <Alert type="error" message={error} />}
             <div className="flex justify-end gap-3">
-              <button onClick={closeAction} className="btn btn-secondary">Cancel</button>
+              <button onClick={closeAction} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
               <button
                 onClick={handleAction}
                 disabled={submitting}
                 className="btn btn-primary"
               >
-                {submitting ? 'Approving...' : 'Approve Upgrade'}
+                {submitting ? t('upgradeRequests.actions.approving') : t('upgradeRequests.actions.approveUpgrade')}
               </button>
             </div>
           </div>
@@ -311,34 +313,34 @@ export function SuperAdminUpgradeRequests() {
       <Modal
         open={!!actionRequest && actionType === 'reject'}
         onClose={closeAction}
-        title="Reject Upgrade Request"
+        title={t('upgradeRequests.modal.rejectTitle')}
       >
         {actionRequest && (
           <div className="space-y-4">
             <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
-              <div><span className="text-gray-500">Company:</span> <span className="font-medium">{actionRequest.company_name}</span></div>
-              <div><span className="text-gray-500">Current Plan:</span> <span className="font-medium">{actionRequest.current_plan_name}</span></div>
-              <div><span className="text-gray-500">Requested Plan:</span> <span className="font-medium">{actionRequest.requested_plan_name}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.company')}:</span> <span className="font-medium">{actionRequest.company_name}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.currentPlan')}:</span> <span className="font-medium">{actionRequest.current_plan_name}</span></div>
+              <div><span className="text-gray-500">{t('upgradeRequests.columns.requestedPlan')}:</span> <span className="font-medium">{actionRequest.requested_plan_name}</span></div>
             </div>
             <div>
-              <label className="label">Rejection Reason (required)</label>
+              <label className="label">{t('upgradeRequests.actions.rejectionReason')}</label>
               <textarea
                 value={rejectionReason}
                 onChange={e => setRejectionReason(e.target.value)}
                 className="input"
                 rows={3}
-                placeholder="Explain why this request is being rejected..."
+                placeholder={t('upgradeRequests.modal.rejectionReasonPlaceholder')}
               />
             </div>
             {error && <Alert type="error" message={error} />}
             <div className="flex justify-end gap-3">
-              <button onClick={closeAction} className="btn btn-secondary">Cancel</button>
+              <button onClick={closeAction} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
               <button
                 onClick={handleAction}
                 disabled={submitting || !rejectionReason.trim()}
                 className="btn btn-danger"
               >
-                {submitting ? 'Rejecting...' : 'Reject Request'}
+                {submitting ? t('upgradeRequests.actions.rejecting') : t('upgradeRequests.actions.rejectRequest')}
               </button>
             </div>
           </div>

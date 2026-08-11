@@ -10,6 +10,10 @@
     @apply bg-gray-50 text-gray-900 antialiased;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   }
+  /* Arabic font + RTL adjustments */
+  html[dir="rtl"] body {
+    font-family: 'Cairo', 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+  }
 }
 
 @layer components {
@@ -124,3 +128,31 @@
 .datasheet-container .rdg {
   height: 100%;
 }
+
+/* ============================================================================
+   RTL (Right-to-Left) overrides for Arabic
+   ========================================================================== */
+html[dir="rtl"] .table {
+  text-align: right;
+}
+html[dir="rtl"] .table thead th {
+  text-align: right;
+}
+html[dir="rtl"] .rdg {
+  direction: rtl;
+}
+html[dir="rtl"] .rdg-header-row {
+  direction: rtl;
+}
+html[dir="rtl"] .rdg-row {
+  direction: rtl;
+}
+/* Fix react-data-grid cell content alignment in RTL */
+html[dir="rtl"] .rdg-cell {
+  text-align: right;
+}
+/* Fix combobox portal positioning in RTL */
+html[dir="rtl"] .combobox-portal {
+  direction: rtl;
+}
+

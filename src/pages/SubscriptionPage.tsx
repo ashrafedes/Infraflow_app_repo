@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSubscription } from '@/contexts/SubscriptionContext'
@@ -8,6 +9,7 @@ import { Check, X, Clock, AlertTriangle, CreditCard, FileUp, ArrowUpCircle } fro
 import type { SubscriptionPlan, Feature, PlanFeature, SubscriptionUpgradeRequest } from '@/types'
 
 export function SubscriptionPage() {
+  const { t } = useTranslation('subscription')
   const { profile } = useAuth()
   const { info, loading: subLoading } = useSubscription()
   const [plans, setPlans] = useState<SubscriptionPlan[]>([])
@@ -79,12 +81,12 @@ export function SubscriptionPage() {
 
     const result = data as { success: boolean; request_id: string | null; error: string | null }
     if (!result.success) {
-      setError(result.error ?? 'Failed to submit upgrade request')
+      setError(result.error ?? t('subscription:errors.submitFailed'))
       setSubmitting(false)
       return
     }
 
-    setSuccess('Upgrade request submitted successfully. We will review it shortly.')
+    setSuccess(t('subscription:success.upgradeSubmitted'))
     setSubmitting(false)
 
     // Refresh requests
@@ -116,12 +118,12 @@ export function SubscriptionPage() {
 
     const result = data as { success: boolean; error: string | null }
     if (!result.success) {
-      setError(result.error ?? 'Failed to cancel request')
+      setError(result.error ?? t('subscription:errors.cancelFailed'))
       setSubmitting(false)
       return
     }
 
-    setSuccess('Upgrade request cancelled.')
+    setSuccess(t('subscription:success.cancelled'))
     setPendingRequest(null)
     setSubmitting(false)
 
@@ -144,7 +146,7 @@ export function SubscriptionPage() {
 
   return (
     <div>
-      <PageHeader title="Subscription" subtitle="Manage your plan and request upgrades" />
+      <PageHeader title={t('subscription:title')} subtitle={t('subscription:subtitle')} />
 
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
       {success && <div className="mb-4"><Alert type="success" message={success} /></div>}
@@ -170,9 +172,9 @@ export function SubscriptionPage() {
             <div className="flex-1">
               {trialExpired ? (
                 <>
-                  <p className="font-semibold text-red-800">Your free trial has expired</p>
+                  <p className="font-semibold text-red-800">{t('subscription:trial.expired')}</p>
                   <p className="text-sm text-red-600 mt-1">
-                    Upgrade to a paid plan to continue using InfraFlow.
+                    {t('subscription:trial.expiredMessage')}
                   </p>
                 </>
               ) : (
@@ -182,14 +184,14 @@ export function SubscriptionPage() {
                     trialDaysRemaining <= 5 ? 'text-amber-800' :
                     'text-green-800'
                   }`}>
-                    {trialDaysRemaining} {trialDaysRemaining === 1 ? 'day' : 'days'} remaining in your free trial
+                    {t('subscription:trial.daysRemaining', { count: trialDaysRemaining, days: trialDaysRemaining === 1 ? t('subscription:trial.day') : t('subscription:trial.days') })}
                   </p>
                   <p className={`text-sm mt-1 ${
                     trialDaysRemaining <= 2 ? 'text-red-600' :
                     trialDaysRemaining <= 5 ? 'text-amber-600' :
                     'text-green-600'
                   }`}>
-                    Your trial expires on {formatDate(info.trial_ends_at)}. Upgrade now to avoid interruption.
+                    {t('subscription:trial.expiresOn', { date: formatDate(info.trial_ends_at) })}
                   </p>
                 </>
               )}
@@ -197,7 +199,7 @@ export function SubscriptionPage() {
             {isAdmin && (
               <button onClick={scrollToPlans} className="btn btn-primary btn-sm whitespace-nowrap">
                 <ArrowUpCircle className="h-4 w-4" />
-                Upgrade Now
+                {t('subscription:upgradeNow')}
               </button>
             )}
           </div>
@@ -210,7 +212,7 @@ export function SubscriptionPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <CreditCard className="h-6 w-6 text-brand-600" />
-              <h2 className="text-lg font-semibold">Current Plan</h2>
+              <h2 className="text-lg font-semibold">{t('subscription:currentPlan')}</h2>
             </div>
             <span className={`badge ${
               info.status === 'trial' ? 'badge-blue' :
@@ -218,37 +220,37 @@ export function SubscriptionPage() {
               info.status === 'suspended' ? 'badge-gray' :
               'badge-gray'
             }`}>
-              {info.status}
+              {t(`common:status.${info.status}`)}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             <div>
-              <p className="text-sm text-gray-500">Plan</p>
+              <p className="text-sm text-gray-500">{t('common:plan.plan')}</p>
               <p className="font-semibold text-lg">{info.plan_name}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Max Users</p>
+              <p className="text-sm text-gray-500">{t('subscription:maxUsers')}</p>
               <p className="font-semibold text-lg">{info.max_users}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Active Users</p>
+              <p className="text-sm text-gray-500">{t('subscription:activeUsers')}</p>
               <p className="font-semibold text-lg">{info.active_users}</p>
             </div>
             {info.status === 'trial' && info.trial_ends_at && (
               <div>
-                <p className="text-sm text-gray-500">Trial Ends</p>
+                <p className="text-sm text-gray-500">{t('subscription:trialEnds')}</p>
                 <p className="font-semibold text-lg">{formatDate(info.trial_ends_at)}</p>
               </div>
             )}
             {info.status === 'active' && info.current_period_end && (
               <div>
-                <p className="text-sm text-gray-500">Current Period Ends</p>
+                <p className="text-sm text-gray-500">{t('subscription:currentPeriodEnds')}</p>
                 <p className="font-semibold text-lg">{formatDate(info.current_period_end)}</p>
               </div>
             )}
             {info.suspended_reason && (
               <div className="col-span-2 lg:col-span-4">
-                <p className="text-sm text-gray-500">Suspension Reason</p>
+                <p className="text-sm text-gray-500">{t('subscription:suspensionReason')}</p>
                 <p className="text-sm text-red-600">{info.suspended_reason}</p>
               </div>
             )}
@@ -263,25 +265,24 @@ export function SubscriptionPage() {
             <div className="flex items-center gap-3">
               <FileUp className="h-5 w-5 text-amber-600" />
               <div>
-                <p className="font-semibold text-amber-800">Pending Upgrade Request</p>
+                <p className="font-semibold text-amber-800">{t('subscription:pendingRequest')}</p>
                 <p className="text-sm text-amber-700 mt-1">
-                  Requested upgrade to{' '}
-                  <span className="font-medium">
-                    {plans.find(p => p.id === pendingRequest.requested_plan_id)?.plan_name ?? 'Unknown'}
-                  </span>{' '}
-                  on {formatDate(pendingRequest.requested_at)}
+                  {t('subscription:requestedUpgradeTo', {
+                    plan: plans.find(p => p.id === pendingRequest.requested_plan_id)?.plan_name ?? t('subscription:unknownPlan'),
+                    date: formatDate(pendingRequest.requested_at),
+                  })}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="badge badge-blue">Pending Review</span>
+              <span className="badge badge-blue">{t('subscription:pendingReview')}</span>
               {isAdmin && (
                 <button
                   onClick={handleCancelRequest}
                   disabled={submitting}
                   className="btn btn-secondary btn-sm"
                 >
-                  Cancel Request
+                  {t('subscription:cancelRequest')}
                 </button>
               )}
             </div>
@@ -291,7 +292,7 @@ export function SubscriptionPage() {
 
       {/* Available Plans */}
       <div ref={plansRef}>
-        <h2 className="text-lg font-semibold mb-4">Available Plans</h2>
+        <h2 className="text-lg font-semibold mb-4">{t('subscription:availablePlans')}</h2>
         <div className="grid gap-4 lg:grid-cols-3 mb-6">
           {plans.filter(p => p.is_active).map(p => {
             const isCurrentPlan = p.plan_code === info?.plan_code
@@ -311,21 +312,21 @@ export function SubscriptionPage() {
               >
                 {isCurrentPlan && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="badge badge-green px-3 py-1 text-xs">Current Plan</span>
+                    <span className="badge badge-green px-3 py-1 text-xs">{t('subscription:currentPlanBadge')}</span>
                   </div>
                 )}
                 <h3 className="font-semibold text-lg mb-1">{p.plan_name}</h3>
-                <p className="text-sm text-gray-500 mb-4">{p.description ?? 'No description'}</p>
+                <p className="text-sm text-gray-500 mb-4">{p.description ?? t('subscription:noDescription')}</p>
                 <div className="space-y-1 text-sm mb-4">
-                  <div><span className="text-gray-500">Max Users:</span> <span className="font-medium">{p.default_max_users}</span></div>
+                  <div><span className="text-gray-500">{t('subscription:maxUsers')}:</span> <span className="font-medium">{p.default_max_users}</span></div>
                   {p.trial_duration_days && (
-                    <div><span className="text-gray-500">Trial Duration:</span> <span className="font-medium">{p.trial_duration_days} days</span></div>
+                    <div><span className="text-gray-500">{t('subscription:trialDuration')}:</span> <span className="font-medium">{t('subscription:trialDurationDays', { count: p.trial_duration_days })}</span></div>
                   )}
                 </div>
 
                 {/* Feature list */}
                 <div className="border-t border-gray-100 pt-4 mb-4">
-                  <p className="text-xs font-medium text-gray-700 mb-2">Features</p>
+                  <p className="text-xs font-medium text-gray-700 mb-2">{t('subscription:features')}</p>
                   <div className="space-y-1.5">
                     {features.map(f => {
                       const isEnabled = planEnabledFeatures.has(f.feature_key)
@@ -340,7 +341,7 @@ export function SubscriptionPage() {
                             {f.feature_name}
                           </span>
                           <span className={`badge ${f.category === 'core' ? 'badge-blue' : 'badge-gray'} text-xs`}>
-                            {f.category}
+                            {t(`subscription:featureCategory.${f.category}`)}
                           </span>
                         </div>
                       )
@@ -351,7 +352,7 @@ export function SubscriptionPage() {
                 {/* Action button */}
                 {isCurrentPlan ? (
                   <button disabled className="btn btn-secondary w-full opacity-60 cursor-default">
-                    Current Plan
+                    {t('subscription:current')}
                   </button>
                 ) : isUpgrade && isAdmin ? (
                   <button
@@ -360,15 +361,15 @@ export function SubscriptionPage() {
                     className="btn btn-primary w-full"
                   >
                     <ArrowUpCircle className="h-4 w-4" />
-                    {pendingRequest ? 'Pending Request' : 'Request Upgrade'}
+                    {pendingRequest ? t('subscription:pendingRequestBtn') : t('subscription:requestUpgrade')}
                   </button>
                 ) : isUpgrade && !isAdmin ? (
                   <p className="text-xs text-gray-400 text-center py-2">
-                    Contact your company admin to upgrade
+                    {t('subscription:contactAdminToUpgrade')}
                   </p>
                 ) : (
                   <button disabled className="btn btn-secondary w-full opacity-60 cursor-default">
-                    Lower Tier
+                    {t('subscription:lowerTier')}
                   </button>
                 )}
               </div>
@@ -380,16 +381,16 @@ export function SubscriptionPage() {
       {/* Recent Request History */}
       {recentRequests.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold mb-4">Request History</h2>
+          <h2 className="text-lg font-semibold mb-4">{t('subscription:requestHistory')}</h2>
           <div className="card table-container">
             <table className="table">
               <thead>
                 <tr>
-                  <th>Requested Plan</th>
-                  <th>Status</th>
-                  <th>Requested</th>
-                  <th>Reviewed</th>
-                  <th>Notes</th>
+                  <th>{t('subscription:requestedPlan')}</th>
+                  <th>{t('subscription:status')}</th>
+                  <th>{t('subscription:requested')}</th>
+                  <th>{t('subscription:reviewed')}</th>
+                  <th>{t('subscription:notes')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -397,14 +398,14 @@ export function SubscriptionPage() {
                   const reqPlan = plans.find(p => p.id === r.requested_plan_id)
                   return (
                     <tr key={r.id}>
-                      <td className="font-medium">{reqPlan?.plan_name ?? 'Unknown'}</td>
+                      <td className="font-medium">{reqPlan?.plan_name ?? t('subscription:unknownPlan')}</td>
                       <td>
                         <span className={`badge ${
                           r.status === 'approved' ? 'badge-green' :
                           r.status === 'rejected' ? 'badge-gray' :
                           'badge-gray'
                         }`}>
-                          {r.status}
+                          {t(`common:status.${r.status}`)}
                         </span>
                       </td>
                       <td>{formatDate(r.requested_at)}</td>

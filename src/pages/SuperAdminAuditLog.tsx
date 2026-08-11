@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert } from '@/components/ui'
@@ -18,6 +19,7 @@ const PAGE_SIZE = 50
 // Component
 // ============================================================================
 export function SuperAdminAuditLog() {
+  const { t } = useTranslation('superAdmin')
   const [logs, setLogs] = useState<AuditLogWithCompany[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
   const [loading, setLoading] = useState(true)
@@ -118,27 +120,27 @@ export function SuperAdminAuditLog() {
 
   return (
     <div>
-      <PageHeader title="Audit Log" subtitle="Platform-wide subscription change history" />
+      <PageHeader title={t('auditLog.title')} subtitle={t('auditLog.subtitle')} />
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
 
       {/* Filters */}
       <div className="card p-4 mb-4">
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <label className="label">Company</label>
+            <label className="label">{t('auditLog.filters.company')}</label>
             <select
               value={filterCompanyId}
               onChange={e => setFilterCompanyId(e.target.value)}
               className="input"
             >
-              <option value="all">All Companies</option>
+              <option value="all">{t('auditLog.filters.allCompanies')}</option>
               {companies.map(c => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="label">Action Type</label>
+            <label className="label">{t('auditLog.filters.actionType')}</label>
             <select
               value={filterAction}
               onChange={e => setFilterAction(e.target.value)}
@@ -146,18 +148,18 @@ export function SuperAdminAuditLog() {
             >
               {actionTypes.map(a => (
                 <option key={a} value={a}>
-                  {a === 'all' ? 'All Actions' : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+                  {a === 'all' ? t('auditLog.filters.allActions') : a.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="label">Search Company Name</label>
+            <label className="label">{t('auditLog.filters.searchCompany')}</label>
             <input
               type="text"
               value={searchCompany}
               onChange={e => setSearchCompany(e.target.value)}
-              placeholder="Filter by company name..."
+              placeholder={t('auditLog.filters.searchPlaceholder')}
               className="input"
             />
           </div>
@@ -169,19 +171,19 @@ export function SuperAdminAuditLog() {
         <table className="table">
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Action</th>
-              <th>Old Value</th>
-              <th>New Value</th>
-              <th>Performed By</th>
-              <th>When</th>
+              <th>{t('auditLog.columns.company')}</th>
+              <th>{t('auditLog.columns.action')}</th>
+              <th>{t('auditLog.columns.oldValue')}</th>
+              <th>{t('auditLog.columns.newValue')}</th>
+              <th>{t('auditLog.columns.performedBy')}</th>
+              <th>{t('auditLog.columns.when')}</th>
             </tr>
           </thead>
           <tbody>
             {logs.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center text-gray-500 py-8">
-                  No audit log entries found
+                  {t('auditLog.empty')}
                 </td>
               </tr>
             ) : (
@@ -205,7 +207,7 @@ export function SuperAdminAuditLog() {
                   <td className="text-xs text-gray-500">
                     {log.performed_by
                       ? `${log.performed_by.slice(0, 8)}...`
-                      : 'System'}
+                      : t('auditLog.system')}
                   </td>
                   <td className="whitespace-nowrap text-xs text-gray-600">
                     {formatDateTime(log.performed_at)}
@@ -225,7 +227,7 @@ export function SuperAdminAuditLog() {
             disabled={loadingMore}
             className="btn btn-secondary"
           >
-            {loadingMore ? 'Loading...' : 'Load More'}
+            {loadingMore ? t('common:buttons.loading') : t('common:buttons.loadMore')}
           </button>
         </div>
       )}

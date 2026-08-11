@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, Modal, ConfirmDialog, LoadingSpinner, Alert, DirtyBadge } from '@/components/ui'
 import { Plus, Save, Trash2, Search } from 'lucide-react'
@@ -27,6 +28,7 @@ interface WorkOrderRow extends WorkOrder {
 }
 
 export function WorkOrdersPage() {
+  const { t } = useTranslation('workOrders')
   const [rows, setRows] = useState<WorkOrderRow[]>([])
   const [projects, setProjects] = useState<Project[]>([])
   const [locations, setLocations] = useState<WorkLocation[]>([])
@@ -124,7 +126,7 @@ export function WorkOrdersPage() {
     }
     if (allOk) {
       setRows((prev) => prev.map((r) => ({ ...r, _dirty: false })))
-      setSuccess(`${dirtyRows.length} work order(s) updated`)
+      setSuccess(t('workOrders:detail.saveSuccess', { count: dirtyRows.length }))
       setTimeout(() => setSuccess(null), 3000)
     }
   }, [rows])
@@ -150,10 +152,10 @@ export function WorkOrdersPage() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    if (!createForm.work_order_number.trim()) { setError('WO Number is required'); return }
-    if (!createForm.project_id) { setError('Project is required'); return }
-    if (!createForm.work_location_id) { setError('Work Location is required'); return }
-    if (!createForm.supervisor.trim()) { setError('Supervisor is required'); return }
+    if (!createForm.work_order_number.trim()) { setError(t('workOrders:create.errors.woNumberRequired')); return }
+    if (!createForm.project_id) { setError(t('workOrders:create.errors.projectRequired')); return }
+    if (!createForm.work_location_id) { setError(t('workOrders:create.errors.workLocationRequired')); return }
+    if (!createForm.supervisor.trim()) { setError(t('workOrders:create.errors.supervisorRequired')); return }
 
     const payload = {
       work_order_number: createForm.work_order_number.trim(),
@@ -218,9 +220,9 @@ export function WorkOrdersPage() {
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Work Orders"
-        subtitle="Master-detail — select a WO to edit header + BOQ. Ctrl+N for new, Ctrl+S to save."
-        action={<button onClick={() => setCreateModalOpen(true)} className="btn btn-primary"><Plus className="h-4 w-4" /> Add Work Order</button>}
+        title={t('workOrders:title')}
+        subtitle={t('workOrders:subtitle')}
+        action={<button onClick={() => setCreateModalOpen(true)} className="btn btn-primary"><Plus className="h-4 w-4" /> {t('workOrders:create.title')}</button>}
       />
 
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
@@ -235,7 +237,7 @@ export function WorkOrdersPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search work orders..."
+              placeholder={t('workOrders:search')}
               className="input pl-10"
             />
           </div>
@@ -245,13 +247,13 @@ export function WorkOrdersPage() {
               onChange={(e) => setProjectFilter(e.target.value)}
               className="input"
             >
-              <option value="">All Projects</option>
+              <option value="">{t('workOrders:allProjects')}</option>
               {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
           <div ref={listRef} className="card flex-1 overflow-y-auto p-0">
             {filteredRows.length === 0 ? (
-              <div className="p-4 text-sm text-gray-500 text-center">No work orders found</div>
+              <div className="p-4 text-sm text-gray-500 text-center">{t('workOrders:empty.noWorkOrders')}</div>
             ) : (
               <ul className="divide-y divide-gray-100">
                 {filteredRows.map((wo) => (
@@ -265,7 +267,7 @@ export function WorkOrdersPage() {
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-sm">{wo.work_order_number}</span>
-                        <span className={cn('badge text-xs', statusColors[wo.status])}>{wo.status.replace('_', ' ')}</span>
+                        <span className={cn('badge text-xs', statusColors[wo.status])}>{t(`common:status.${wo.status}`)}</span>
                       </div>
                       <div className="text-xs text-gray-500 mt-1">{wo.project_name}</div>
                       <div className="text-xs text-gray-400">{wo.work_location_name}</div>
@@ -290,10 +292,10 @@ export function WorkOrdersPage() {
                     <p className="text-sm text-gray-500">{selectedWo.project_name} — {selectedWo.work_location_name}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button onClick={saveHeader} disabled={!isHeaderDirty} className="btn btn-primary btn-sm" title="Save header (Ctrl+S)">
-                      <Save className="h-3 w-3" /> Save Header
+                    <button onClick={saveHeader} disabled={!isHeaderDirty} className="btn btn-primary btn-sm" title={t('workOrders:detail.saveHeaderTitle')}>
+                      <Save className="h-3 w-3" /> {t('workOrders:detail.saveHeader')}
                     </button>
-                    <button onClick={() => setDeleteId(selectedWo.id)} className="btn btn-danger btn-sm" title="Delete WO">
+                    <button onClick={() => setDeleteId(selectedWo.id)} className="btn btn-danger btn-sm" title={t('workOrders:detail.deleteWo')}>
                       <Trash2 className="h-3 w-3" />
                     </button>
                   </div>
@@ -302,25 +304,25 @@ export function WorkOrdersPage() {
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
                   {/* Immutable fields (read-only) */}
                   <div>
-                    <label className="label">WO Number</label>
+                    <label className="label">{t('workOrders:detail.woNumber')}</label>
                     <p className="text-sm font-medium">{selectedWo.work_order_number}</p>
                   </div>
                   <div>
-                    <label className="label">Site Code</label>
+                    <label className="label">{t('workOrders:detail.siteCode')}</label>
                     <p className="text-sm font-medium">{selectedWo.site_code ?? '—'}</p>
                   </div>
                   <div>
-                    <label className="label">Project</label>
+                    <label className="label">{t('workOrders:detail.project')}</label>
                     <p className="text-sm font-medium">{selectedWo.project_name}</p>
                   </div>
                   <div>
-                    <label className="label">Work Location</label>
+                    <label className="label">{t('workOrders:detail.workLocation')}</label>
                     <p className="text-sm font-medium">{selectedWo.work_location_name}</p>
                   </div>
 
                   {/* Editable fields */}
                   <div>
-                    <label className="label">Supervisor</label>
+                    <label className="label">{t('workOrders:detail.supervisor')}</label>
                     <input
                       type="text"
                       value={selectedWo.supervisor}
@@ -329,7 +331,7 @@ export function WorkOrdersPage() {
                     />
                   </div>
                   <div>
-                    <label className="label">Contractor</label>
+                    <label className="label">{t('workOrders:detail.contractor')}</label>
                     <select
                       value={selectedWo.contractor_id ?? ''}
                       onChange={(e) => {
@@ -341,9 +343,9 @@ export function WorkOrdersPage() {
                       }}
                       className="input"
                     >
-                      <option value="">No contractor</option>
+                      <option value="">{t('workOrders:create.noContractor')}</option>
                       {contractors.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                      <option value="__new__">+ Add new contractor…</option>
+                      <option value="__new__">{t('workOrders:detail.addNewContractor')}</option>
                     </select>
                     {addingContractor && (
                       <div className="mt-2 flex items-center gap-2">
@@ -351,7 +353,7 @@ export function WorkOrdersPage() {
                           type="text"
                           value={newContractorName}
                           onChange={(e) => setNewContractorName(e.target.value)}
-                          placeholder="Contractor name"
+                          placeholder={t('workOrders:detail.contractorNamePlaceholder')}
                           className="input flex-1"
                           autoFocus
                         />
@@ -370,30 +372,30 @@ export function WorkOrdersPage() {
                           }}
                           className="btn btn-primary btn-sm"
                         >
-                          Add
+                          {t('common:buttons.add')}
                         </button>
                         <button
                           type="button"
                           onClick={() => { setAddingContractor(false); setNewContractorName('') }}
                           className="btn btn-secondary btn-sm"
                         >
-                          Cancel
+                          {t('common:buttons.cancel')}
                         </button>
                       </div>
                     )}
                   </div>
                   <div>
-                    <label className="label">Status</label>
+                    <label className="label">{t('workOrders:detail.status')}</label>
                     <select
                       value={selectedWo.status}
                       onChange={(e) => handleHeaderFieldChange('status', e.target.value as WorkOrderStatus)}
                       className="input"
                     >
-                      {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                      {STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{t(`common:status.${o.value}`)}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="label">Start Date</label>
+                    <label className="label">{t('workOrders:detail.startDate')}</label>
                     <input
                       type="date"
                       value={selectedWo.start_date ?? ''}
@@ -402,7 +404,7 @@ export function WorkOrdersPage() {
                     />
                   </div>
                   <div>
-                    <label className="label">End Date</label>
+                    <label className="label">{t('workOrders:detail.endDate')}</label>
                     <input
                       type="date"
                       value={selectedWo.end_date ?? ''}
@@ -426,63 +428,63 @@ export function WorkOrdersPage() {
             </div>
           ) : (
             <div className="card flex h-full items-center justify-center">
-              <p className="text-gray-500">Select a work order from the list, or create a new one.</p>
+              <p className="text-gray-500">{t('workOrders:empty.selectOrCreate')}</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Create WO Modal (immutable fields) */}
-      <Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} title="Add Work Order" size="lg">
+      <Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} title={t('workOrders:create.title')} size="lg">
         <form onSubmit={handleCreate} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label">WO Number</label>
+              <label className="label">{t('workOrders:detail.woNumber')}</label>
               <input value={createForm.work_order_number} onChange={(e) => setCreateForm({ ...createForm, work_order_number: e.target.value })} className="input" required autoFocus />
             </div>
             <div>
-              <label className="label">Site Code</label>
+              <label className="label">{t('workOrders:detail.siteCode')}</label>
               <input value={createForm.site_code} onChange={(e) => setCreateForm({ ...createForm, site_code: e.target.value })} className="input" />
             </div>
             <div>
-              <label className="label">Project</label>
+              <label className="label">{t('workOrders:detail.project')}</label>
               <select value={createForm.project_id} onChange={(e) => setCreateForm({ ...createForm, project_id: e.target.value })} className="input" required>
-                <option value="">Select project...</option>
+                <option value="">{t('workOrders:create.selectProject')}</option>
                 {projects.map((p) => <option key={p.id} value={p.id}>{p.code} — {p.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="label">Work Location</label>
+              <label className="label">{t('workOrders:detail.workLocation')}</label>
               <select value={createForm.work_location_id} onChange={(e) => setCreateForm({ ...createForm, work_location_id: e.target.value })} className="input" required>
-                <option value="">Select location...</option>
+                <option value="">{t('workOrders:create.selectLocation')}</option>
                 {locations.map((l) => <option key={l.id} value={l.id}>{l.code} — {l.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="label">Supervisor</label>
+              <label className="label">{t('workOrders:detail.supervisor')}</label>
               <input value={createForm.supervisor} onChange={(e) => setCreateForm({ ...createForm, supervisor: e.target.value })} className="input" required />
             </div>
             <div>
-              <label className="label">Contractor</label>
+              <label className="label">{t('workOrders:detail.contractor')}</label>
               <select value={createForm.contractor_id} onChange={(e) => setCreateForm({ ...createForm, contractor_id: e.target.value })} className="input">
-                <option value="">No contractor</option>
+                <option value="">{t('workOrders:create.noContractor')}</option>
                 {contractors.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="label">Start Date</label>
+              <label className="label">{t('workOrders:detail.startDate')}</label>
               <input type="date" value={createForm.start_date} onChange={(e) => setCreateForm({ ...createForm, start_date: e.target.value })} className="input" />
             </div>
             <div>
-              <label className="label">End Date</label>
+              <label className="label">{t('workOrders:detail.endDate')}</label>
               <input type="date" value={createForm.end_date} onChange={(e) => setCreateForm({ ...createForm, end_date: e.target.value })} className="input" />
             </div>
           </div>
           {error && <Alert type="error" message={error} />}
-          <p className="text-xs text-gray-500">Status defaults to "Active". You can change it later from the detail panel.</p>
+          <p className="text-xs text-gray-500">{t('workOrders:create.statusDefault')}</p>
           <div className="flex justify-end gap-3">
-            <button type="button" onClick={() => setCreateModalOpen(false)} className="btn btn-secondary">Cancel</button>
-            <button type="submit" className="btn btn-primary">Create</button>
+            <button type="button" onClick={() => setCreateModalOpen(false)} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
+            <button type="submit" className="btn btn-primary">{t('common:buttons.create')}</button>
           </div>
         </form>
       </Modal>
@@ -491,9 +493,9 @@ export function WorkOrdersPage() {
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Work Order"
-        message="Are you sure? This will also delete associated BOQ items."
-        confirmLabel="Delete"
+        title={t('workOrders:delete.title')}
+        message={t('workOrders:delete.message')}
+        confirmLabel={t('common:buttons.delete')}
         danger
       />
     </div>

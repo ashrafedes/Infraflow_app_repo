@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, Modal } from '@/components/ui'
 import type { SubscriptionPlan, Feature, PlanFeature } from '@/types'
 
 export function SuperAdminPlans() {
+  const { t } = useTranslation('superAdmin')
   const [plans, setPlans] = useState<SubscriptionPlan[]>([])
   const [features, setFeatures] = useState<Feature[]>([])
   const [planFeatures, setPlanFeatures] = useState<PlanFeature[]>([])
@@ -87,7 +89,7 @@ export function SuperAdminPlans() {
 
   return (
     <div>
-      <PageHeader title="Subscription Plans" subtitle="Manage plans and feature entitlements" />
+      <PageHeader title={t('plans.title')} subtitle={t('plans.subtitle')} />
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
 
       {/* Plans list */}
@@ -97,23 +99,23 @@ export function SuperAdminPlans() {
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-semibold text-lg">{p.plan_name}</h3>
               <span className={`badge ${p.is_active ? 'badge-green' : 'badge-gray'}`}>
-                {p.is_active ? 'Active' : 'Inactive'}
+                {p.is_active ? t('plans.active') : t('plans.inactive')}
               </span>
             </div>
-            <p className="text-sm text-gray-500 mb-3">{p.description ?? 'No description'}</p>
+            <p className="text-sm text-gray-500 mb-3">{p.description ?? t('plans.noDescription')}</p>
             <div className="space-y-1 text-sm">
-              <div><span className="text-gray-500">Code:</span> <span className="font-mono">{p.plan_code}</span></div>
-              <div><span className="text-gray-500">Max Users:</span> {p.default_max_users}</div>
-              {p.trial_duration_days && <div><span className="text-gray-500">Trial:</span> {p.trial_duration_days} days</div>}
-              {p.is_system_plan && <div><span className="text-gray-500">System plan</span></div>}
+              <div><span className="text-gray-500">{t('plans.code')}:</span> <span className="font-mono">{p.plan_code}</span></div>
+              <div><span className="text-gray-500">{t('plans.maxUsers')}:</span> {p.default_max_users}</div>
+              {p.trial_duration_days && <div><span className="text-gray-500">{t('plans.trial')}:</span> {p.trial_duration_days} {t('plans.days')}</div>}
+              {p.is_system_plan && <div><span className="text-gray-500">{t('plans.systemPlan')}</span></div>}
             </div>
             <div className="mt-4">
-              <button onClick={() => handleEdit(p)} className="btn btn-secondary btn-sm">Edit Plan</button>
+              <button onClick={() => handleEdit(p)} className="btn btn-secondary btn-sm">{t('plans.editPlan')}</button>
             </div>
 
             {/* Feature toggles */}
             <div className="mt-4 border-t border-gray-100 pt-4">
-              <p className="text-xs font-medium text-gray-700 mb-2">Features</p>
+              <p className="text-xs font-medium text-gray-700 mb-2">{t('plans.features.title')}</p>
               <div className="space-y-1">
                 {features.map(f => {
                   const pf = planFeatures.find(x => x.plan_id === p.id && x.feature_key === f.feature_key)
@@ -137,28 +139,28 @@ export function SuperAdminPlans() {
       </div>
 
       {/* Edit Plan Modal */}
-      <Modal open={!!editPlan} onClose={() => setEditPlan(null)} title="Edit Plan">
+      <Modal open={!!editPlan} onClose={() => setEditPlan(null)} title={t('plans.modal.editTitle')}>
         <div className="space-y-4">
           <div>
-            <label className="label">Plan Name</label>
+            <label className="label">{t('plans.columns.name')}</label>
             <input value={editForm.plan_name} onChange={e => setEditForm({ ...editForm, plan_name: e.target.value })} className="input" />
           </div>
           <div>
-            <label className="label">Description</label>
+            <label className="label">{t('plans.features.description')}</label>
             <textarea value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} className="input" rows={2} />
           </div>
           <div>
-            <label className="label">Default Max Users</label>
+            <label className="label">{t('plans.defaultMaxUsers')}</label>
             <input type="number" value={editForm.default_max_users} onChange={e => setEditForm({ ...editForm, default_max_users: e.target.value })} className="input" min="1" />
           </div>
           <div className="flex items-center gap-2">
             <input type="checkbox" id="plan_active" checked={editForm.is_active} onChange={e => setEditForm({ ...editForm, is_active: e.target.checked })} />
-            <label htmlFor="plan_active" className="text-sm">Active</label>
+            <label htmlFor="plan_active" className="text-sm">{t('plans.active')}</label>
           </div>
           {error && <Alert type="error" message={error} />}
           <div className="flex justify-end gap-3">
-            <button onClick={() => setEditPlan(null)} className="btn btn-secondary">Cancel</button>
-            <button onClick={handleSave} className="btn btn-primary">Save</button>
+            <button onClick={() => setEditPlan(null)} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
+            <button onClick={handleSave} className="btn btn-primary">{t('common:buttons.save')}</button>
           </div>
         </div>
       </Modal>

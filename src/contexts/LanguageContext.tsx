@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import i18n, { type Language, DEFAULT_LANGUAGE } from '@/i18n'
 import { supabase } from '@/lib/supabase'
+import { setLocale } from '@/lib/utils'
 
 // ============================================================================
 // LanguageContext — manages active language (EN/AR) + RTL direction
@@ -33,6 +34,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr'
     document.documentElement.lang = newLang
     localStorage.setItem('infraflow-lang', newLang)
+    setLocale(newLang)
   }, [])
 
   // Sync user_profiles.preferred_language to DB (best-effort, no error blocking)
@@ -60,10 +62,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLang(lang === 'en' ? 'ar' : 'en')
   }, [lang, setLang])
 
-  // On mount: apply initial dir to <html>
+  // On mount: apply initial dir to <html> + set locale for formatting
   useEffect(() => {
     document.documentElement.dir = dir
     document.documentElement.lang = lang
+    setLocale(lang)
   }, [dir, lang])
 
   // Listen for i18n language changes (e.g., from LanguageDetector)

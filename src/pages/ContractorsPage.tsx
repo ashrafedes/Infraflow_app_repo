@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, DirtyBadge, ConfirmDialog } from '@/components/ui'
 import { Plus, Save, Trash2 } from 'lucide-react'
@@ -20,6 +21,7 @@ function nextTempId(): string {
 }
 
 export function ContractorsPage() {
+  const { t } = useTranslation('masterData')
   const [rows, setRows] = useState<ContractorRow[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -54,7 +56,7 @@ export function ContractorsPage() {
 
   const saveRow = useCallback(async (row: ContractorRow) => {
     setError(null)
-    if (!row.name?.trim()) { setError('Name is required'); return false }
+    if (!row.name?.trim()) { setError(t('common:validation.nameRequired')); return false }
 
     const payload = {
       name: row.name.trim(),
@@ -84,7 +86,7 @@ export function ContractorsPage() {
       if (!ok) { allOk = false; break }
     }
     if (allOk) {
-      setSuccess(`${dirtyRows.length} row(s) saved`)
+      setSuccess(t('masterData:contractors.saved', { count: dirtyRows.length }))
       setTimeout(() => setSuccess(null), 3000)
     }
   }, [rows, saveRow])
@@ -142,37 +144,37 @@ export function ContractorsPage() {
   }, [rows, search])
 
   const columns: readonly Column<ContractorRow>[] = useMemo(() => [
-    { key: 'name', name: 'Name', width: 260, resizable: true, editable: true, renderEditCell: textCellEditor<ContractorRow>(), cellClass: 'font-medium' },
-    { key: 'contact_info', name: 'Contact Info', width: 320, resizable: true, editable: true, renderEditCell: textCellEditor<ContractorRow>(), renderCell: readOnlyCell<ContractorRow>((v) => (v as string) || '—') },
-    { key: 'is_active', name: 'Active', width: 70, renderCell: checkboxCell<ContractorRow>() },
+    { key: 'name', name: t('common:labels.name'), width: 260, resizable: true, editable: true, renderEditCell: textCellEditor<ContractorRow>(), cellClass: 'font-medium' },
+    { key: 'contact_info', name: t('common:labels.contactPerson'), width: 320, resizable: true, editable: true, renderEditCell: textCellEditor<ContractorRow>(), renderCell: readOnlyCell<ContractorRow>((v) => (v as string) || '—') },
+    { key: 'is_active', name: t('common:labels.isActive'), width: 70, renderCell: checkboxCell<ContractorRow>() },
     {
       key: '_actions', name: '', width: 50, sortable: false, resizable: false,
       renderCell: ({ row }) => (
         <button
           onClick={(e) => { e.stopPropagation(); setDeleteId(row._isNew ? (row._tempId ?? row.id) : row.id) }}
           className="text-gray-400 hover:text-red-600"
-          title="Delete"
+          title={t('common:buttons.delete')}
         >
           <Trash2 className="h-4 w-4" />
         </button>
       ),
     },
-  ], [])
+  ], [t])
 
   if (loading) return <LoadingSpinner />
 
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Contractors"
-        subtitle="Manage contractor master data — inline editing, Ctrl+N for new row, Ctrl+S to save"
-        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> Add Row</button>}
+        title={t('masterData:contractors.title')}
+        subtitle={t('masterData:contractors.subtitle')}
+        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> {t('common:buttons.addRow')}</button>}
       />
 
       <div className="mb-4 flex items-center gap-3 flex-wrap">
-        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search contractors..." className="input max-w-xs" />
-        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title="Save all changes (Ctrl+S)">
-          <Save className="h-4 w-4" /> Save All
+        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('masterData:contractors.search')} className="input max-w-xs" />
+        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title={t('common:buttons.saveAll')}>
+          <Save className="h-4 w-4" /> {t('common:buttons.saveAll')}
         </button>
         <DirtyBadge dirty={isDirty} />
       </div>
@@ -187,7 +189,7 @@ export function ContractorsPage() {
           onRowsChange={handleRowsChange}
           rowKeyGetter={rowKeyGetter}
           dirtyRowIds={dirtyRowIds}
-          emptyMessage="No contractors found. Press Ctrl+N or click Add Row to start."
+          emptyMessage={t('masterData:contractors.empty')}
           rowHeight={38}
         />
       </div>
@@ -197,11 +199,11 @@ export function ContractorsPage() {
           rows={filteredRows as unknown as Record<string, unknown>[]}
           titleKey="name"
           fields={[
-            { key: 'contact_person', label: 'Contact' },
-            { key: 'phone', label: 'Phone' },
-            { key: 'is_active', label: 'Active', format: (v) => (v ? 'Yes' : 'No') },
+            { key: 'contact_person', label: t('common:labels.contactPerson') },
+            { key: 'phone', label: t('common:labels.phone') },
+            { key: 'is_active', label: t('common:labels.isActive'), format: (v) => (v ? t('common:labels.yes') : t('common:labels.no')) },
           ]}
-          emptyMessage="No contractors found. Click Add Row to start."
+          emptyMessage={t('masterData:contractors.empty')}
         />
       </div>
 
@@ -209,9 +211,9 @@ export function ContractorsPage() {
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Contractor"
-        message="Are you sure? This action cannot be undone."
-        confirmLabel="Delete"
+        title={t('masterData:contractors.deleteTitle')}
+        message={t('masterData:contractors.deleteMessage')}
+        confirmLabel={t('common:buttons.delete')}
         danger
       />
     </div>

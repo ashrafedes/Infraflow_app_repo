@@ -7,7 +7,8 @@
     "shortDescription": "Description",
     "category": "Category",
     "uom": "UOM",
-    "isActive": "Active"
+    "isActive": "Active",
+    "longDescription": "Long Description"
   },
   "buttons": {
     "addRow": "Add Row",
@@ -26,5 +27,12 @@
     "message": "Are you sure you want to delete this material?"
   },
   "saved": "{{count}} material(s) saved",
-  "pasted": "{{count}} row(s) pasted — review and Save"
+  "pasted": "{{count}} row(s) pasted — review and Save",
+  "clipboardReadError": "Failed to read clipboard",
+  "errors": {
+    "itemNumberRequired": "Item number is required",
+    "shortDescriptionRequired": "Short description is required",
+    "uomRequired": "UOM is required"
+  },
+  "pasteValidationErrors": "Paste validation errors:"
 }

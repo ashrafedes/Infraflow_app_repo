@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
@@ -9,6 +10,7 @@ import { ArrowLeftRight, Package, ClipboardList, AlertTriangle, TrendingUp, File
 import type { MovementDetail, WarehouseBalance } from '@/types'
 
 export function Dashboard() {
+  const { t } = useTranslation('dashboard')
   const { profile } = useAuth()
   const [loading, setLoading] = useState(true)
   const [recentMovements, setRecentMovements] = useState<MovementDetail[]>([])
@@ -49,15 +51,15 @@ export function Dashboard() {
   if (loading) return <LoadingSpinner />
 
   const statCards = [
-    { label: 'Active Work Orders', value: stats.workOrders, icon: ClipboardList, color: 'text-blue-600' },
-    { label: 'Active Materials', value: stats.materials, icon: Package, color: 'text-green-600' },
-    { label: 'Total Movements', value: stats.movements, icon: ArrowLeftRight, color: 'text-purple-600' },
-    { label: 'Low/No Stock Items', value: stats.lowStock, icon: AlertTriangle, color: 'text-red-600' },
+    { label: t('dashboard:stats.activeWorkOrders'), value: stats.workOrders, icon: ClipboardList, color: 'text-blue-600' },
+    { label: t('dashboard:stats.activeMaterials'), value: stats.materials, icon: Package, color: 'text-green-600' },
+    { label: t('dashboard:stats.totalMovements'), value: stats.movements, icon: ArrowLeftRight, color: 'text-purple-600' },
+    { label: t('dashboard:stats.lowStock'), value: stats.lowStock, icon: AlertTriangle, color: 'text-red-600' },
   ]
 
   return (
     <div>
-      <PageHeader title="Dashboard" subtitle={`Welcome back, ${profile?.full_name}`} />
+      <PageHeader title={t('dashboard:title')} subtitle={t('dashboard:welcome', { name: profile?.full_name })} />
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 mb-6 lg:grid-cols-4">
@@ -78,21 +80,21 @@ export function Dashboard() {
         {/* Recent Movements */}
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Recent Movements</h2>
-            <Link to="/movements" className="text-sm text-brand-600 hover:underline">View all</Link>
+            <h2 className="font-semibold">{t('dashboard:sections.recentMovements')}</h2>
+            <Link to="/movements" className="text-sm text-brand-600 hover:underline">{t('dashboard:sections.viewAll')}</Link>
           </div>
           {recentMovements.length === 0 ? (
-            <p className="text-sm text-gray-500 py-8 text-center">No movements yet</p>
+            <p className="text-sm text-gray-500 py-8 text-center">{t('dashboard:empty.noMovements')}</p>
           ) : (
             <div className="table-container">
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Number</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Item</th>
-                    <th className="text-right">Qty</th>
+                    <th>{t('dashboard:columns.number')}</th>
+                    <th>{t('dashboard:columns.date')}</th>
+                    <th>{t('dashboard:columns.type')}</th>
+                    <th>{t('dashboard:columns.item')}</th>
+                    <th className="text-right">{t('dashboard:columns.qty')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -114,19 +116,19 @@ export function Dashboard() {
         {/* Low Stock */}
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Warehouse Stock Levels</h2>
+            <h2 className="font-semibold">{t('dashboard:sections.warehouseStock')}</h2>
             <TrendingUp className="h-5 w-5 text-gray-400" />
           </div>
           {warehouseBalances.length === 0 ? (
-            <p className="text-sm text-gray-500 py-8 text-center">No stock data yet</p>
+            <p className="text-sm text-gray-500 py-8 text-center">{t('dashboard:empty.noStock')}</p>
           ) : (
             <div className="table-container">
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Item</th>
-                    <th>Warehouse</th>
-                    <th className="text-right">Balance</th>
+                    <th>{t('dashboard:columns.item')}</th>
+                    <th>{t('common:labels.warehouse')}</th>
+                    <th className="text-right">{t('dashboard:columns.balance')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -150,36 +152,36 @@ export function Dashboard() {
       <div className="mt-6 flex gap-3 flex-wrap">
         <Link to="/movements/new" className="btn btn-primary">
           <ArrowLeftRight className="h-4 w-4" />
-          New Movement
+          {t('dashboard:quickActions.newMovement')}
         </Link>
         <Link to="/work-orders" className="btn btn-secondary">
           <ClipboardList className="h-4 w-4" />
-          Work Orders
+          {t('dashboard:quickActions.workOrders')}
         </Link>
         <Link to="/materials" className="btn btn-secondary">
           <Boxes className="h-4 w-4" />
-          Materials
+          {t('dashboard:quickActions.materials')}
         </Link>
         <Link to="/reports" className="btn btn-secondary">
           <FileBarChart className="h-4 w-4" />
-          Reports
+          {t('dashboard:quickActions.reports')}
         </Link>
       </div>
 
       {/* Advanced Dashboard (entitlement-gated) */}
       <div className="mt-6">
         <FeatureGate feature={FEATURES.ADVANCED_DASHBOARD} fallback={
-          <LockedState feature="advanced_dashboard" message="Advanced dashboard charts (trends, cost analysis, utilization graphs) require a higher plan" />
+          <LockedState feature="advanced_dashboard" message={t('dashboard:advanced.lockedMessage')} />
         }>
           <div className="card p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold">Advanced Analytics</h2>
+              <h2 className="font-semibold">{t('dashboard:sections.advancedAnalytics')}</h2>
               <TrendingUp className="h-5 w-5 text-brand-600" />
             </div>
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
               <div className="rounded-lg border border-gray-100 p-4">
-                <p className="text-xs text-gray-500">Movement Trend (30d)</p>
-                <p className="text-lg font-semibold mt-1">{formatNumber(stats.movements)} total</p>
+                <p className="text-xs text-gray-500">{t('dashboard:advanced.movementTrend')}</p>
+                <p className="text-lg font-semibold mt-1">{formatNumber(stats.movements)} {t('dashboard:advanced.total')}</p>
                 <div className="mt-2 flex items-end gap-1 h-12">
                   {[3, 5, 2, 7, 4, 6, 8, 5, 3, 6].map((h, i) => (
                     <div key={i} className="flex-1 bg-brand-200 rounded-t" style={{ height: `${h * 10}%` }} />
@@ -187,19 +189,19 @@ export function Dashboard() {
                 </div>
               </div>
               <div className="rounded-lg border border-gray-100 p-4">
-                <p className="text-xs text-gray-500">Stock Value</p>
+                <p className="text-xs text-gray-500">{t('dashboard:advanced.stockValue')}</p>
                 <p className="text-lg font-semibold mt-1">—</p>
-                <p className="text-xs text-gray-400 mt-2">Enable to see stock value by warehouse</p>
+                <p className="text-xs text-gray-400 mt-2">{t('dashboard:advanced.enableStockValue')}</p>
               </div>
               <div className="rounded-lg border border-gray-100 p-4">
-                <p className="text-xs text-gray-500">WO Utilization</p>
-                <p className="text-lg font-semibold mt-1">{formatNumber(stats.workOrders)} active</p>
-                <p className="text-xs text-gray-400 mt-2">Enable to see utilization breakdown</p>
+                <p className="text-xs text-gray-500">{t('dashboard:advanced.woUtilization')}</p>
+                <p className="text-lg font-semibold mt-1">{formatNumber(stats.workOrders)} {t('dashboard:advanced.active')}</p>
+                <p className="text-xs text-gray-400 mt-2">{t('dashboard:advanced.enableUtilization')}</p>
               </div>
               <div className="rounded-lg border border-gray-100 p-4">
-                <p className="text-xs text-gray-500">Low Stock Alerts</p>
-                <p className="text-lg font-semibold mt-1 text-red-600">{formatNumber(stats.lowStock)} items</p>
-                <p className="text-xs text-gray-400 mt-2">Enable to see reorder recommendations</p>
+                <p className="text-xs text-gray-500">{t('dashboard:advanced.lowStockAlerts')}</p>
+                <p className="text-lg font-semibold mt-1 text-red-600">{formatNumber(stats.lowStock)} {t('dashboard:advanced.items')}</p>
+                <p className="text-xs text-gray-400 mt-2">{t('dashboard:advanced.enableReorder')}</p>
               </div>
             </div>
           </div>

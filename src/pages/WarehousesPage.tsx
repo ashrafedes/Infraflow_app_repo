@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, DirtyBadge, ConfirmDialog } from '@/components/ui'
 import { Plus, Save, Trash2 } from 'lucide-react'
@@ -58,12 +59,8 @@ function selectCell<R>(options: { value: string; label: string }[]) {
   return renderCell
 }
 
-const TYPE_OPTIONS = [
-  { value: 'main', label: 'Main' },
-  { value: 'sub', label: 'Sub' },
-]
-
 export function WarehousesPage() {
+  const { t } = useTranslation('masterData')
   const [rows, setRows] = useState<WarehouseRow[]>([])
   const [locations, setLocations] = useState<WorkLocation[]>([])
   const [loading, setLoading] = useState(true)
@@ -122,10 +119,10 @@ export function WarehousesPage() {
 
   const saveRow = useCallback(async (row: WarehouseRow) => {
     setError(null)
-    if (!row.code?.trim()) { setError('Code is required'); return false }
-    if (!row.name?.trim()) { setError('Name is required'); return false }
+    if (!row.code?.trim()) { setError(t('common:validation.codeRequired')); return false }
+    if (!row.name?.trim()) { setError(t('common:validation.nameRequired')); return false }
     if (row.warehouse_type === 'sub' && !row.work_location_id) {
-      setError('Sub warehouses require a work location'); return false
+      setError(t('masterData:warehouses.subRequiresLocation')); return false
     }
 
     const payload = {
@@ -160,7 +157,7 @@ export function WarehousesPage() {
       if (!ok) { allOk = false; break }
     }
     if (allOk) {
-      setSuccess(`${dirtyRows.length} row(s) saved`)
+      setSuccess(t('masterData:warehouses.saved', { count: dirtyRows.length }))
       setTimeout(() => setSuccess(null), 3000)
     }
   }, [rows, saveRow])
@@ -226,52 +223,57 @@ export function WarehousesPage() {
     )
   }, [rows, search])
 
+  const typeOptions = useMemo(() => [
+    { value: 'main', label: t('masterData:warehouses.typeMain') },
+    { value: 'sub', label: t('masterData:warehouses.typeSub') },
+  ], [t])
+
   const columns: readonly Column<WarehouseRow>[] = useMemo(() => [
-    { key: 'code', name: 'Code', width: 120, resizable: true, editable: true, renderEditCell: textCellEditor<WarehouseRow>(), cellClass: 'font-medium' },
-    { key: 'name', name: 'Name', width: 240, resizable: true, editable: true, renderEditCell: textCellEditor<WarehouseRow>() },
-    { key: 'warehouse_type', name: 'Type', width: 90, editable: true, renderEditCell: selectEditor<WarehouseRow>(TYPE_OPTIONS), renderCell: selectCell<WarehouseRow>(TYPE_OPTIONS) },
+    { key: 'code', name: t('common:labels.code'), width: 120, resizable: true, editable: true, renderEditCell: textCellEditor<WarehouseRow>(), cellClass: 'font-medium' },
+    { key: 'name', name: t('common:labels.name'), width: 240, resizable: true, editable: true, renderEditCell: textCellEditor<WarehouseRow>() },
+    { key: 'warehouse_type', name: t('masterData:warehouses.type'), width: 90, editable: true, renderEditCell: selectEditor<WarehouseRow>(typeOptions), renderCell: selectCell<WarehouseRow>(typeOptions) },
     {
       key: 'work_location_id',
-      name: 'Work Location',
+      name: t('masterData:warehouses.workLocation'),
       width: 220,
       resizable: true,
       editable: (row) => row.warehouse_type === 'sub',
       ...comboboxEditor<WarehouseRow>(locationItems, locationLabel),
       renderCell: ({ row }: RenderCellProps<WarehouseRow>) => {
         if (row.warehouse_type !== 'sub') return <span className="text-gray-300">—</span>
-        if (!row.work_location_id) return <span className="text-gray-400">Select…</span>
+        if (!row.work_location_id) return <span className="text-gray-400">{t('masterData:warehouses.selectLocation')}</span>
         return <>{locationLabel(row.work_location_id)}</>
       },
     },
-    { key: 'is_active', name: 'Active', width: 70, renderCell: checkboxCell<WarehouseRow>() },
+    { key: 'is_active', name: t('common:labels.isActive'), width: 70, renderCell: checkboxCell<WarehouseRow>() },
     {
       key: '_actions', name: '', width: 50, sortable: false, resizable: false,
       renderCell: ({ row }) => (
         <button
           onClick={(e) => { e.stopPropagation(); setDeleteId(row._isNew ? (row._tempId ?? row.id) : row.id) }}
           className="text-gray-400 hover:text-red-600"
-          title="Delete"
+          title={t('common:buttons.delete')}
         >
           <Trash2 className="h-4 w-4" />
         </button>
       ),
     },
-  ], [locationItems, locationLabel])
+  ], [locationItems, locationLabel, typeOptions, t])
 
   if (loading) return <LoadingSpinner />
 
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Warehouses"
-        subtitle="Manage warehouse master data — inline editing, Ctrl+N for new row, Ctrl+S to save"
-        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> Add Row</button>}
+        title={t('masterData:warehouses.title')}
+        subtitle={t('masterData:warehouses.subtitle')}
+        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> {t('common:buttons.addRow')}</button>}
       />
 
       <div className="mb-4 flex items-center gap-3 flex-wrap">
-        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search warehouses..." className="input max-w-xs" />
-        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title="Save all changes (Ctrl+S)">
-          <Save className="h-4 w-4" /> Save All
+        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('masterData:warehouses.search')} className="input max-w-xs" />
+        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title={t('common:buttons.saveAll')}>
+          <Save className="h-4 w-4" /> {t('common:buttons.saveAll')}
         </button>
         <DirtyBadge dirty={isDirty} />
       </div>
@@ -286,7 +288,7 @@ export function WarehousesPage() {
           onRowsChange={handleRowsChange}
           rowKeyGetter={rowKeyGetter}
           dirtyRowIds={dirtyRowIds}
-          emptyMessage="No warehouses found. Press Ctrl+N or click Add Row to start."
+          emptyMessage={t('masterData:warehouses.empty')}
           rowHeight={38}
         />
       </div>
@@ -297,9 +299,9 @@ export function WarehousesPage() {
           titleKey="code"
           subtitleKey="name"
           fields={[
-            { key: 'is_active', label: 'Active', format: (v) => (v ? 'Yes' : 'No') },
+            { key: 'is_active', label: t('common:labels.isActive'), format: (v) => (v ? t('common:labels.yes') : t('common:labels.no')) },
           ]}
-          emptyMessage="No warehouses found. Click Add Row to start."
+          emptyMessage={t('masterData:warehouses.empty')}
         />
       </div>
 
@@ -307,9 +309,9 @@ export function WarehousesPage() {
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Warehouse"
-        message="Are you sure? This action cannot be undone."
-        confirmLabel="Delete"
+        title={t('masterData:warehouses.deleteTitle')}
+        message={t('masterData:warehouses.deleteMessage')}
+        confirmLabel={t('common:buttons.delete')}
         danger
       />
     </div>

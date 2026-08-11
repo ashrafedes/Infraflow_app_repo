@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { Boxes } from 'lucide-react'
 
 export function CompanySetup() {
+  const { t } = useTranslation('auth')
   const { refreshProfile } = useAuth()
   const [companyName, setCompanyName] = useState('')
   const [loading, setLoading] = useState(false)
@@ -23,7 +25,7 @@ export function CompanySetup() {
 
       await refreshProfile()
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Failed to create company'
+      const msg = err instanceof Error ? err.message : t('auth:failedToCreateCompany')
       setError(msg)
     }
 
@@ -37,20 +39,20 @@ export function CompanySetup() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600">
             <Boxes className="h-7 w-7 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Set Up Your Company</h1>
-          <p className="text-sm text-gray-500">Create your organization to get started</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('auth:companySetup')}</h1>
+          <p className="text-sm text-gray-500">{t('auth:setupCompany')}</p>
         </div>
 
         <div className="card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="label">Company Name</label>
+              <label className="label">{t('auth:companyName')}</label>
               <input
                 type="text"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 className="input"
-                placeholder="e.g. ACME Construction"
+                placeholder={t('auth:companyNamePlaceholder')}
                 required
               />
             </div>
@@ -60,7 +62,7 @@ export function CompanySetup() {
             )}
 
             <button type="submit" disabled={loading} className="btn btn-primary w-full">
-              {loading ? 'Creating...' : 'Create Company'}
+              {loading ? t('common:buttons.creating') : t('auth:createCompany')}
             </button>
           </form>
         </div>

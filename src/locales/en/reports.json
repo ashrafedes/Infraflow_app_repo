@@ -24,7 +24,8 @@
     "woNumber": "WO #",
     "boq": "BOQ",
     "issuedQty": "Issued",
-    "remaining": "On-Hand"
+    "remaining": "On-Hand",
+    "contractor": "Contractor"
   },
   "empty": {
     "warehouse": "No warehouse stock data",
@@ -36,5 +37,6 @@
     "title": "Advanced Reports",
     "description": "Trend analysis, cost breakdowns, and forecasting are available with the advanced reports feature.",
     "lockedMessage": "Advanced reports (trend analysis, cost breakdowns, forecasting) require a higher plan"
-  }
+  },
+  "exportTooltip": "Export to CSV"
 }

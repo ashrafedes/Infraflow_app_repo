@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert } from '@/components/ui'
@@ -14,6 +15,7 @@ interface CompanyWithSub extends Company {
 }
 
 export function SuperAdminCompanies() {
+  const { t } = useTranslation('superAdmin')
   const [companies, setCompanies] = useState<CompanyWithSub[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -54,18 +56,18 @@ export function SuperAdminCompanies() {
 
   return (
     <div>
-      <PageHeader title="Companies" subtitle="All registered companies on the platform" />
+      <PageHeader title={t('companies.title')} subtitle={t('companies.subtitle')} />
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
       <div className="card table-container">
         <table className="table">
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Plan</th>
-              <th>Status</th>
-              <th>Trial Ends</th>
-              <th>Created</th>
-              <th className="text-right">Actions</th>
+              <th>{t('companies.columns.company')}</th>
+              <th>{t('companies.columns.plan')}</th>
+              <th>{t('companies.columns.status')}</th>
+              <th>{t('companies.columns.trialEnds')}</th>
+              <th>{t('companies.columns.created')}</th>
+              <th className="text-right">{t('companies.columns.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -83,7 +85,7 @@ export function SuperAdminCompanies() {
                     c.status === 'active' ? 'badge-green' :
                     c.status === 'suspended' ? 'badge-gray' : 'badge-gray'
                   }`}>
-                    {c.status ?? '—'}
+                    {c.status ? t(`common:status.${c.status}`) : '—'}
                   </span>
                 </td>
                 <td>{c.trial_ends_at ? formatDate(c.trial_ends_at) : '—'}</td>
@@ -93,7 +95,7 @@ export function SuperAdminCompanies() {
                     to={`/admin/companies/${c.id}`}
                     className="btn btn-secondary btn-sm"
                   >
-                    View
+                    {t('common:buttons.view')}
                   </Link>
                 </td>
               </tr>

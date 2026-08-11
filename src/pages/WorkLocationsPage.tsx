@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, DirtyBadge, ConfirmDialog } from '@/components/ui'
 import { Plus, Save, Trash2 } from 'lucide-react'
@@ -20,6 +21,7 @@ function nextTempId(): string {
 }
 
 export function WorkLocationsPage() {
+  const { t } = useTranslation('masterData')
   const [rows, setRows] = useState<WorkLocationRow[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -54,8 +56,8 @@ export function WorkLocationsPage() {
 
   const saveRow = useCallback(async (row: WorkLocationRow) => {
     setError(null)
-    if (!row.code?.trim()) { setError('Code is required'); return false }
-    if (!row.name?.trim()) { setError('Name is required'); return false }
+    if (!row.code?.trim()) { setError(t('common:validation.codeRequired')); return false }
+    if (!row.name?.trim()) { setError(t('common:validation.nameRequired')); return false }
 
     const payload = { code: row.code.trim(), name: row.name.trim(), is_active: row.is_active }
 
@@ -81,7 +83,7 @@ export function WorkLocationsPage() {
       if (!ok) { allOk = false; break }
     }
     if (allOk) {
-      setSuccess(`${dirtyRows.length} row(s) saved`)
+      setSuccess(t('masterData:workLocations.saved', { count: dirtyRows.length }))
       setTimeout(() => setSuccess(null), 3000)
     }
   }, [rows, saveRow])
@@ -141,37 +143,37 @@ export function WorkLocationsPage() {
   }, [rows, search])
 
   const columns: readonly Column<WorkLocationRow>[] = useMemo(() => [
-    { key: 'code', name: 'Code', width: 140, resizable: true, editable: true, renderEditCell: textCellEditor<WorkLocationRow>(), cellClass: 'font-medium' },
-    { key: 'name', name: 'Name', width: 300, resizable: true, editable: true, renderEditCell: textCellEditor<WorkLocationRow>() },
-    { key: 'is_active', name: 'Active', width: 70, renderCell: checkboxCell<WorkLocationRow>() },
+    { key: 'code', name: t('common:labels.code'), width: 140, resizable: true, editable: true, renderEditCell: textCellEditor<WorkLocationRow>(), cellClass: 'font-medium' },
+    { key: 'name', name: t('common:labels.name'), width: 300, resizable: true, editable: true, renderEditCell: textCellEditor<WorkLocationRow>() },
+    { key: 'is_active', name: t('common:labels.isActive'), width: 70, renderCell: checkboxCell<WorkLocationRow>() },
     {
       key: '_actions', name: '', width: 50, sortable: false, resizable: false,
       renderCell: ({ row }) => (
         <button
           onClick={(e) => { e.stopPropagation(); setDeleteId(row._isNew ? (row._tempId ?? row.id) : row.id) }}
           className="text-gray-400 hover:text-red-600"
-          title="Delete"
+          title={t('common:buttons.delete')}
         >
           <Trash2 className="h-4 w-4" />
         </button>
       ),
     },
-  ], [])
+  ], [t])
 
   if (loading) return <LoadingSpinner />
 
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Work Locations"
-        subtitle="Manage work location master data — inline editing, Ctrl+N for new row, Ctrl+S to save"
-        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> Add Row</button>}
+        title={t('masterData:workLocations.title')}
+        subtitle={t('masterData:workLocations.subtitle')}
+        action={<button onClick={addNewRow} className="btn btn-primary"><Plus className="h-4 w-4" /> {t('common:buttons.addRow')}</button>}
       />
 
       <div className="mb-4 flex items-center gap-3 flex-wrap">
-        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search locations..." className="input max-w-xs" />
-        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title="Save all changes (Ctrl+S)">
-          <Save className="h-4 w-4" /> Save All
+        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('masterData:workLocations.search')} className="input max-w-xs" />
+        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title={t('common:buttons.saveAll')}>
+          <Save className="h-4 w-4" /> {t('common:buttons.saveAll')}
         </button>
         <DirtyBadge dirty={isDirty} />
       </div>
@@ -186,7 +188,7 @@ export function WorkLocationsPage() {
           onRowsChange={handleRowsChange}
           rowKeyGetter={rowKeyGetter}
           dirtyRowIds={dirtyRowIds}
-          emptyMessage="No work locations found. Press Ctrl+N or click Add Row to start."
+          emptyMessage={t('masterData:workLocations.empty')}
           rowHeight={38}
         />
       </div>
@@ -197,9 +199,9 @@ export function WorkLocationsPage() {
           titleKey="code"
           subtitleKey="name"
           fields={[
-            { key: 'is_active', label: 'Active', format: (v) => (v ? 'Yes' : 'No') },
+            { key: 'is_active', label: t('common:labels.isActive'), format: (v) => (v ? t('common:labels.yes') : t('common:labels.no')) },
           ]}
-          emptyMessage="No work locations found. Click Add Row to start."
+          emptyMessage={t('masterData:workLocations.empty')}
         />
       </div>
 
@@ -207,9 +209,9 @@ export function WorkLocationsPage() {
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Work Location"
-        message="Are you sure? This action cannot be undone."
-        confirmLabel="Delete"
+        title={t('masterData:workLocations.deleteTitle')}
+        message={t('masterData:workLocations.deleteMessage')}
+        confirmLabel={t('common:buttons.delete')}
         danger
       />
     </div>

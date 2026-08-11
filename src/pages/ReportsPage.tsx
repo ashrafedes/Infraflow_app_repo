@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, FeatureGate, LockedState } from '@/components/ui'
 import { Datasheet, readOnlyCell } from '@/components/grid/Datasheet'
@@ -12,6 +13,7 @@ import type { WarehouseBalance, WorkOrderBalance, ContractorBalance, WOMaterialS
 type ReportTab = 'warehouse' | 'work_order' | 'contractor' | 'wo_summary'
 
 export function ReportsPage() {
+  const { t } = useTranslation('reports')
   const [tab, setTab] = useState<ReportTab>('warehouse')
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -44,10 +46,10 @@ export function ReportsPage() {
   }, [tab])
 
   const tabs: { key: ReportTab; label: string }[] = [
-    { key: 'warehouse', label: 'Warehouse Stock' },
-    { key: 'work_order', label: 'Work Order Balances' },
-    { key: 'contractor', label: 'Contractor Balances' },
-    { key: 'wo_summary', label: 'WO Material Summary' },
+    { key: 'warehouse', label: t('reports:tabs.warehouse') },
+    { key: 'work_order', label: t('reports:tabs.workOrder') },
+    { key: 'contractor', label: t('reports:tabs.contractor') },
+    { key: 'wo_summary', label: t('reports:tabs.woSummary') },
   ]
 
   // ============================================================================
@@ -75,44 +77,44 @@ export function ReportsPage() {
   // Column definitions per tab
   // ============================================================================
   const whColumns: readonly Column<WarehouseBalance>[] = useMemo(() => [
-    { key: 'warehouse_code', name: 'Warehouse', width: 120, sortable: true, renderCell: readOnlyCell<WarehouseBalance>(), cellClass: 'whitespace-nowrap' },
-    { key: 'item_number', name: 'Item #', width: 120, sortable: true, renderCell: readOnlyCell<WarehouseBalance>(), cellClass: 'font-medium' },
-    { key: 'short_description', name: 'Description', width: 240, sortable: true, renderCell: readOnlyCell<WarehouseBalance>() },
-    { key: 'uom', name: 'UOM', width: 70, sortable: true, renderCell: readOnlyCell<WarehouseBalance>() },
-    { key: 'received', name: 'Received', width: 100, sortable: true, renderCell: numCell<WarehouseBalance>('received') },
-    { key: 'issued', name: 'Issued', width: 100, sortable: true, renderCell: numCell<WarehouseBalance>('issued') },
-    { key: 'current_balance', name: 'Balance', width: 100, sortable: true, renderCell: numCell<WarehouseBalance>('current_balance', { redIfZero: true }) },
-  ], [])
+    { key: 'warehouse_code', name: t('reports:columns.warehouse'), width: 120, sortable: true, renderCell: readOnlyCell<WarehouseBalance>(), cellClass: 'whitespace-nowrap' },
+    { key: 'item_number', name: t('reports:columns.itemNumber'), width: 120, sortable: true, renderCell: readOnlyCell<WarehouseBalance>(), cellClass: 'font-medium' },
+    { key: 'short_description', name: t('reports:columns.description'), width: 240, sortable: true, renderCell: readOnlyCell<WarehouseBalance>() },
+    { key: 'uom', name: t('reports:columns.uom'), width: 70, sortable: true, renderCell: readOnlyCell<WarehouseBalance>() },
+    { key: 'received', name: t('reports:columns.received'), width: 100, sortable: true, renderCell: numCell<WarehouseBalance>('received') },
+    { key: 'issued', name: t('reports:columns.issued'), width: 100, sortable: true, renderCell: numCell<WarehouseBalance>('issued') },
+    { key: 'current_balance', name: t('reports:columns.balance'), width: 100, sortable: true, renderCell: numCell<WarehouseBalance>('current_balance', { redIfZero: true }) },
+  ], [t])
 
   const woColumns: readonly Column<WorkOrderBalance>[] = useMemo(() => [
-    { key: 'item_number', name: 'Item #', width: 120, sortable: true, renderCell: readOnlyCell<WorkOrderBalance>(), cellClass: 'font-medium' },
-    { key: 'short_description', name: 'Description', width: 240, sortable: true, renderCell: readOnlyCell<WorkOrderBalance>() },
-    { key: 'uom', name: 'UOM', width: 70, sortable: true, renderCell: readOnlyCell<WorkOrderBalance>() },
-    { key: 'issued', name: 'Issued', width: 100, sortable: true, renderCell: numCell<WorkOrderBalance>('issued') },
-    { key: 'on_hand', name: 'On-Hand', width: 100, sortable: true, renderCell: numCell<WorkOrderBalance>('on_hand') },
-    { key: 'consumed', name: 'Consumed', width: 100, sortable: true, renderCell: numCell<WorkOrderBalance>('consumed', { gray: true }) },
-  ], [])
+    { key: 'item_number', name: t('reports:columns.itemNumber'), width: 120, sortable: true, renderCell: readOnlyCell<WorkOrderBalance>(), cellClass: 'font-medium' },
+    { key: 'short_description', name: t('reports:columns.description'), width: 240, sortable: true, renderCell: readOnlyCell<WorkOrderBalance>() },
+    { key: 'uom', name: t('reports:columns.uom'), width: 70, sortable: true, renderCell: readOnlyCell<WorkOrderBalance>() },
+    { key: 'issued', name: t('reports:columns.issued'), width: 100, sortable: true, renderCell: numCell<WorkOrderBalance>('issued') },
+    { key: 'on_hand', name: t('reports:columns.onHand'), width: 100, sortable: true, renderCell: numCell<WorkOrderBalance>('on_hand') },
+    { key: 'consumed', name: t('reports:columns.consumed'), width: 100, sortable: true, renderCell: numCell<WorkOrderBalance>('consumed', { gray: true }) },
+  ], [t])
 
   const conColumns: readonly Column<ContractorBalance>[] = useMemo(() => [
-    { key: 'contractor_name', name: 'Contractor', width: 200, sortable: true, renderCell: readOnlyCell<ContractorBalance>() },
-    { key: 'item_number', name: 'Item #', width: 120, sortable: true, renderCell: readOnlyCell<ContractorBalance>(), cellClass: 'font-medium' },
-    { key: 'short_description', name: 'Description', width: 240, sortable: true, renderCell: readOnlyCell<ContractorBalance>() },
-    { key: 'uom', name: 'UOM', width: 70, sortable: true, renderCell: readOnlyCell<ContractorBalance>() },
-    { key: 'transferred_in', name: 'Transferred In', width: 120, sortable: true, renderCell: numCell<ContractorBalance>('transferred_in') },
-    { key: 'returned_out', name: 'Returned', width: 100, sortable: true, renderCell: numCell<ContractorBalance>('returned_out') },
-    { key: 'current_balance', name: 'Balance', width: 100, sortable: true, renderCell: numCell<ContractorBalance>('current_balance') },
-  ], [])
+    { key: 'contractor_name', name: t('reports:columns.contractor'), width: 200, sortable: true, renderCell: readOnlyCell<ContractorBalance>() },
+    { key: 'item_number', name: t('reports:columns.itemNumber'), width: 120, sortable: true, renderCell: readOnlyCell<ContractorBalance>(), cellClass: 'font-medium' },
+    { key: 'short_description', name: t('reports:columns.description'), width: 240, sortable: true, renderCell: readOnlyCell<ContractorBalance>() },
+    { key: 'uom', name: t('reports:columns.uom'), width: 70, sortable: true, renderCell: readOnlyCell<ContractorBalance>() },
+    { key: 'transferred_in', name: t('reports:columns.transferredIn'), width: 120, sortable: true, renderCell: numCell<ContractorBalance>('transferred_in') },
+    { key: 'returned_out', name: t('reports:columns.returned'), width: 100, sortable: true, renderCell: numCell<ContractorBalance>('returned_out') },
+    { key: 'current_balance', name: t('reports:columns.balance'), width: 100, sortable: true, renderCell: numCell<ContractorBalance>('current_balance') },
+  ], [t])
 
   const summaryColumns: readonly Column<WOMaterialSummary>[] = useMemo(() => [
-    { key: 'work_order_number', name: 'WO #', width: 120, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>(), cellClass: 'font-medium' },
-    { key: 'item_number', name: 'Item #', width: 120, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>() },
-    { key: 'short_description', name: 'Description', width: 240, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>() },
-    { key: 'uom', name: 'UOM', width: 70, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>() },
-    { key: 'boq_quantity', name: 'BOQ', width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('boq_quantity') },
-    { key: 'issued_quantity', name: 'Issued', width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('issued_quantity') },
-    { key: 'consumed_quantity', name: 'Consumed', width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('consumed_quantity', { gray: true }) },
-    { key: 'remaining_quantity', name: 'On-Hand', width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('remaining_quantity') },
-  ], [])
+    { key: 'work_order_number', name: t('reports:columns.woNumber'), width: 120, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>(), cellClass: 'font-medium' },
+    { key: 'item_number', name: t('reports:columns.itemNumber'), width: 120, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>() },
+    { key: 'short_description', name: t('reports:columns.description'), width: 240, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>() },
+    { key: 'uom', name: t('reports:columns.uom'), width: 70, sortable: true, renderCell: readOnlyCell<WOMaterialSummary>() },
+    { key: 'boq_quantity', name: t('reports:columns.boq'), width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('boq_quantity') },
+    { key: 'issued_quantity', name: t('reports:columns.issued'), width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('issued_quantity') },
+    { key: 'consumed_quantity', name: t('reports:columns.consumed'), width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('consumed_quantity', { gray: true }) },
+    { key: 'remaining_quantity', name: t('reports:columns.onHand'), width: 100, sortable: true, renderCell: numCell<WOMaterialSummary>('remaining_quantity') },
+  ], [t])
 
   const handleExport = () => {
     if (!hasExports) return
@@ -142,20 +144,20 @@ export function ReportsPage() {
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Reports"
-        subtitle="Inventory balances and material summaries — click column headers to sort"
+        title={t('reports:title')}
+        subtitle={t('reports:subtitle')}
       />
 
       {/* Tabs + toolbar */}
       <div className="mb-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex gap-2 flex-wrap">
-          {tabs.map((t) => (
+          {tabs.map((tabItem) => (
             <button
-              key={t.key}
-              onClick={() => { setTab(t.key); setSearch('') }}
-              className={cn('btn btn-sm', tab === t.key ? 'btn-primary' : 'btn-secondary')}
+              key={tabItem.key}
+              onClick={() => { setTab(tabItem.key); setSearch('') }}
+              className={cn('btn btn-sm', tab === tabItem.key ? 'btn-primary' : 'btn-secondary')}
             >
-              {t.label}
+              {tabItem.label}
             </button>
           ))}
         </div>
@@ -165,16 +167,16 @@ export function ReportsPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
+            placeholder={t('reports:search')}
             className="input max-w-xs"
           />
           <FeatureGate feature={FEATURES.EXPORTS} fallback={
-            <button disabled className="btn btn-secondary btn-sm opacity-50 cursor-not-allowed" title="Export requires a higher plan">
-              <Lock className="h-3 w-3" /> Export
+            <button disabled className="btn btn-secondary btn-sm opacity-50 cursor-not-allowed" title={t('reports:advanced.lockedMessage')}>
+              <Lock className="h-3 w-3" /> {t('common:buttons.export')}
             </button>
           }>
-            <button onClick={handleExport} className="btn btn-secondary btn-sm" title="Export current tab as CSV">
-              <Download className="h-3 w-3" /> Export CSV
+            <button onClick={handleExport} className="btn btn-secondary btn-sm" title={t('reports:exportTooltip')}>
+              <Download className="h-3 w-3" /> {t('common:buttons.export')}
             </button>
           </FeatureGate>
         </div>
@@ -183,12 +185,12 @@ export function ReportsPage() {
       {/* Advanced reports tab (gated) */}
       <FeatureGate feature={FEATURES.ADVANCED_REPORTS} fallback={
         <div className="mb-4">
-          <LockedState feature="advanced_reports" message="Advanced reports (trend analysis, cost breakdowns, forecasting) require a higher plan" />
+          <LockedState feature="advanced_reports" message={t('reports:advanced.lockedMessage')} />
         </div>
       }>
         <div className="mb-4 card p-4">
-          <h3 className="text-sm font-semibold mb-2">Advanced Reports</h3>
-          <p className="text-xs text-gray-500">Trend analysis, cost breakdowns, and forecasting are available with the advanced reports feature.</p>
+          <h3 className="text-sm font-semibold mb-2">{t('reports:advanced.title')}</h3>
+          <p className="text-xs text-gray-500">{t('reports:advanced.description')}</p>
         </div>
       </FeatureGate>
 
@@ -202,7 +204,7 @@ export function ReportsPage() {
               columns={whColumns}
               rows={whBalances.filter(filterFn) as WarehouseBalance[]}
               rowKeyGetter={(r) => `${r.warehouse_id}-${r.material_id}`}
-              emptyMessage="No warehouse stock data"
+              emptyMessage={t('reports:empty.warehouse')}
               rowHeight={34}
             />
           )}
@@ -211,7 +213,7 @@ export function ReportsPage() {
               columns={woColumns}
               rows={woBalances.filter(filterFn) as WorkOrderBalance[]}
               rowKeyGetter={(r) => `${r.work_order_id}-${r.material_id}`}
-              emptyMessage="No work order balance data"
+              emptyMessage={t('reports:empty.workOrder')}
               rowHeight={34}
             />
           )}
@@ -220,7 +222,7 @@ export function ReportsPage() {
               columns={conColumns}
               rows={conBalances.filter(filterFn) as ContractorBalance[]}
               rowKeyGetter={(r) => `${r.contractor_id}-${r.material_id}`}
-              emptyMessage="No contractor balance data"
+              emptyMessage={t('reports:empty.contractor')}
               rowHeight={34}
             />
           )}
@@ -229,7 +231,7 @@ export function ReportsPage() {
               columns={summaryColumns}
               rows={woSummary.filter(filterFn) as WOMaterialSummary[]}
               rowKeyGetter={(r) => `${r.work_order_id}-${r.material_id}`}
-              emptyMessage="No WO material summary data"
+              emptyMessage={t('reports:empty.woSummary')}
               rowHeight={34}
             />
           )}
@@ -244,11 +246,11 @@ export function ReportsPage() {
               titleKey="item_number"
               subtitleKey="short_description"
               fields={[
-                { key: 'warehouse_code', label: 'Warehouse' },
-                { key: 'uom', label: 'UOM' },
-                { key: 'current_balance', label: 'Balance', redIfZero: true },
+                { key: 'warehouse_code', label: t('reports:columns.warehouse') },
+                { key: 'uom', label: t('reports:columns.uom') },
+                { key: 'current_balance', label: t('reports:columns.balance'), redIfZero: true },
               ]}
-              emptyMessage="No warehouse stock data"
+              emptyMessage={t('reports:empty.warehouse')}
             />
           )}
           {tab === 'work_order' && (
@@ -258,11 +260,11 @@ export function ReportsPage() {
               titleKey="item_number"
               subtitleKey="short_description"
               fields={[
-                { key: 'uom', label: 'UOM' },
-                { key: 'on_hand', label: 'On-Hand' },
-                { key: 'consumed', label: 'Consumed' },
+                { key: 'uom', label: t('reports:columns.uom') },
+                { key: 'on_hand', label: t('reports:columns.onHand') },
+                { key: 'consumed', label: t('reports:columns.consumed') },
               ]}
-              emptyMessage="No work order balance data"
+              emptyMessage={t('reports:empty.workOrder')}
             />
           )}
           {tab === 'contractor' && (
@@ -272,10 +274,10 @@ export function ReportsPage() {
               titleKey="item_number"
               subtitleKey="contractor_name"
               fields={[
-                { key: 'uom', label: 'UOM' },
-                { key: 'current_balance', label: 'Balance' },
+                { key: 'uom', label: t('reports:columns.uom') },
+                { key: 'current_balance', label: t('reports:columns.balance') },
               ]}
-              emptyMessage="No contractor balance data"
+              emptyMessage={t('reports:empty.contractor')}
             />
           )}
           {tab === 'wo_summary' && (
@@ -285,11 +287,11 @@ export function ReportsPage() {
               titleKey="work_order_number"
               subtitleKey="short_description"
               fields={[
-                { key: 'uom', label: 'UOM' },
-                { key: 'boq_quantity', label: 'BOQ' },
-                { key: 'remaining_quantity', label: 'On-Hand' },
+                { key: 'uom', label: t('reports:columns.uom') },
+                { key: 'boq_quantity', label: t('reports:columns.boq') },
+                { key: 'remaining_quantity', label: t('reports:columns.onHand') },
               ]}
-              emptyMessage="No WO material summary data"
+              emptyMessage={t('reports:empty.woSummary')}
             />
           )}
         </div>

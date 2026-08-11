@@ -8,13 +8,44 @@
       "trialCompanies": "Trial Companies",
       "totalRevenue": "Total Revenue",
       "totalUsers": "Total Users",
-      "suspendedCompanies": "Suspended Companies"
+      "suspendedCompanies": "Suspended Companies",
+      "activeCompanies": "Active Companies",
+      "basicCompanies": "Basic Companies",
+      "expiringTrials": "Expiring Trials",
+      "freeTrials": "Free Trials",
+      "pendingUpgrades": "Pending Upgrades",
+      "premiumCompanies": "Premium Companies",
+      "totalActiveUsers": "Total Active Users"
     },
     "sections": {
       "recentCompanies": "Recent Companies",
       "revenueByPlan": "Revenue by Plan",
-      "companiesByStatus": "Companies by Status"
-    }
+      "companiesByStatus": "Companies by Status",
+      "companiesNearLimit": "Companies Near Limit",
+      "recentChanges": "Recent Changes"
+    },
+    "columns": {
+      "action": "Action",
+      "active": "Active",
+      "company": "Company",
+      "max": "Max",
+      "status": "Status",
+      "utilization": "Utilization",
+      "when": "When"
+    },
+    "empty": {
+      "nearLimit": "No companies near limit",
+      "noChanges": "No recent changes"
+    },
+    "errors": {
+      "loadFailed": "Failed to load dashboard data"
+    },
+    "tier": {
+      "critical": "Critical",
+      "limitReached": "Limit Reached",
+      "warning": "Warning"
+    },
+    "viewAll": "View all"
   },
   "companies": {
     "title": "Companies",
@@ -25,7 +56,10 @@
       "plan": "Plan",
       "status": "Status",
       "users": "Users",
-      "created": "Created"
+      "created": "Created",
+      "actions": "Actions",
+      "company": "Company",
+      "trialEnds": "Trial Ends"
     },
     "detail": {
       "title": "Company Detail",
@@ -41,7 +75,53 @@
       "createdAt": "Created At",
       "suspend": "Suspend",
       "activate": "Activate",
-      "resetTrial": "Reset Trial"
+      "resetTrial": "Reset Trial",
+      "activeUsers": "Active Users",
+      "auditHistory": "Audit History",
+      "backToCompanies": "Back to Companies",
+      "columns": {
+        "action": "Action",
+        "active": "Active",
+        "created": "Created",
+        "email": "Email",
+        "name": "Name",
+        "newValue": "New Value",
+        "oldValue": "Old Value",
+        "performedBy": "Performed By",
+        "role": "Role",
+        "when": "When"
+      },
+      "companyId": "Company ID",
+      "critical": "Critical",
+      "currentPeriod": "Current Period",
+      "disabled": "Disabled",
+      "enabled": "Enabled",
+      "featureEntitlements": "Feature Entitlements",
+      "healthy": "Healthy",
+      "informationalNote": "Feature entitlements are managed at the plan level. Overrides can be applied here for individual companies.",
+      "inspection": "Inspection",
+      "limitReached": "Limit Reached",
+      "noAuditEntries": "No audit entries",
+      "noFeatureData": "No feature data available",
+      "noSubscription": "No subscription found",
+      "noUsers": "No users found",
+      "notFound": "Company not found",
+      "override": "(override)",
+      "overview": "Company Overview",
+      "roles": {
+        "companyAdmin": "Company Admin",
+        "inspector": "Inspector",
+        "projectControl": "Project Control",
+        "projectManager": "Project Manager",
+        "warehouseMan": "Warehouse Man"
+      },
+      "suspendedReason": "Suspended Reason",
+      "system": "System",
+      "totalUsers": "Total Users",
+      "trialStart": "Trial Start",
+      "userLimit": "User Limit",
+      "utilization": "Utilization",
+      "warning": "Warning"
     },
     "empty": "No companies found"
   },
@@ -53,9 +133,27 @@
       "plan": "Plan",
       "status": "Status",
       "trialEnds": "Trial Ends",
-      "users": "Users"
+      "users": "Users",
+      "actions": "Actions",
+      "created": "Created",
+      "maxUsers": "Max Users"
     },
-    "empty": "No subscriptions found"
+    "empty": "No subscriptions found",
+    "audit": {
+      "action": "Action",
+      "newValue": "New Value",
+      "oldValue": "Old Value",
+      "when": "When"
+    },
+    "modal": {
+      "auditTitle": "Subscription Audit Log",
+      "editTitle": "Edit Subscription"
+    },
+    "override": "(override)",
+    "overrideMaxUsers": "Override max users",
+    "plan": "Plan",
+    "suspensionReason": "Suspension Reason",
+    "suspensionReasonPlaceholder": "Enter suspension reason..."
   },
   "plans": {
     "title": "Plans & Features",
@@ -71,7 +169,20 @@
       "name": "Feature Name",
       "key": "Feature Key",
       "description": "Description"
-    }
+    },
+    "active": "Active",
+    "code": "Code",
+    "days": "days",
+    "defaultMaxUsers": "Default Max Users",
+    "editPlan": "Edit Plan",
+    "inactive": "Inactive",
+    "maxUsers": "Max Users",
+    "modal": {
+      "editTitle": "Edit Plan"
+    },
+    "noDescription": "No description",
+    "systemPlan": "System Plan",
+    "trial": "Trial"
   },
   "auditLog": {
     "title": "Audit Log",
@@ -81,9 +192,23 @@
       "action": "Action",
       "entity": "Entity",
       "user": "User",
-      "details": "Details"
+      "details": "Details",
+      "company": "Company",
+      "newValue": "New Value",
+      "oldValue": "Old Value",
+      "performedBy": "Performed By",
+      "when": "When"
     },
-    "empty": "No audit log entries"
+    "empty": "No audit log entries",
+    "filters": {
+      "actionType": "Action Type",
+      "allActions": "All Actions",
+      "allCompanies": "All Companies",
+      "company": "Company",
+      "searchCompany": "Search company...",
+      "searchPlaceholder": "Search..."
+    },
+    "system": "System"
   },
   "upgradeRequests": {
     "title": "Upgrade Requests",
@@ -94,14 +219,20 @@
       "requestedPlan": "Requested Plan",
       "status": "Status",
       "requestedBy": "Requested By",
-      "date": "Date"
+      "date": "Date",
+      "actions": "Actions",
+      "reviewed": "Reviewed"
     },
     "actions": {
       "approve": "Approve",
       "reject": "Reject",
       "adminNotes": "Admin Notes",
       "rejectionReason": "Rejection Reason",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "approveUpgrade": "Approve Upgrade",
+      "approving": "Approving...",
+      "rejectRequest": "Reject Request",
+      "rejecting": "Rejecting..."
     },
     "filters": {
       "all": "All",
@@ -109,6 +240,21 @@
       "approved": "Approved",
       "rejected": "Rejected"
     },
-    "empty": "No upgrade requests"
+    "empty": "No upgrade requests",
+    "errors": {
+      "approveFailed": "Failed to approve request",
+      "rejectFailed": "Failed to reject request"
+    },
+    "modal": {
+      "adminNotesPlaceholder": "Enter admin notes...",
+      "approveTitle": "Approve Upgrade Request",
+      "rejectTitle": "Reject Upgrade Request",
+      "rejectionReasonPlaceholder": "Enter rejection reason..."
+    },
+    "pendingCount": "{{count}} pending",
+    "success": {
+      "approved": "Upgrade request approved successfully",
+      "rejected": "Upgrade request rejected successfully"
+    }
   }
 }

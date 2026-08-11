@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { LoadingSpinner, Alert, DirtyBadge } from '@/components/ui'
 import { SearchableCombobox, type ComboboxItem } from '@/components/combobox/SearchableCombobox'
@@ -43,6 +44,7 @@ function emptyLine(): MovementLineRow {
 }
 
 export function NewMovementPage() {
+  const { t } = useTranslation('movements')
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -289,7 +291,7 @@ export function NewMovementPage() {
         return hasData ? [...prev, ...newLines] : newLines
       })
     } catch {
-      setError('Failed to read clipboard')
+      setError(t('movements:new.clipboardReadFailed'))
     }
   }
 
@@ -318,27 +320,27 @@ export function NewMovementPage() {
   const columns: readonly Column<MovementLineRow>[] = useMemo(() => [
     {
       key: 'material_id',
-      name: 'Item',
+      name: t('movements:new.item'),
       width: 220,
       resizable: true,
       ...comboboxEditor<MovementLineRow>(materialItems, materialLabel),
     },
     {
       key: 'short_description',
-      name: 'Description',
+      name: t('movements:new.description'),
       width: 280,
       resizable: true,
       renderCell: readOnlyCell<MovementLineRow>(),
     },
     {
       key: 'uom',
-      name: 'UOM',
+      name: t('movements:new.uom'),
       width: 70,
       renderCell: readOnlyCell<MovementLineRow>(),
     },
     {
       key: 'available_balance',
-      name: 'Available',
+      name: t('movements:new.available'),
       width: 100,
       renderCell: ({ row }) => {
         if (row.available_balance == null) return <span className="text-gray-400">—</span>
@@ -352,7 +354,7 @@ export function NewMovementPage() {
     },
     {
       key: 'quantity',
-      name: 'Quantity',
+      name: t('movements:new.quantity'),
       width: 100,
       editable: true,
       renderEditCell: numberEditor<MovementLineRow>({ min: 0 }),
@@ -364,7 +366,7 @@ export function NewMovementPage() {
     },
     {
       key: 'notes',
-      name: 'Notes',
+      name: t('movements:new.notes'),
       width: 220,
       editable: true,
       renderEditCell: textCellEditor<MovementLineRow>(),
@@ -381,7 +383,7 @@ export function NewMovementPage() {
           <button
             onClick={(e) => { e.stopPropagation(); duplicateLine(row._id) }}
             className="text-gray-400 hover:text-gray-600"
-            title="Duplicate"
+            title={t('movements:new.duplicate')}
           >
             <Copy className="h-3.5 w-3.5" />
           </button>
@@ -389,7 +391,7 @@ export function NewMovementPage() {
             <button
               onClick={(e) => { e.stopPropagation(); removeLine(row._id) }}
               className="text-gray-400 hover:text-red-600"
-              title="Delete"
+              title={t('movements:new.delete')}
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -419,7 +421,7 @@ export function NewMovementPage() {
     // Validate lines
     const validLines = lines.filter((l) => l.material_id && l.quantity && l.quantity > 0)
     if (validLines.length === 0) {
-      setError('Add at least one material line with a valid quantity')
+      setError(t('movements:new.materialRequired'))
       return
     }
 
@@ -432,43 +434,43 @@ export function NewMovementPage() {
 
     switch (movementType) {
       case 'RECEIPT':
-        if (!supplierId || !destWarehouseId) { setError('Select supplier and destination warehouse'); return }
+        if (!supplierId || !destWarehouseId) { setError(t('movements:new.supplierAndDestRequired')); return }
         header.supplier_id = supplierId
         header.destination_warehouse_id = destWarehouseId
         break
       case 'ISSUE':
-        if (!sourceWarehouseId || !destWorkOrderId) { setError('Select source warehouse and destination work order'); return }
+        if (!sourceWarehouseId || !destWorkOrderId) { setError(t('movements:new.sourceWhAndDestWoRequired')); return }
         header.source_warehouse_id = sourceWarehouseId
         header.destination_work_order_id = destWorkOrderId
         break
       case 'USAGE':
-        if (!sourceWorkOrderId) { setError('Select source work order'); return }
+        if (!sourceWorkOrderId) { setError(t('movements:new.sourceWoRequired')); return }
         header.source_work_order_id = sourceWorkOrderId
         break
       case 'TRANSFER':
         if (transferSubType === 'wh_to_wh') {
-          if (!sourceWarehouseId || !destWarehouseId) { setError('Select source and destination warehouses'); return }
+          if (!sourceWarehouseId || !destWarehouseId) { setError(t('movements:new.sourceAndDestWhRequired')); return }
           header.source_warehouse_id = sourceWarehouseId
           header.destination_warehouse_id = destWarehouseId
         } else if (transferSubType === 'wo_to_wo') {
-          if (!sourceWorkOrderId || !destWorkOrderId) { setError('Select source and destination work orders'); return }
+          if (!sourceWorkOrderId || !destWorkOrderId) { setError(t('movements:new.sourceAndDestWoRequired')); return }
           header.source_work_order_id = sourceWorkOrderId
           header.destination_work_order_id = destWorkOrderId
         } else {
-          if (!sourceWorkOrderId || !contractorId) { setError('Select source work order and contractor'); return }
+          if (!sourceWorkOrderId || !contractorId) { setError(t('movements:new.sourceWoAndContractorRequired')); return }
           header.source_work_order_id = sourceWorkOrderId
           header.contractor_id = contractorId
         }
         break
       case 'RETURN':
-        if (!destWarehouseId) { setError('Select destination warehouse'); return }
+        if (!destWarehouseId) { setError(t('movements:new.destWhRequired')); return }
         header.destination_warehouse_id = destWarehouseId
         if (sourceWorkOrderId) header.source_work_order_id = sourceWorkOrderId
         else if (contractorId) header.contractor_id = contractorId
-        else { setError('Select source work order or contractor'); return }
+        else { setError(t('movements:new.sourceWoOrContractorRequired')); return }
         break
       case 'ADJUSTMENT':
-        if (!sourceWarehouseId || !adjustmentReason.trim()) { setError('Select warehouse and provide adjustment reason'); return }
+        if (!sourceWarehouseId || !adjustmentReason.trim()) { setError(t('movements:new.whAndReasonRequired')); return }
         header.source_warehouse_id = sourceWarehouseId
         header.adjustment_type = adjustmentType
         header.adjustment_reason = adjustmentReason.trim()
@@ -481,7 +483,7 @@ export function NewMovementPage() {
         const available = balances[line.material_id] ?? 0
         if (line.quantity! > available) {
           const mat = materials.find((m) => m.id === line.material_id)
-          setError(`Quantity ${line.quantity} for ${mat?.item_number ?? 'item'} exceeds available balance ${available}`)
+          setError(t('movements:new.quantityExceedsAvailable', { quantity: line.quantity, item: mat?.item_number ?? 'item', available }))
           return
         }
       }
@@ -504,7 +506,7 @@ export function NewMovementPage() {
       // Navigate to the new movement detail page
       navigate(`/movements/${data}`)
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Failed to create movement'
+      const msg = err instanceof Error ? err.message : t('movements:new.createFailed')
       setError(msg)
     }
     setSubmitting(false)
@@ -524,16 +526,16 @@ export function NewMovementPage() {
       {/* ── Compact header bar ── */}
       <div className="flex shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 py-2">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/movements')} className="text-gray-400 hover:text-gray-700" title="Back to Movements">
+          <button onClick={() => navigate('/movements')} className="text-gray-400 hover:text-gray-700" title={t('movements:detail.backToMovements')}>
             <ArrowLeft className="h-4 w-4" />
           </button>
-          <h1 className="text-base font-semibold text-gray-900">New Movement</h1>
+          <h1 className="text-base font-semibold text-gray-900">{t('movements:new.title')}</h1>
           <DirtyBadge dirty={isDirty} />
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => navigate('/movements')} className="btn btn-secondary btn-sm">Cancel</button>
+          <button onClick={() => navigate('/movements')} className="btn btn-secondary btn-sm">{t('common:buttons.cancel')}</button>
           <button onClick={handleSubmit} disabled={submitting} className="btn btn-primary btn-sm">
-            <Save className="h-3.5 w-3.5" /> {submitting ? 'Saving...' : 'Save'}
+            <Save className="h-3.5 w-3.5" /> {submitting ? t('movements:new.saving') : t('movements:new.save')}
           </button>
         </div>
       </div>
@@ -542,7 +544,7 @@ export function NewMovementPage() {
       {(error || pasteErrors) && (
         <div className="shrink-0 space-y-1 px-4 pt-2">
           {error && <Alert type="error" message={error} />}
-          {pasteErrors && <Alert type="error" message={`Paste errors:\n${pasteErrors}`} />}
+          {pasteErrors && <Alert type="error" message={`${t('movements:new.pasteErrors')}:\n${pasteErrors}`} />}
         </div>
       )}
 
@@ -550,38 +552,38 @@ export function NewMovementPage() {
       <div className="shrink-0 border-b border-gray-200 bg-white px-4 py-2.5">
         <div className="grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-3 lg:grid-cols-6">
           <div>
-            <label className="mb-0.5 block text-xs font-medium text-gray-500">Type</label>
+            <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.movementType')}</label>
             <select
               value={movementType}
               onChange={(e) => handleTypeChange(e.target.value as MovementType)}
               className="input-compact"
             >
-              <option value="RECEIPT">Receipt</option>
-              <option value="ISSUE">Issue</option>
-              <option value="USAGE">Usage</option>
-              <option value="TRANSFER">Transfer</option>
-              <option value="RETURN">Return</option>
-              <option value="ADJUSTMENT">Adjustment</option>
+              <option value="RECEIPT">{t('common:movementTypes.RECEIPT')}</option>
+              <option value="ISSUE">{t('common:movementTypes.ISSUE')}</option>
+              <option value="USAGE">{t('common:movementTypes.USAGE')}</option>
+              <option value="TRANSFER">{t('common:movementTypes.TRANSFER')}</option>
+              <option value="RETURN">{t('common:movementTypes.RETURN')}</option>
+              <option value="ADJUSTMENT">{t('common:movementTypes.ADJUSTMENT')}</option>
             </select>
           </div>
           <div>
-            <label className="mb-0.5 block text-xs font-medium text-gray-500">Date</label>
+            <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.movementDate')}</label>
             <input type="date" value={movementDate} onChange={(e) => setMovementDate(e.target.value)} className="input-compact" required />
           </div>
           <div>
-            <label className="mb-0.5 block text-xs font-medium text-gray-500">Movement No.</label>
-            <div className="flex h-[34px] items-center rounded-md border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-400">Auto-generated</div>
+            <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.movementNo')}</label>
+            <div className="flex h-[34px] items-center rounded-md border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-400">{t('movements:new.autoGenerated')}</div>
           </div>
 
           {movementType === 'RECEIPT' && (
             <>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Supplier</label>
-                <SearchableCombobox items={supplierItems} value={supplierId} onChange={setSupplierId} placeholder="Search..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.supplier')}</label>
+                <SearchableCombobox items={supplierItems} value={supplierId} onChange={setSupplierId} placeholder={t('movements:new.selectContractor')} />
               </div>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Dest. Warehouse</label>
-                <SearchableCombobox items={warehouseItems} value={destWarehouseId} onChange={setDestWarehouseId} placeholder="Search..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.toWarehouse')}</label>
+                <SearchableCombobox items={warehouseItems} value={destWarehouseId} onChange={setDestWarehouseId} placeholder={t('movements:new.selectWarehouse')} />
               </div>
             </>
           )}
@@ -589,69 +591,69 @@ export function NewMovementPage() {
           {movementType === 'ISSUE' && (
             <>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Source Warehouse</label>
-                <SearchableCombobox items={warehouseItems} value={sourceWarehouseId} onChange={setSourceWarehouseId} placeholder="Search..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.fromWarehouse')}</label>
+                <SearchableCombobox items={warehouseItems} value={sourceWarehouseId} onChange={setSourceWarehouseId} placeholder={t('movements:new.selectWarehouse')} />
               </div>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Work Order</label>
-                <SearchableCombobox items={workOrderItems} value={destWorkOrderId} onChange={setDestWorkOrderId} placeholder="Search..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.workOrder')}</label>
+                <SearchableCombobox items={workOrderItems} value={destWorkOrderId} onChange={setDestWorkOrderId} placeholder={t('movements:new.selectWorkOrder')} />
               </div>
             </>
           )}
 
           {movementType === 'USAGE' && (
             <div className="col-span-2 sm:col-span-3 lg:col-span-3">
-              <label className="mb-0.5 block text-xs font-medium text-gray-500">Source Work Order</label>
-              <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={setSourceWorkOrderId} placeholder="Search..." />
+              <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.sourceWorkOrder')}</label>
+              <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={setSourceWorkOrderId} placeholder={t('movements:new.selectWorkOrder')} />
             </div>
           )}
 
           {movementType === 'TRANSFER' && (
             <>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Transfer Type</label>
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.transferType')}</label>
                 <select value={transferSubType} onChange={(e) => {
                   setTransferSubType(e.target.value as typeof transferSubType)
                   setSourceWarehouseId(''); setSourceWorkOrderId(''); setDestWarehouseId(''); setDestWorkOrderId(''); setContractorId('')
                 }} className="input-compact">
-                  <option value="wh_to_wh">WH → WH</option>
-                  <option value="wo_to_wo">WO → WO</option>
-                  <option value="wo_to_contractor">WO → Contractor</option>
+                  <option value="wh_to_wh">{t('movements:new.whToWh')}</option>
+                  <option value="wo_to_wo">{t('movements:new.woToWo')}</option>
+                  <option value="wo_to_contractor">{t('movements:new.woToContractor')}</option>
                 </select>
               </div>
               {transferSubType === 'wh_to_wh' && (
                 <>
                   <div>
-                    <label className="mb-0.5 block text-xs font-medium text-gray-500">Source WH</label>
-                    <SearchableCombobox items={warehouseItems} value={sourceWarehouseId} onChange={setSourceWarehouseId} placeholder="Search..." />
+                    <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.fromWarehouse')}</label>
+                    <SearchableCombobox items={warehouseItems} value={sourceWarehouseId} onChange={setSourceWarehouseId} placeholder={t('movements:new.selectWarehouse')} />
                   </div>
                   <div>
-                    <label className="mb-0.5 block text-xs font-medium text-gray-500">Dest. WH</label>
-                    <SearchableCombobox items={warehouseItems.filter((w) => w.id !== sourceWarehouseId)} value={destWarehouseId} onChange={setDestWarehouseId} placeholder="Search..." />
+                    <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.toWarehouse')}</label>
+                    <SearchableCombobox items={warehouseItems.filter((w) => w.id !== sourceWarehouseId)} value={destWarehouseId} onChange={setDestWarehouseId} placeholder={t('movements:new.selectWarehouse')} />
                   </div>
                 </>
               )}
               {transferSubType === 'wo_to_wo' && (
                 <>
                   <div>
-                    <label className="mb-0.5 block text-xs font-medium text-gray-500">Source WO</label>
-                    <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={setSourceWorkOrderId} placeholder="Search..." />
+                    <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.fromWorkOrder')}</label>
+                    <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={setSourceWorkOrderId} placeholder={t('movements:new.selectWorkOrder')} />
                   </div>
                   <div>
-                    <label className="mb-0.5 block text-xs font-medium text-gray-500">Dest. WO</label>
-                    <SearchableCombobox items={workOrderItems.filter((w) => w.id !== sourceWorkOrderId)} value={destWorkOrderId} onChange={setDestWorkOrderId} placeholder="Search..." />
+                    <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.toWorkOrder')}</label>
+                    <SearchableCombobox items={workOrderItems.filter((w) => w.id !== sourceWorkOrderId)} value={destWorkOrderId} onChange={setDestWorkOrderId} placeholder={t('movements:new.selectWorkOrder')} />
                   </div>
                 </>
               )}
               {transferSubType === 'wo_to_contractor' && (
                 <>
                   <div>
-                    <label className="mb-0.5 block text-xs font-medium text-gray-500">Source WO</label>
-                    <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={setSourceWorkOrderId} placeholder="Search..." />
+                    <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.fromWorkOrder')}</label>
+                    <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={setSourceWorkOrderId} placeholder={t('movements:new.selectWorkOrder')} />
                   </div>
                   <div>
-                    <label className="mb-0.5 block text-xs font-medium text-gray-500">Contractor</label>
-                    <SearchableCombobox items={contractorItems} value={contractorId} onChange={setContractorId} placeholder="Search..." />
+                    <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.contractor')}</label>
+                    <SearchableCombobox items={contractorItems} value={contractorId} onChange={setContractorId} placeholder={t('movements:new.selectContractor')} />
                   </div>
                 </>
               )}
@@ -661,16 +663,16 @@ export function NewMovementPage() {
           {movementType === 'RETURN' && (
             <>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">From Work Order</label>
-                <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={(id) => { setSourceWorkOrderId(id); if (id) setContractorId('') }} placeholder="Select WO..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.fromWorkOrder')}</label>
+                <SearchableCombobox items={workOrderItems} value={sourceWorkOrderId} onChange={(id) => { setSourceWorkOrderId(id); if (id) setContractorId('') }} placeholder={t('movements:new.selectWorkOrder')} />
               </div>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Or From Contractor</label>
-                <SearchableCombobox items={contractorItems} value={contractorId} onChange={(id) => { setContractorId(id); if (id) setSourceWorkOrderId('') }} placeholder="Select..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.orFromContractor')}</label>
+                <SearchableCombobox items={contractorItems} value={contractorId} onChange={(id) => { setContractorId(id); if (id) setSourceWorkOrderId('') }} placeholder={t('movements:new.selectContractor')} />
               </div>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Dest. Warehouse</label>
-                <SearchableCombobox items={warehouseItems} value={destWarehouseId} onChange={setDestWarehouseId} placeholder="Search..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.toWarehouse')}</label>
+                <SearchableCombobox items={warehouseItems} value={destWarehouseId} onChange={setDestWarehouseId} placeholder={t('movements:new.selectWarehouse')} />
               </div>
             </>
           )}
@@ -678,19 +680,19 @@ export function NewMovementPage() {
           {movementType === 'ADJUSTMENT' && (
             <>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Warehouse</label>
-                <SearchableCombobox items={warehouseItems} value={sourceWarehouseId} onChange={setSourceWarehouseId} placeholder="Search..." />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.warehouse')}</label>
+                <SearchableCombobox items={warehouseItems} value={sourceWarehouseId} onChange={setSourceWarehouseId} placeholder={t('movements:new.selectWarehouse')} />
               </div>
               <div>
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Adjustment</label>
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.adjustment')}</label>
                 <select value={adjustmentType} onChange={(e) => setAdjustmentType(e.target.value as 'increase' | 'decrease')} className="input-compact">
-                  <option value="increase">Increase (+)</option>
-                  <option value="decrease">Decrease (-)</option>
+                  <option value="increase">{t('movements:new.increase')}</option>
+                  <option value="decrease">{t('movements:new.decrease')}</option>
                 </select>
               </div>
               <div className="col-span-2 sm:col-span-3 lg:col-span-3">
-                <label className="mb-0.5 block text-xs font-medium text-gray-500">Reason</label>
-                <input value={adjustmentReason} onChange={(e) => setAdjustmentReason(e.target.value)} className="input-compact" placeholder="e.g. Stock count correction" required />
+                <label className="mb-0.5 block text-xs font-medium text-gray-500">{t('movements:new.reason')}</label>
+                <input value={adjustmentReason} onChange={(e) => setAdjustmentReason(e.target.value)} className="input-compact" placeholder={t('movements:new.reasonPlaceholder')} required />
               </div>
             </>
           )}
@@ -699,21 +701,21 @@ export function NewMovementPage() {
         {/* Context inheritance — compact inline */}
         {contextWO && (
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 rounded-md bg-gray-50 px-3 py-1.5 text-xs">
-            <span className="font-medium text-gray-400">WO Context:</span>
-            <span><span className="text-gray-400">Project</span> <span className="font-medium text-gray-700">{contextWO.project_name}</span></span>
-            <span><span className="text-gray-400">Location</span> <span className="font-medium text-gray-700">{contextWO.work_location_name}</span></span>
-            <span><span className="text-gray-400">Site</span> <span className="font-medium text-gray-700">{contextWO.site_code ?? '—'}</span></span>
-            <span><span className="text-gray-400">Supervisor</span> <span className="font-medium text-gray-700">{contextWO.supervisor}</span></span>
+            <span className="font-medium text-gray-400">{t('movements:new.woContext')}:</span>
+            <span><span className="text-gray-400">{t('movements:new.project')}</span> <span className="font-medium text-gray-700">{contextWO.project_name}</span></span>
+            <span><span className="text-gray-400">{t('movements:new.location')}</span> <span className="font-medium text-gray-700">{contextWO.work_location_name}</span></span>
+            <span><span className="text-gray-400">{t('movements:new.site')}</span> <span className="font-medium text-gray-700">{contextWO.site_code ?? '—'}</span></span>
+            <span><span className="text-gray-400">{t('movements:new.supervisor')}</span> <span className="font-medium text-gray-700">{contextWO.supervisor}</span></span>
             {contextWO.contractor_name && (
-              <span><span className="text-gray-400">Contractor</span> <span className="font-medium text-gray-700">{contextWO.contractor_name}</span></span>
+              <span><span className="text-gray-400">{t('movements:new.contractor')}</span> <span className="font-medium text-gray-700">{contextWO.contractor_name}</span></span>
             )}
           </div>
         )}
 
         {/* Notes — compact inline */}
         <div className="mt-2 flex items-center gap-2">
-          <label className="whitespace-nowrap text-xs font-medium text-gray-500">Notes</label>
-          <input value={notes} onChange={(e) => setNotes(e.target.value)} className="input-compact" placeholder="Optional movement notes..." />
+          <label className="whitespace-nowrap text-xs font-medium text-gray-500">{t('movements:new.notes')}</label>
+          <input value={notes} onChange={(e) => setNotes(e.target.value)} className="input-compact" placeholder={t('movements:new.notesPlaceholder')} />
         </div>
       </div>
 
@@ -721,15 +723,15 @@ export function NewMovementPage() {
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="flex shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 py-2">
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-semibold text-gray-900">Material Lines</h2>
-            <span className="text-xs text-gray-400">{filledLineCount} of {lines.length} lines</span>
+            <h2 className="text-sm font-semibold text-gray-900">{t('movements:new.lines')}</h2>
+            <span className="text-xs text-gray-400">{t('movements:new.lineCount', { filled: filledLineCount, total: lines.length })}</span>
           </div>
           <div className="flex gap-2">
-            <button onClick={handlePaste} className="btn btn-secondary btn-sm" title="Paste from Excel">
-              <ClipboardPaste className="h-3 w-3" /> Paste
+            <button onClick={handlePaste} className="btn btn-secondary btn-sm" title={t('movements:new.pasteFromExcel')}>
+              <ClipboardPaste className="h-3 w-3" /> {t('movements:new.paste')}
             </button>
-            <button onClick={addLine} className="btn btn-secondary btn-sm" title="Add line (Ctrl+N)">
-              <Plus className="h-3 w-3" /> Add Line
+            <button onClick={addLine} className="btn btn-secondary btn-sm" title={t('movements:new.addLineShortcut')}>
+              <Plus className="h-3 w-3" /> {t('movements:new.addLine')}
             </button>
           </div>
         </div>
@@ -739,7 +741,7 @@ export function NewMovementPage() {
             rows={lines}
             onRowsChange={handleRowsChange}
             rowKeyGetter={(row) => row._id}
-            emptyMessage="No lines. Press Ctrl+N or Add Line to start."
+            emptyMessage={t('movements:new.emptyLines')}
             rowHeight={36}
             className="h-full"
           />
@@ -750,11 +752,11 @@ export function NewMovementPage() {
       {blocker?.state === 'blocked' && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => blocker.reset?.()}>
           <div className="rounded-xl bg-white p-6 shadow-xl max-w-md" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-semibold mb-2">Unsaved changes</h3>
-            <p className="text-sm text-gray-600 mb-4">You have unsaved movement data. Leave without saving?</p>
+            <h3 className="text-lg font-semibold mb-2">{t('movements:new.unsavedChanges')}</h3>
+            <p className="text-sm text-gray-600 mb-4">{t('movements:new.unsavedChangesMessage')}</p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => blocker.reset?.()} className="btn btn-secondary">Stay</button>
-              <button onClick={() => blocker.proceed()} className="btn btn-danger">Leave</button>
+              <button onClick={() => blocker.reset?.()} className="btn btn-secondary">{t('movements:new.stay')}</button>
+              <button onClick={() => blocker.proceed()} className="btn btn-danger">{t('movements:new.leave')}</button>
             </div>
           </div>
         </div>

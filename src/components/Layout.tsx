@@ -143,35 +143,37 @@ export function Layout({ children }: { children: ReactNode }) {
           {visibleGroups.map((group) => (
             <div
               key={group.labelKey}
-              className="flex h-full items-center gap-1 border-e border-gray-200 pe-2 last:border-e-0 md:pe-3"
+              className="flex h-full flex-col items-center justify-between border-e border-gray-200 pe-2 last:border-e-0 md:pe-3"
             >
-              <span className="hidden self-end pb-1 text-[10px] font-semibold uppercase text-gray-400 lg:block">
+              <div className="flex items-center gap-1">
+                {group.items.map((item) => {
+                  const label = t(item.labelKey)
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.to === '/' || item.to === '/admin'}
+                      title={label}
+                      className={({ isActive }) =>
+                        cn(
+                          'flex h-12 w-[4.2rem] flex-col items-center justify-center rounded-lg px-1 text-[10px] font-medium leading-tight transition-colors md:w-20',
+                          isActive
+                            ? 'bg-brand-50 text-brand-700'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        )
+                      }
+                    >
+                      <item.icon className="h-4 w-4 flex-shrink-0 md:h-5 md:w-5" />
+                      <span className="mt-0.5 block w-full break-words text-center max-h-6 overflow-hidden">
+                        {label}
+                      </span>
+                    </NavLink>
+                  )
+                })}
+              </div>
+              <span className="hidden pb-1 text-[10px] font-semibold uppercase text-gray-400 lg:block">
                 {t(group.labelKey)}
               </span>
-              {group.items.map((item) => {
-                const label = t(item.labelKey)
-                return (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    end={item.to === '/' || item.to === '/admin'}
-                    title={label}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex h-12 w-[4.2rem] flex-col items-center justify-center rounded-lg px-1 text-[10px] font-medium leading-tight transition-colors md:w-20',
-                        isActive
-                          ? 'bg-brand-50 text-brand-700'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                      )
-                    }
-                  >
-                    <item.icon className="h-4 w-4 flex-shrink-0 md:h-5 md:w-5" />
-                    <span className="mt-0.5 block w-full break-words text-center max-h-6 overflow-hidden">
-                      {label}
-                    </span>
-                  </NavLink>
-                )
-              })}
             </div>
           ))}
         </div>

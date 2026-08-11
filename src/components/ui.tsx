@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X, Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useFeature } from '@/lib/entitlements'
@@ -113,10 +114,12 @@ export function ConfirmDialog({
 // ============================================================================
 // LoadingSpinner
 // ============================================================================
-export function LoadingSpinner({ message = 'Loading...' }: { message?: string }) {
+export function LoadingSpinner({ message }: { message?: string }) {
+  const { t } = useTranslation()
+  const msg = message ?? t('common:buttons.loading')
   return (
     <div className="flex h-64 items-center justify-center">
-      <div className="text-gray-500">{message}</div>
+      <div className="text-gray-500">{msg}</div>
     </div>
   )
 }
@@ -139,18 +142,20 @@ export function EmptyState({ message, action }: { message: string; action?: Reac
 export function SearchInput({
   value,
   onChange,
-  placeholder = 'Search...',
+  placeholder,
 }: {
   value: string
   onChange: (value: string) => void
   placeholder?: string
 }) {
+  const { t } = useTranslation()
+  const ph = placeholder ?? t('common:buttons.search')
   return (
     <input
       type="text"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
+      placeholder={ph}
       className="input max-w-xs"
     />
   )
@@ -160,9 +165,10 @@ export function SearchInput({
 // Toggle (active/inactive)
 // ============================================================================
 export function ActiveBadge({ active }: { active: boolean }) {
+  const { t } = useTranslation()
   return (
     <span className={active ? 'badge badge-green' : 'badge badge-gray'}>
-      {active ? 'Active' : 'Inactive'}
+      {active ? t('common:status.active') : t('common:status.inactive')}
     </span>
   )
 }
@@ -220,13 +226,14 @@ export function useAsyncData<T>(
 // LockedState — shown when a subscription feature is not available
 // ============================================================================
 export function LockedState({ feature, message }: { feature: string; message?: string }) {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center">
       <Lock className="h-8 w-8 text-gray-400 mb-3" />
       <p className="text-sm font-medium text-gray-700">
-        {message ?? 'This feature is not available on your current plan'}
+        {message ?? t('common:locked.featureNotAvailable')}
       </p>
-      <p className="text-xs text-gray-400 mt-1">Feature: {feature}</p>
+      <p className="text-xs text-gray-400 mt-1">{t('common:locked.feature')}: {feature}</p>
     </div>
   )
 }
@@ -254,11 +261,12 @@ export function FeatureGate({
 // DirtyBadge — indicates unsaved changes
 // ============================================================================
 export function DirtyBadge({ dirty }: { dirty: boolean }) {
+  const { t } = useTranslation()
   if (!dirty) return null
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
       <span className="h-2 w-2 rounded-full bg-amber-500" />
-      Unsaved changes
+      {t('common:messages.unsavedChanges')}
     </span>
   )
 }

@@ -21,5 +21,41 @@
   "adminNotes": "Admin Notes",
   "rejectionReason": "Rejection Reason",
   "submit": "Submit Request",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "activeUsers": "Active Users",
+  "cancelRequest": "Cancel Request",
+  "contactAdminToUpgrade": "Contact admin to upgrade",
+  "currentPeriodEnds": "Current Period Ends",
+  "currentPlanBadge": "Current Plan",
+  "errors": {
+    "cancelFailed": "Failed to cancel request",
+    "submitFailed": "Failed to submit request"
+  },
+  "lowerTier": "Lower Tier",
+  "noDescription": "No description",
+  "notes": "Notes",
+  "pendingRequestBtn": "Pending Request",
+  "pendingReview": "Pending Review",
+  "requestHistory": "Request History",
+  "requested": "Requested",
+  "requestedPlan": "Requested Plan",
+  "requestedUpgradeTo": "Requested upgrade to {{plan}}",
+  "reviewed": "Reviewed",
+  "success": {
+    "cancelled": "Request cancelled successfully",
+    "upgradeSubmitted": "Upgrade request submitted successfully"
+  },
+  "suspensionReason": "Suspension Reason",
+  "trial": {
+    "day": "{{count}} day remaining",
+    "days": "{{count}} days remaining",
+    "daysRemaining": "{{count}} days remaining",
+    "expired": "Trial Expired",
+    "expiredMessage": "Your trial has expired. Please upgrade to continue using InfraFlow.",
+    "expiresOn": "Expires on {{date}}"
+  },
+  "trialDuration": "Trial Duration",
+  "trialDurationDays": "{{count}} days",
+  "unknownPlan": "Unknown Plan",
+  "upgradeNow": "Upgrade Now"
 }

@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { Boxes } from 'lucide-react'
 
 export function AuthPage() {
+  const { t } = useTranslation('auth')
   const { signIn, signUp } = useAuth()
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [email, setEmail] = useState('')
@@ -44,8 +46,8 @@ export function AuthPage() {
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600">
             <Boxes className="h-7 w-7 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">InfraFlow</h1>
-          <p className="text-sm text-gray-500">Material Control & Work Order System</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('auth:title')}</h1>
+          <p className="text-sm text-gray-500">{t('auth:tagline')}</p>
         </div>
 
         <div className="card p-6">
@@ -56,7 +58,7 @@ export function AuthPage() {
                 mode === 'signin' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
               }`}
             >
-              Sign In
+              {t('auth:signin')}
             </button>
             <button
               onClick={() => setMode('signup')}
@@ -64,14 +66,14 @@ export function AuthPage() {
                 mode === 'signup' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
               }`}
             >
-              Register
+              {t('auth:register')}
             </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {mode === 'signup' && (
               <div>
-                <label className="label">Full Name</label>
+                <label className="label">{t('auth:fullName')}</label>
                 <input
                   type="text"
                   value={fullName}
@@ -82,7 +84,7 @@ export function AuthPage() {
               </div>
             )}
             <div>
-              <label className="label">Email</label>
+              <label className="label">{t('auth:email')}</label>
               <input
                 type="email"
                 value={email}
@@ -92,7 +94,7 @@ export function AuthPage() {
               />
             </div>
             <div>
-              <label className="label">Password</label>
+              <label className="label">{t('auth:password')}</label>
               <input
                 type="password"
                 value={password}
@@ -108,7 +110,7 @@ export function AuthPage() {
             )}
 
             <button type="submit" disabled={loading} className="btn btn-primary w-full">
-              {loading ? 'Please wait...' : mode === 'signin' ? 'Sign In' : 'Create Account'}
+              {loading ? t('common:buttons.pleaseWait') : mode === 'signin' ? t('auth:signin') : t('auth:createAccount')}
             </button>
           </form>
         </div>

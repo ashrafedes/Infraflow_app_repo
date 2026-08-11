@@ -1,114 +1,260 @@
 {
   "dashboard": {
-    "title": "Super Admin Dashboard",
-    "subtitle": "Platform overview and statistics",
+    "title": "لوحة تحكم مدير النظام",
+    "subtitle": "نظرة عامة على المنصة والإحصائيات",
     "stats": {
-      "totalCompanies": "Total Companies",
-      "activeSubscriptions": "Active Subscriptions",
-      "trialCompanies": "Trial Companies",
-      "totalRevenue": "Total Revenue",
-      "totalUsers": "Total Users",
-      "suspendedCompanies": "Suspended Companies"
+      "totalCompanies": "إجمالي الشركات",
+      "activeSubscriptions": "الاشتراكات النشطة",
+      "trialCompanies": "شركات تجريبية",
+      "totalRevenue": "إجمالي الإيرادات",
+      "totalUsers": "إجمالي المستخدمين",
+      "suspendedCompanies": "شركات موقوفة",
+      "activeCompanies": "شركات نشطة",
+      "basicCompanies": "شركات أساسية",
+      "expiringTrials": "تجارب تنتهي قريباً",
+      "freeTrials": "تجارب مجانية",
+      "pendingUpgrades": "ترقيات قيد الانتظار",
+      "premiumCompanies": "شركات مميزة",
+      "totalActiveUsers": "إجمالي المستخدمين النشطين"
     },
     "sections": {
-      "recentCompanies": "Recent Companies",
-      "revenueByPlan": "Revenue by Plan",
-      "companiesByStatus": "Companies by Status"
-    }
+      "recentCompanies": "أحدث الشركات",
+      "revenueByPlan": "الإيرادات حسب الباقة",
+      "companiesByStatus": "الشركات حسب الحالة",
+      "companiesNearLimit": "شركات قرب الحد",
+      "recentChanges": "التغييرات الحديثة"
+    },
+    "columns": {
+      "action": "الإجراء",
+      "active": "نشط",
+      "company": "الشركة",
+      "max": "الحد الأقصى",
+      "status": "الحالة",
+      "utilization": "الاستخدام",
+      "when": "متى"
+    },
+    "empty": {
+      "nearLimit": "لا توجد شركات قرب الحد",
+      "noChanges": "لا توجد تغييرات حديثة"
+    },
+    "errors": {
+      "loadFailed": "فشل في تحميل بيانات لوحة التحكم"
+    },
+    "tier": {
+      "critical": "حرج",
+      "limitReached": "تم بلوغ الحد",
+      "warning": "تحذير"
+    },
+    "viewAll": "عرض الكل"
   },
   "companies": {
-    "title": "Companies",
-    "subtitle": "Manage all companies on the platform",
-    "search": "Search companies...",
+    "title": "الشركات",
+    "subtitle": "إدارة جميع الشركات على المنصة",
+    "search": "بحث الشركات...",
     "columns": {
-      "name": "Name",
-      "plan": "Plan",
-      "status": "Status",
-      "users": "Users",
-      "created": "Created"
+      "name": "الاسم",
+      "plan": "الباقة",
+      "status": "الحالة",
+      "users": "المستخدمون",
+      "created": "تاريخ الإنشاء",
+      "actions": "إجراءات",
+      "company": "الشركة",
+      "trialEnds": "ينتهي التجريبي"
     },
     "detail": {
-      "title": "Company Detail",
-      "info": "Company Info",
-      "subscription": "Subscription",
-      "users": "Users",
-      "auditLog": "Audit Log",
-      "name": "Name",
-      "plan": "Plan",
-      "status": "Status",
-      "trialEnds": "Trial Ends",
-      "maxUsers": "Max Users",
-      "createdAt": "Created At",
-      "suspend": "Suspend",
-      "activate": "Activate",
-      "resetTrial": "Reset Trial"
+      "title": "تفاصيل الشركة",
+      "info": "معلومات الشركة",
+      "subscription": "الاشتراك",
+      "users": "المستخدمون",
+      "auditLog": "سجل التدقيق",
+      "name": "الاسم",
+      "plan": "الباقة",
+      "status": "الحالة",
+      "trialEnds": "ينتهي التجريبي",
+      "maxUsers": "الحد الأقصى للمستخدمين",
+      "createdAt": "تاريخ الإنشاء",
+      "suspend": "إيقاف",
+      "activate": "تفعيل",
+      "resetTrial": "إعادة تعيين التجريبي",
+      "activeUsers": "المستخدمون النشطون",
+      "auditHistory": "سجل التدقيق",
+      "backToCompanies": "العودة إلى الشركات",
+      "columns": {
+        "action": "الإجراء",
+        "active": "نشط",
+        "created": "تاريخ الإنشاء",
+        "email": "البريد الإلكتروني",
+        "name": "الاسم",
+        "newValue": "القيمة الجديدة",
+        "oldValue": "القيمة القديمة",
+        "performedBy": "نفذها",
+        "role": "الدور",
+        "when": "متى"
+      },
+      "companyId": "معرف الشركة",
+      "critical": "حرج",
+      "currentPeriod": "الفترة الحالية",
+      "disabled": "معطّل",
+      "enabled": "مفعّل",
+      "featureEntitlements": "ميزات الاستحقاق",
+      "healthy": "سليم",
+      "informationalNote": "تُدار ميزات الاستحقاق على مستوى الباقة. يمكن تطبيق تجاوزات للشركات الفردية هنا.",
+      "inspection": "تفتيش",
+      "limitReached": "تم بلوغ الحد",
+      "noAuditEntries": "لا توجد إدخالات تدقيق",
+      "noFeatureData": "لا توجد بيانات ميزات متاحة",
+      "noSubscription": "لا يوجد اشتراك",
+      "noUsers": "لا يوجد مستخدمون",
+      "notFound": "الشركة غير موجودة",
+      "override": "(تجاوز)",
+      "overview": "نظرة عامة على الشركة",
+      "roles": {
+        "companyAdmin": "مدير الشركة",
+        "inspector": "مفتش",
+        "projectControl": "مراقبة المشروع",
+        "projectManager": "مدير المشروع",
+        "warehouseMan": "أمين المخزن"
+      },
+      "suspendedReason": "سبب الإيقاف",
+      "system": "النظام",
+      "totalUsers": "إجمالي المستخدمين",
+      "trialStart": "بداية التجربة",
+      "userLimit": "حد المستخدمين",
+      "utilization": "الاستخدام",
+      "warning": "تحذير"
     },
-    "empty": "No companies found"
+    "empty": "لا توجد شركات"
   },
   "subscriptions": {
-    "title": "Subscriptions",
-    "subtitle": "Manage all subscriptions",
+    "title": "الاشتراكات",
+    "subtitle": "إدارة جميع الاشتراكات",
     "columns": {
-      "company": "Company",
-      "plan": "Plan",
-      "status": "Status",
-      "trialEnds": "Trial Ends",
-      "users": "Users"
+      "company": "الشركة",
+      "plan": "الباقة",
+      "status": "الحالة",
+      "trialEnds": "ينتهي التجريبي",
+      "users": "المستخدمون",
+      "actions": "إجراءات",
+      "created": "تاريخ الإنشاء",
+      "maxUsers": "الحد الأقصى للمستخدمين"
     },
-    "empty": "No subscriptions found"
+    "empty": "لا توجد اشتراكات",
+    "audit": {
+      "action": "الإجراء",
+      "newValue": "القيمة الجديدة",
+      "oldValue": "القيمة القديمة",
+      "when": "متى"
+    },
+    "modal": {
+      "auditTitle": "سجل تدقيق الاشتراك",
+      "editTitle": "تعديل الاشتراك"
+    },
+    "override": "(تجاوز)",
+    "overrideMaxUsers": "تجاوز الحد الأقصى للمستخدمين",
+    "plan": "الباقة",
+    "suspensionReason": "سبب الإيقاف",
+    "suspensionReasonPlaceholder": "أدخل سبب الإيقاف..."
   },
   "plans": {
-    "title": "Plans & Features",
-    "subtitle": "Manage subscription plans and features",
+    "title": "الباقات والميزات",
+    "subtitle": "إدارة باقات الاشتراك والميزات",
     "columns": {
-      "name": "Plan Name",
-      "price": "Price",
-      "status": "Status",
-      "sortOrder": "Sort Order"
+      "name": "اسم الباقة",
+      "price": "السعر",
+      "status": "الحالة",
+      "sortOrder": "ترتيب الفرز"
     },
     "features": {
-      "title": "Features",
-      "name": "Feature Name",
-      "key": "Feature Key",
-      "description": "Description"
-    }
+      "title": "الميزات",
+      "name": "اسم الميزة",
+      "key": "مفتاح الميزة",
+      "description": "الوصف"
+    },
+    "active": "نشط",
+    "code": "الرمز",
+    "days": "أيام",
+    "defaultMaxUsers": "الحد الافتراضي للمستخدمين",
+    "editPlan": "تعديل الباقة",
+    "inactive": "غير نشط",
+    "maxUsers": "الحد الأقصى للمستخدمين",
+    "modal": {
+      "editTitle": "تعديل الباقة"
+    },
+    "noDescription": "بدون وصف",
+    "systemPlan": "باقة النظام",
+    "trial": "تجريبي"
   },
   "auditLog": {
-    "title": "Audit Log",
-    "subtitle": "System audit trail",
+    "title": "سجل التدقيق",
+    "subtitle": "مسار تدقيق النظام",
     "columns": {
-      "timestamp": "Timestamp",
-      "action": "Action",
-      "entity": "Entity",
-      "user": "User",
-      "details": "Details"
+      "timestamp": "الطابع الزمني",
+      "action": "الإجراء",
+      "entity": "الكيان",
+      "user": "المستخدم",
+      "details": "التفاصيل",
+      "company": "الشركة",
+      "newValue": "القيمة الجديدة",
+      "oldValue": "القيمة القديمة",
+      "performedBy": "نفذها",
+      "when": "متى"
     },
-    "empty": "No audit log entries"
+    "empty": "لا توجد إدخالات في سجل التدقيق",
+    "filters": {
+      "actionType": "نوع الإجراء",
+      "allActions": "كل الإجراءات",
+      "allCompanies": "كل الشركات",
+      "company": "الشركة",
+      "searchCompany": "بحث عن شركة...",
+      "searchPlaceholder": "بحث..."
+    },
+    "system": "النظام"
   },
   "upgradeRequests": {
-    "title": "Upgrade Requests",
-    "subtitle": "Review and process subscription upgrade requests",
+    "title": "طلبات الترقية",
+    "subtitle": "مراجعة ومعالجة طلبات ترقية الاشتراك",
     "columns": {
-      "company": "Company",
-      "currentPlan": "Current Plan",
-      "requestedPlan": "Requested Plan",
-      "status": "Status",
-      "requestedBy": "Requested By",
-      "date": "Date"
+      "company": "الشركة",
+      "currentPlan": "الباقة الحالية",
+      "requestedPlan": "الباقة المطلوبة",
+      "status": "الحالة",
+      "requestedBy": "طلبها",
+      "date": "التاريخ",
+      "actions": "إجراءات",
+      "reviewed": "تمت المراجعة"
     },
     "actions": {
-      "approve": "Approve",
-      "reject": "Reject",
-      "adminNotes": "Admin Notes",
-      "rejectionReason": "Rejection Reason",
-      "confirm": "Confirm"
+      "approve": "اعتماد",
+      "reject": "رفض",
+      "adminNotes": "ملاحظات المسؤول",
+      "rejectionReason": "سبب الرفض",
+      "confirm": "تأكيد",
+      "approveUpgrade": "اعتماد الترقية",
+      "approving": "جارٍ الاعتماد...",
+      "rejectRequest": "رفض الطلب",
+      "rejecting": "جارٍ الرفض..."
     },
     "filters": {
-      "all": "All",
-      "pending": "Pending",
-      "approved": "Approved",
-      "rejected": "Rejected"
+      "all": "الكل",
+      "pending": "قيد الانتظار",
+      "approved": "معتمد",
+      "rejected": "مرفوض"
     },
-    "empty": "No upgrade requests"
+    "empty": "لا توجد طلبات ترقية",
+    "errors": {
+      "approveFailed": "فشل في اعتماد الطلب",
+      "rejectFailed": "فشل في رفض الطلب"
+    },
+    "modal": {
+      "adminNotesPlaceholder": "أدخل ملاحظات المسؤول...",
+      "approveTitle": "اعتماد طلب الترقية",
+      "rejectTitle": "رفض طلب الترقية",
+      "rejectionReasonPlaceholder": "أدخل سبب الرفض..."
+    },
+    "pendingCount": "{{count}} قيد الانتظار",
+    "success": {
+      "approved": "تم اعتماد طلب الترقية بنجاح",
+      "rejected": "تم رفض طلب الترقية بنجاح"
+    }
   }
 }

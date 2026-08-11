@@ -21,7 +21,9 @@
     "passwordHint": "A temporary password will be generated and a password setup email will be sent to the user.",
     "creating": "Creating...",
     "createUser": "Create User",
-    "success": "User created. Password setup email sent to {{email}}."
+    "success": "User created. Password setup email sent to {{email}}.",
+    "initialPassword": "Initial Password",
+    "passwordPlaceholder": "Enter temporary password"
   },
   "drawer": {
     "userDetails": "User Details",
@@ -36,14 +38,24 @@
       "workOrder": "Work Order",
       "project": "Project",
       "workLocation": "Work Location",
-      "deleted": "(deleted)"
-    }
+      "deleted": "(deleted)",
+      "location": "Location",
+      "locationDeleted": "Location (deleted)",
+      "projectDeleted": "Project (deleted)",
+      "unknown": "Unknown",
+      "warehouseDeleted": "Warehouse (deleted)",
+      "workOrderDeleted": "Work Order (deleted)"
+    },
+    "selectEntity": "Select entity..."
   },
   "delete": {
     "title": "Delete User",
-    "message": "Are you sure? This will remove the user and all their scope assignments."
+    "message": "Are you sure? This will remove the user and all their scope assignments.",
+    "confirm": "Delete"
   },
   "empty": "No users found. Click Add User to create one.",
   "saved": "{{count}} user(s) updated",
-  "limitReached": "User limit reached ({{active}}/{{max}})"
+  "limitReached": "User limit reached ({{active}}/{{max}})",
+  "addUserTooltip": "Add new user",
+  "saveAllTooltip": "Save all changes"
 }

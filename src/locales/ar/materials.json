@@ -1,30 +1,38 @@
 {
-  "title": "Materials",
-  "subtitle": "Manage material master data — inline editing, Ctrl+N for new row, Ctrl+S to save",
-  "search": "Search materials...",
+  "title": "المواد",
+  "subtitle": "إدارة بيانات المواد — تحرير مباشر، Ctrl+N لصف جديد، Ctrl+S للحفظ",
+  "search": "بحث المواد...",
   "columns": {
-    "itemNumber": "Item #",
-    "shortDescription": "Description",
-    "category": "Category",
-    "uom": "UOM",
-    "isActive": "Active"
+    "itemNumber": "رقم الصنف",
+    "shortDescription": "الوصف",
+    "category": "الفئة",
+    "uom": "وحدة القياس",
+    "isActive": "نشط",
+    "longDescription": "الوصف التفصيلي"
   },
   "buttons": {
-    "addRow": "Add Row",
-    "paste": "Paste",
-    "saveAll": "Save All",
-    "category": "Category"
+    "addRow": "إضافة صف",
+    "paste": "لصق",
+    "saveAll": "حفظ الكل",
+    "category": "الفئة"
   },
   "categoryModal": {
-    "title": "Add Category",
-    "categoryName": "Category Name",
-    "add": "Add"
+    "title": "إضافة فئة",
+    "categoryName": "اسم الفئة",
+    "add": "إضافة"
   },
-  "empty": "No materials found. Press Ctrl+N or click Add Row to start.",
+  "empty": "لا توجد مواد. اضغط Ctrl+N أو إضافة صف للبدء.",
   "delete": {
-    "title": "Delete Material",
-    "message": "Are you sure you want to delete this material?"
+    "title": "حذف المادة",
+    "message": "هل أنت متأكد من حذف هذه المادة؟"
   },
-  "saved": "{{count}} material(s) saved",
-  "pasted": "{{count}} row(s) pasted — review and Save"
+  "saved": "تم حفظ {{count}} مادة",
+  "pasted": "تم لصق {{count}} صف — راجع واحفظ",
+  "clipboardReadError": "فشل في قراءة الحافظة",
+  "pasteValidationErrors": "أخطاء التحقق من اللصق:",
+  "errors": {
+    "itemNumberRequired": "رقم الصنف مطلوب",
+    "shortDescriptionRequired": "الوصف المختصر مطلوب",
+    "uomRequired": "وحدة القياس مطلوبة"
+  }
 }

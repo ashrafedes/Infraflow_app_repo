@@ -10,7 +10,8 @@
     },
     "empty": "No projects found. Press Ctrl+N or click Add Row to start.",
     "deleteTitle": "Delete Project",
-    "deleteMessage": "Are you sure you want to delete this project?"
+    "deleteMessage": "Are you sure you want to delete this project?",
+    "saved": "{{count}} project(s) saved"
   },
   "workLocations": {
     "title": "Work Locations",
@@ -23,7 +24,8 @@
     },
     "empty": "No work locations found. Press Ctrl+N or click Add Row to start.",
     "deleteTitle": "Delete Work Location",
-    "deleteMessage": "Are you sure you want to delete this work location?"
+    "deleteMessage": "Are you sure you want to delete this work location?",
+    "saved": "{{count}} work location(s) saved"
   },
   "warehouses": {
     "title": "Warehouses",
@@ -36,7 +38,14 @@
     },
     "empty": "No warehouses found. Press Ctrl+N or click Add Row to start.",
     "deleteTitle": "Delete Warehouse",
-    "deleteMessage": "Are you sure you want to delete this warehouse?"
+    "deleteMessage": "Are you sure you want to delete this warehouse?",
+    "saved": "{{count}} warehouse(s) saved",
+    "selectLocation": "Select location...",
+    "subRequiresLocation": "Sub warehouses require a work location",
+    "type": "Type",
+    "typeMain": "Main",
+    "typeSub": "Sub",
+    "workLocation": "Work Location"
   },
   "suppliers": {
     "title": "Suppliers",
@@ -50,7 +59,8 @@
     },
     "empty": "No suppliers found. Press Ctrl+N or click Add Row to start.",
     "deleteTitle": "Delete Supplier",
-    "deleteMessage": "Are you sure you want to delete this supplier?"
+    "deleteMessage": "Are you sure you want to delete this supplier?",
+    "saved": "{{count}} supplier(s) saved"
   },
   "contractors": {
     "title": "Contractors",
@@ -64,6 +74,7 @@
     },
     "empty": "No contractors found. Press Ctrl+N or click Add Row to start.",
     "deleteTitle": "Delete Contractor",
-    "deleteMessage": "Are you sure you want to delete this contractor?"
+    "deleteMessage": "Are you sure you want to delete this contractor?",
+    "saved": "{{count}} contractor(s) saved"
   }
 }

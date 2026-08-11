@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, EmptyState, SearchInput } from '@/components/ui'
 import { Plus, Eye } from 'lucide-react'
@@ -16,6 +17,7 @@ const typeColors: Record<MovementType, string> = {
 }
 
 export function MovementsPage() {
+  const { t } = useTranslation('movements')
   const [items, setItems] = useState<MovementDetail[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -42,32 +44,32 @@ export function MovementsPage() {
   return (
     <div>
       <PageHeader
-        title="Material Movements"
-        subtitle="All material movements across warehouses and work orders"
-        action={<Link to="/movements/new" className="btn btn-primary"><Plus className="h-4 w-4" /> New Movement</Link>}
+        title={t('movements:title')}
+        subtitle={t('movements:subtitle')}
+        action={<Link to="/movements/new" className="btn btn-primary"><Plus className="h-4 w-4" /> {t('movements:newMovement')}</Link>}
       />
 
       <div className="mb-4 flex gap-3 flex-wrap">
-        <SearchInput value={search} onChange={setSearch} placeholder="Search movements..." />
+        <SearchInput value={search} onChange={setSearch} placeholder={t('movements:search')} />
         <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className="input max-w-xs">
-          <option value="">All Types</option>
-          <option value="RECEIPT">Receipt</option>
-          <option value="ISSUE">Issue</option>
-          <option value="USAGE">Usage</option>
-          <option value="TRANSFER">Transfer</option>
-          <option value="RETURN">Return</option>
-          <option value="ADJUSTMENT">Adjustment</option>
+          <option value="">{t('movements:allTypes')}</option>
+          <option value="RECEIPT">{t('common:movementTypes.RECEIPT')}</option>
+          <option value="ISSUE">{t('common:movementTypes.ISSUE')}</option>
+          <option value="USAGE">{t('common:movementTypes.USAGE')}</option>
+          <option value="TRANSFER">{t('common:movementTypes.TRANSFER')}</option>
+          <option value="RETURN">{t('common:movementTypes.RETURN')}</option>
+          <option value="ADJUSTMENT">{t('common:movementTypes.ADJUSTMENT')}</option>
         </select>
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState message="No movements found" action={<Link to="/movements/new" className="btn btn-primary"><Plus className="h-4 w-4" /> New Movement</Link>} />
+        <EmptyState message={t('movements:empty')} action={<Link to="/movements/new" className="btn btn-primary"><Plus className="h-4 w-4" /> {t('movements:newMovement')}</Link>} />
       ) : (
         <div className="card table-container">
           <table className="table">
             <thead>
               <tr>
-                <th>Number</th><th>Date</th><th>Type</th><th>Item</th><th>From</th><th>To</th><th className="text-right">Qty</th><th className="text-right">Actions</th>
+                <th>{t('movements:columns.number')}</th><th>{t('movements:columns.date')}</th><th>{t('movements:columns.type')}</th><th>{t('movements:columns.item')}</th><th>{t('movements:columns.from')}</th><th>{t('movements:columns.to')}</th><th className="text-right">{t('movements:columns.qty')}</th><th className="text-right">{t('movements:columns.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -75,10 +77,10 @@ export function MovementsPage() {
                 <tr key={m.line_id}>
                   <td className="font-medium">{m.movement_number}</td>
                   <td>{formatDate(m.movement_date)}</td>
-                  <td><span className={`badge ${typeColors[m.movement_type]}`}>{m.movement_type}</span></td>
+                  <td><span className={`badge ${typeColors[m.movement_type]}`}>{t(`common:movementTypes.${m.movement_type}`)}</span></td>
                   <td className="whitespace-nowrap">{m.item_number}</td>
                   <td className="text-gray-500">{m.source_warehouse_code ?? m.source_work_order_number ?? m.supplier_code ?? '—'}</td>
-                  <td className="text-gray-500">{m.destination_warehouse_code ?? m.destination_work_order_number ?? m.contractor_name ?? (m.movement_type === 'USAGE' ? 'Consumed' : '—')}</td>
+                  <td className="text-gray-500">{m.destination_warehouse_code ?? m.destination_work_order_number ?? m.contractor_name ?? (m.movement_type === 'USAGE' ? t('movements:consumed') : '—')}</td>
                   <td className="text-right">{formatNumber(m.quantity)} {m.uom}</td>
                   <td className="text-right">
                     <Link to={`/movements/${m.movement_id}`} className="btn btn-secondary btn-sm"><Eye className="h-3 w-3" /></Link>

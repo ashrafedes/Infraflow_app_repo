@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 
 // ============================================================================
@@ -46,11 +47,13 @@ export function MobileCardList({
   subtitleKey,
   actionLabel,
   onAction,
-  emptyMessage = 'No data found',
+  emptyMessage,
   rowKey = 'id',
 }: MobileCardListProps) {
+  const { t } = useTranslation()
+  const emptyMsg = emptyMessage ?? t('common:messages.noData')
   if (rows.length === 0) {
-    return <div className="p-4 text-center text-sm text-gray-500">{emptyMessage}</div>
+    return <div className="p-4 text-center text-sm text-gray-500">{emptyMsg}</div>
   }
 
   const getKey = (row: Record<string, unknown>): string => {

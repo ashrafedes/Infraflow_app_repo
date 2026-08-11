@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, ActiveBadge } from '@/components/ui'
@@ -17,18 +18,11 @@ interface CompanyFeature {
   is_enabled: boolean
 }
 
-const roleLabels: Record<string, string> = {
-  company_admin: 'Company Admin',
-  warehouse_man: 'Warehouse Man',
-  inspector: 'Inspector',
-  project_control: 'Project Control',
-  project_manager: 'Project Manager',
-}
-
 // ============================================================================
 // Tier badge — informational only, computed from active/max ratio
 // ============================================================================
 function UtilizationBadge({ pct }: { pct: number }) {
+  const { t } = useTranslation('superAdmin')
   let tier: 'warning' | 'critical' | 'limit_reached' | 'ok' = 'ok'
   if (pct >= 100) tier = 'limit_reached'
   else if (pct >= 90) tier = 'critical'
@@ -41,10 +35,10 @@ function UtilizationBadge({ pct }: { pct: number }) {
     limit_reached: 'badge badge-red',
   }
   const labels: Record<string, string> = {
-    ok: 'Healthy',
-    warning: 'Warning',
-    critical: 'Critical',
-    limit_reached: 'Limit Reached',
+    ok: t('companies.detail.healthy'),
+    warning: t('companies.detail.warning'),
+    critical: t('companies.detail.critical'),
+    limit_reached: t('companies.detail.limitReached'),
   }
   return <span className={styles[tier]}>{labels[tier]}</span>
 }
@@ -53,6 +47,7 @@ function UtilizationBadge({ pct }: { pct: number }) {
 // Component
 // ============================================================================
 export function SuperAdminCompanyDetail() {
+  const { t } = useTranslation('superAdmin')
   const { id } = useParams<{ id: string }>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -64,6 +59,14 @@ export function SuperAdminCompanyDetail() {
   const [features, setFeatures] = useState<CompanyFeature[]>([])
   const [featureDefs, setFeatureDefs] = useState<Feature[]>([])
   const [auditLog, setAuditLog] = useState<SubscriptionAuditLog[]>([])
+
+  const roleLabels: Record<string, string> = {
+    company_admin: t('companies.detail.roles.companyAdmin'),
+    warehouse_man: t('companies.detail.roles.warehouseMan'),
+    inspector: t('companies.detail.roles.inspector'),
+    project_control: t('companies.detail.roles.projectControl'),
+    project_manager: t('companies.detail.roles.projectManager'),
+  }
 
   useEffect(() => {
     if (!id) return
@@ -134,10 +137,10 @@ export function SuperAdminCompanyDetail() {
   if (error) {
     return (
       <div>
-        <PageHeader title="Company Detail" />
+        <PageHeader title={t('companies.detail.title')} />
         <div className="mb-4"><Alert type="error" message={error} /></div>
         <Link to="/admin/companies" className="btn btn-secondary">
-          <ArrowLeft className="h-4 w-4" /> Back to Companies
+          <ArrowLeft className="h-4 w-4" /> {t('companies.detail.backToCompanies')}
         </Link>
       </div>
     )
@@ -146,10 +149,10 @@ export function SuperAdminCompanyDetail() {
   if (!company) {
     return (
       <div>
-        <PageHeader title="Company Detail" />
-        <div className="mb-4"><Alert type="error" message="Company not found." /></div>
+        <PageHeader title={t('companies.detail.title')} />
+        <div className="mb-4"><Alert type="error" message={t('companies.detail.notFound')} /></div>
         <Link to="/admin/companies" className="btn btn-secondary">
-          <ArrowLeft className="h-4 w-4" /> Back to Companies
+          <ArrowLeft className="h-4 w-4" /> {t('companies.detail.backToCompanies')}
         </Link>
       </div>
     )
@@ -184,10 +187,10 @@ export function SuperAdminCompanyDetail() {
     <div>
       <PageHeader
         title={company.name}
-        subtitle="Company Inspection"
+        subtitle={t('companies.detail.inspection')}
         action={
           <Link to="/admin/companies" className="btn btn-secondary">
-            <ArrowLeft className="h-4 w-4" /> Back to Companies
+            <ArrowLeft className="h-4 w-4" /> {t('companies.detail.backToCompanies')}
           </Link>
         }
       />
@@ -197,26 +200,26 @@ export function SuperAdminCompanyDetail() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Overview */}
         <div className="card p-5">
-          <h2 className="font-semibold mb-3">Company Overview</h2>
+          <h2 className="font-semibold mb-3">{t('companies.detail.overview')}</h2>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-500">Company ID:</span>
+              <span className="text-gray-500">{t('companies.detail.companyId')}:</span>
               <span className="font-mono text-xs">{company.id}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Name:</span>
+              <span className="text-gray-500">{t('companies.detail.name')}:</span>
               <span className="font-medium">{company.name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Created:</span>
+              <span className="text-gray-500">{t('companies.detail.createdAt')}:</span>
               <span>{formatDate(company.created_at)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Total Users:</span>
+              <span className="text-gray-500">{t('companies.detail.totalUsers')}:</span>
               <span className="font-medium">{users.length}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Active Users:</span>
+              <span className="text-gray-500">{t('companies.detail.activeUsers')}:</span>
               <span className="font-medium">{activeUserCount}</span>
             </div>
           </div>
@@ -224,66 +227,66 @@ export function SuperAdminCompanyDetail() {
 
         {/* Subscription */}
         <div className="card p-5">
-          <h2 className="font-semibold mb-3">Subscription</h2>
+          <h2 className="font-semibold mb-3">{t('companies.detail.subscription')}</h2>
           {subscription && plan ? (
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Plan:</span>
+                <span className="text-gray-500">{t('companies.detail.plan')}:</span>
                 <span className="font-medium">{plan.plan_name} ({plan.plan_code})</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Status:</span>
-                <span className={statusBadgeClass(subscription.status)}>{subscription.status}</span>
+                <span className="text-gray-500">{t('companies.detail.status')}:</span>
+                <span className={statusBadgeClass(subscription.status)}>{t(`common:status.${subscription.status}`)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Trial Start:</span>
+                <span className="text-gray-500">{t('companies.detail.trialStart')}:</span>
                 <span>{formatDate(subscription.trial_started_at)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Trial End:</span>
+                <span className="text-gray-500">{t('companies.detail.trialEnds')}:</span>
                 <span>{formatDate(subscription.trial_ends_at)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Current Period:</span>
+                <span className="text-gray-500">{t('companies.detail.currentPeriod')}:</span>
                 <span>
                   {formatDate(subscription.current_period_start)} — {formatDate(subscription.current_period_end)}
                 </span>
               </div>
               {subscription.suspended_reason && (
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Suspended Reason:</span>
+                  <span className="text-gray-500">{t('companies.detail.suspendedReason')}:</span>
                   <span className="text-red-600">{subscription.suspended_reason}</span>
                 </div>
               )}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">No subscription found</p>
+            <p className="text-sm text-gray-500">{t('companies.detail.noSubscription')}</p>
           )}
         </div>
 
         {/* User Limit */}
         <div className="card p-5">
-          <h2 className="font-semibold mb-3">User Limit</h2>
+          <h2 className="font-semibold mb-3">{t('companies.detail.userLimit')}</h2>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-500">Active Users:</span>
+              <span className="text-gray-500">{t('companies.detail.activeUsers')}:</span>
               <span className="font-medium">{activeUserCount}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Max Users:</span>
+              <span className="text-gray-500">{t('companies.detail.maxUsers')}:</span>
               <span className="font-medium">
                 {effectiveMaxUsers}
                 {subscription?.max_users_override && (
-                  <span className="text-xs text-gray-400 ml-1">(override)</span>
+                  <span className="text-xs text-gray-400 ml-1">{t('companies.detail.override')}</span>
                 )}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Utilization:</span>
+              <span className="text-gray-500">{t('companies.detail.utilization')}:</span>
               <span className="font-medium">{utilizationPct}%</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-500">Status:</span>
+              <span className="text-gray-500">{t('companies.detail.status')}:</span>
               <UtilizationBadge pct={utilizationPct} />
             </div>
             {/* Progress bar */}
@@ -298,16 +301,16 @@ export function SuperAdminCompanyDetail() {
               />
             </div>
             <p className="text-xs text-gray-400 mt-1">
-              Informational only — does not change subscription limits or user permissions.
+              {t('companies.detail.informationalNote')}
             </p>
           </div>
         </div>
 
         {/* Feature Entitlements */}
         <div className="card p-5">
-          <h2 className="font-semibold mb-3">Feature Entitlements</h2>
+          <h2 className="font-semibold mb-3">{t('companies.detail.featureEntitlements')}</h2>
           {features.length === 0 ? (
-            <p className="text-sm text-gray-500">No feature data available</p>
+            <p className="text-sm text-gray-500">{t('companies.detail.noFeatureData')}</p>
           ) : (
             <div className="space-y-1 max-h-64 overflow-y-auto">
               {features.map(f => {
@@ -323,7 +326,7 @@ export function SuperAdminCompanyDetail() {
                       )}
                     </div>
                     <span className={f.is_enabled ? 'text-green-600 font-medium' : 'text-gray-400'}>
-                      {f.is_enabled ? 'Enabled' : 'Disabled'}
+                      {f.is_enabled ? t('companies.detail.enabled') : t('companies.detail.disabled')}
                     </span>
                   </div>
                 )
@@ -335,19 +338,19 @@ export function SuperAdminCompanyDetail() {
 
       {/* Users Table */}
       <div className="card p-5 mt-6">
-        <h2 className="font-semibold mb-3">Users ({users.length})</h2>
+        <h2 className="font-semibold mb-3">{t('companies.detail.users', { count: users.length })}</h2>
         {users.length === 0 ? (
-          <p className="text-sm text-gray-500 py-4 text-center">No users in this company</p>
+          <p className="text-sm text-gray-500 py-4 text-center">{t('companies.detail.noUsers')}</p>
         ) : (
           <div className="table-container">
             <table className="table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Active</th>
-                  <th>Created</th>
+                  <th>{t('companies.detail.columns.name')}</th>
+                  <th>{t('companies.detail.columns.email')}</th>
+                  <th>{t('companies.detail.columns.role')}</th>
+                  <th>{t('companies.detail.columns.active')}</th>
+                  <th>{t('companies.detail.columns.created')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -368,19 +371,19 @@ export function SuperAdminCompanyDetail() {
 
       {/* Audit History */}
       <div className="card p-5 mt-6">
-        <h2 className="font-semibold mb-3">Audit History</h2>
+        <h2 className="font-semibold mb-3">{t('companies.detail.auditHistory')}</h2>
         {auditLog.length === 0 ? (
-          <p className="text-sm text-gray-500 py-4 text-center">No audit entries for this company</p>
+          <p className="text-sm text-gray-500 py-4 text-center">{t('companies.detail.noAuditEntries')}</p>
         ) : (
           <div className="table-container">
             <table className="table">
               <thead>
                 <tr>
-                  <th>Action</th>
-                  <th>Old Value</th>
-                  <th>New Value</th>
-                  <th>Performed By</th>
-                  <th>When</th>
+                  <th>{t('companies.detail.columns.action')}</th>
+                  <th>{t('companies.detail.columns.oldValue')}</th>
+                  <th>{t('companies.detail.columns.newValue')}</th>
+                  <th>{t('companies.detail.columns.performedBy')}</th>
+                  <th>{t('companies.detail.columns.when')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -394,7 +397,7 @@ export function SuperAdminCompanyDetail() {
                       {log.new_value ? JSON.stringify(log.new_value) : '—'}
                     </td>
                     <td className="text-xs text-gray-500">
-                      {log.performed_by ? `${log.performed_by.slice(0, 8)}...` : 'System'}
+                      {log.performed_by ? `${log.performed_by.slice(0, 8)}...` : t('companies.detail.system')}
                     </td>
                     <td className="whitespace-nowrap text-xs text-gray-600">
                       {formatDateTime(log.performed_at)}

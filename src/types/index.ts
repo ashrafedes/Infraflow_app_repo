@@ -32,6 +32,7 @@ export interface UserProfile {
   role: UserRole
   is_active: boolean
   created_at: string
+  preferred_language?: 'en' | 'ar'
 }
 
 export interface UserScopeAssignment {

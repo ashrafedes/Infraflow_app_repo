@@ -1,4 +1,5 @@
 import { useRef, useCallback, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import DataGrid, {
   type Column,
   type CellClickArgs,
@@ -65,11 +66,13 @@ export function Datasheet<R>({
   enableRowSelection = false,
   selectedRowKeys,
   onSelectedRowKeysChange,
-  emptyMessage = 'No records found',
+  emptyMessage,
   loading = false,
   className,
   rowHeight = 36,
 }: DatasheetProps<R>) {
+  const { t } = useTranslation()
+  const emptyMsg = emptyMessage ?? t('common:messages.noData')
   const gridRef = useRef<HTMLDivElement>(null)
 
   // Build final columns, optionally prepending select column
@@ -126,7 +129,7 @@ export function Datasheet<R>({
         renderers={{
           noRowsFallback: (
             <div className="flex items-center justify-center py-16 text-center text-sm text-gray-400">
-              {emptyMessage}
+              {emptyMsg}
             </div>
           ),
         }}

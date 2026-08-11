@@ -1,40 +1,42 @@
 {
-  "title": "Reports",
-  "subtitle": "Inventory balances and material summaries — click column headers to sort",
-  "search": "Search...",
+  "title": "التقارير",
+  "subtitle": "أرصدة المخزون وملخصات المواد — انقر على عناوين الأعمدة للفرز",
+  "search": "بحث...",
   "tabs": {
-    "warehouse": "Warehouse Stock",
-    "workOrder": "Work Order Balances",
-    "contractor": "Contractor Balances",
-    "woSummary": "WO Material Summary"
+    "warehouse": "مخزون المخازن",
+    "workOrder": "أرصدة أوامر العمل",
+    "contractor": "أرصدة المقاولين",
+    "woSummary": "ملخص مواد أوامر العمل"
   },
   "columns": {
-    "warehouse": "Warehouse",
-    "itemNumber": "Item #",
-    "description": "Description",
-    "uom": "UOM",
-    "received": "Received",
-    "issued": "Issued",
-    "balance": "Balance",
-    "onHand": "On-Hand",
-    "consumed": "Consumed",
-    "contractorName": "Contractor",
-    "transferredIn": "Transferred In",
-    "returned": "Returned",
-    "woNumber": "WO #",
-    "boq": "BOQ",
-    "issuedQty": "Issued",
-    "remaining": "On-Hand"
+    "warehouse": "المخزن",
+    "itemNumber": "رقم الصنف",
+    "description": "الوصف",
+    "uom": "وحدة القياس",
+    "received": "مستلم",
+    "issued": "مصروف",
+    "balance": "الرصيد",
+    "onHand": "المتوفر",
+    "consumed": "مستهلك",
+    "contractorName": "المقاول",
+    "transferredIn": "محوّل وارد",
+    "returned": "مرتجع",
+    "woNumber": "رقم أمر العمل",
+    "boq": "جدول الكميات",
+    "issuedQty": "مصروف",
+    "remaining": "المتبقي",
+    "contractor": "المقاول"
   },
   "empty": {
-    "warehouse": "No warehouse stock data",
-    "workOrder": "No work order balance data",
-    "contractor": "No contractor balance data",
-    "woSummary": "No WO material summary data"
+    "warehouse": "لا توجد بيانات مخزون",
+    "workOrder": "لا توجد بيانات أرصدة أوامر العمل",
+    "contractor": "لا توجد بيانات أرصدة المقاولين",
+    "woSummary": "لا توجد بيانات ملخص مواد أوامر العمل"
   },
   "advanced": {
-    "title": "Advanced Reports",
-    "description": "Trend analysis, cost breakdowns, and forecasting are available with the advanced reports feature.",
-    "lockedMessage": "Advanced reports (trend analysis, cost breakdowns, forecasting) require a higher plan"
-  }
+    "title": "التقارير المتقدمة",
+    "description": "تحليل الاتجاهات وتفصيل التكاليف والتنبؤ متاح مع ميزة التقارير المتقدمة.",
+    "lockedMessage": "التقارير المتقدمة (تحليل الاتجاهات، تفصيل التكاليف، التنبؤ) تتطلب باقة أعلى"
+  },
+  "exportTooltip": "تصدير إلى CSV"
 }

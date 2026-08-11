@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, Alert, DirtyBadge, ConfirmDialog, Modal } from '@/components/ui'
 import { Plus, Save, ClipboardPaste, Trash2 } from 'lucide-react'
@@ -25,6 +26,7 @@ function nextTempId(): string {
 }
 
 export function MaterialsPage() {
+  const { t } = useTranslation('materials')
   const [rows, setRows] = useState<MaterialRow[]>([])
   const [categories, setCategories] = useState<MaterialCategory[]>([])
   const [loading, setLoading] = useState(true)
@@ -88,15 +90,15 @@ export function MaterialsPage() {
     setError(null)
     // Validate required fields
     if (!row.item_number?.trim()) {
-      setError('Item Number is required')
+      setError(t('materials:errors.itemNumberRequired'))
       return false
     }
     if (!row.short_description?.trim()) {
-      setError('Short Description is required')
+      setError(t('materials:errors.shortDescriptionRequired'))
       return false
     }
     if (!row.uom?.trim()) {
-      setError('UOM is required')
+      setError(t('materials:errors.uomRequired'))
       return false
     }
 
@@ -135,7 +137,7 @@ export function MaterialsPage() {
       if (!ok) { allOk = false; break }
     }
     if (allOk) {
-      setSuccess(`${dirtyRows.length} row(s) saved`)
+      setSuccess(t('materials:saved', { count: dirtyRows.length }))
       setTimeout(() => setSuccess(null), 3000)
     }
   }, [rows, saveRow])
@@ -249,10 +251,10 @@ export function MaterialsPage() {
         }
       })
       setRows((prev) => [...prev, ...newRows])
-      setSuccess(`${newRows.length} row(s) pasted — review and Save All`)
+      setSuccess(t('materials:pasted', { count: newRows.length }))
       setTimeout(() => setSuccess(null), 4000)
     } catch {
-      setError('Failed to read clipboard. Try Ctrl+V directly in the grid.')
+      setError(t('materials:clipboardReadError'))
     }
   }
 
@@ -287,7 +289,7 @@ export function MaterialsPage() {
   const columns: readonly Column<MaterialRow>[] = useMemo(() => [
     {
       key: 'item_number',
-      name: 'Item #',
+      name: t('materials:columns.itemNumber'),
       width: 140,
       resizable: true,
       editable: true,
@@ -296,7 +298,7 @@ export function MaterialsPage() {
     },
     {
       key: 'short_description',
-      name: 'Short Description',
+      name: t('materials:columns.shortDescription'),
       width: 220,
       resizable: true,
       editable: true,
@@ -304,7 +306,7 @@ export function MaterialsPage() {
     },
     {
       key: 'long_description',
-      name: 'Long Description',
+      name: t('materials:columns.longDescription'),
       width: 240,
       resizable: true,
       editable: true,
@@ -313,21 +315,21 @@ export function MaterialsPage() {
     },
     {
       key: 'category_id',
-      name: 'Category',
+      name: t('materials:columns.category'),
       width: 160,
       resizable: true,
       ...comboboxEditor<MaterialRow>(categoryItems, categoryLabel),
     },
     {
       key: 'uom',
-      name: 'UOM',
+      name: t('materials:columns.uom'),
       width: 80,
       editable: true,
       renderEditCell: textCellEditor<MaterialRow>(),
     },
     {
       key: 'is_active',
-      name: 'Active',
+      name: t('materials:columns.isActive'),
       width: 70,
       renderCell: checkboxCell<MaterialRow>(),
     },
@@ -344,24 +346,24 @@ export function MaterialsPage() {
             setDeleteId(row._isNew ? (row._tempId ?? row.id) : row.id)
           }}
           className="text-gray-400 hover:text-red-600"
-          title="Delete"
+          title={t('common:buttons.delete')}
         >
           <Trash2 className="h-4 w-4" />
         </button>
       ),
     },
-  ], [categoryItems, categoryLabel])
+  ], [categoryItems, categoryLabel, t])
 
   if (loading) return <LoadingSpinner />
 
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Materials"
-        subtitle="Manage material master data — inline editing, Ctrl+N for new row, Ctrl+S to save"
+        title={t('materials:title')}
+        subtitle={t('materials:subtitle')}
         action={
           <button onClick={addNewRow} className="btn btn-primary">
-            <Plus className="h-4 w-4" /> Add Row
+            <Plus className="h-4 w-4" /> {t('materials:buttons.addRow')}
           </button>
         }
       />
@@ -371,17 +373,17 @@ export function MaterialsPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search materials..."
+          placeholder={t('materials:search')}
           className="input max-w-xs"
         />
-        <button onClick={handlePaste} className="btn btn-secondary" title="Paste from Excel (Ctrl+V also works in grid)">
-          <ClipboardPaste className="h-4 w-4" /> Paste
+        <button onClick={handlePaste} className="btn btn-secondary" title={t('materials:buttons.paste')}>
+          <ClipboardPaste className="h-4 w-4" /> {t('materials:buttons.paste')}
         </button>
-        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title="Save all changes (Ctrl+S)">
-          <Save className="h-4 w-4" /> Save All
+        <button onClick={saveAll} disabled={!isDirty} className="btn btn-primary" title={t('materials:buttons.saveAll')}>
+          <Save className="h-4 w-4" /> {t('materials:buttons.saveAll')}
         </button>
         <button onClick={() => setCatModalOpen(true)} className="btn btn-secondary">
-          <Plus className="h-4 w-4" /> Category
+          <Plus className="h-4 w-4" /> {t('materials:buttons.category')}
         </button>
         <DirtyBadge dirty={isDirty} />
       </div>
@@ -390,7 +392,7 @@ export function MaterialsPage() {
       {success && <div className="mb-4"><Alert type="success" message={success} /></div>}
       {pasteErrors && (
         <div className="mb-4">
-          <Alert type="error" message={`Paste validation errors:\n${pasteErrors}`} />
+          <Alert type="error" message={`${t('materials:pasteValidationErrors')}\n${pasteErrors}`} />
         </div>
       )}
 
@@ -401,7 +403,7 @@ export function MaterialsPage() {
           onRowsChange={handleRowsChange}
           rowKeyGetter={rowKeyGetter}
           dirtyRowIds={dirtyRowIds}
-          emptyMessage="No materials found. Press Ctrl+N or click Add Row to start."
+          emptyMessage={t('materials:empty')}
           rowHeight={38}
         />
       </div>
@@ -412,20 +414,20 @@ export function MaterialsPage() {
           titleKey="item_number"
           subtitleKey="short_description"
           fields={[
-            { key: 'category_name', label: 'Category', badge: true },
-            { key: 'uom', label: 'UOM' },
-            { key: 'is_active', label: 'Active', format: (v) => (v ? 'Yes' : 'No') },
+            { key: 'category_name', label: t('materials:columns.category'), badge: true },
+            { key: 'uom', label: t('materials:columns.uom') },
+            { key: 'is_active', label: t('materials:columns.isActive'), format: (v) => (v ? t('common:labels.yes') : t('common:labels.no')) },
           ]}
-          emptyMessage="No materials found. Click Add Row to start."
+          emptyMessage={t('materials:empty')}
         />
       </div>
 
-      <Modal open={catModalOpen} onClose={() => setCatModalOpen(false)} title="Add Category" size="sm">
+      <Modal open={catModalOpen} onClose={() => setCatModalOpen(false)} title={t('materials:categoryModal.title')} size="sm">
         <div className="space-y-4">
-          <div><label className="label">Category Name</label><input value={newCat} onChange={(e) => setNewCat(e.target.value)} className="input" autoFocus /></div>
+          <div><label className="label">{t('materials:categoryModal.categoryName')}</label><input value={newCat} onChange={(e) => setNewCat(e.target.value)} className="input" autoFocus /></div>
           <div className="flex justify-end gap-3">
-            <button onClick={() => setCatModalOpen(false)} className="btn btn-secondary">Cancel</button>
-            <button onClick={handleAddCategory} className="btn btn-primary">Add</button>
+            <button onClick={() => setCatModalOpen(false)} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
+            <button onClick={handleAddCategory} className="btn btn-primary">{t('materials:categoryModal.add')}</button>
           </div>
         </div>
       </Modal>
@@ -434,9 +436,9 @@ export function MaterialsPage() {
         open={!!deleteId}
         onClose={() => setDeleteId(null)}
         onConfirm={handleDelete}
-        title="Delete Material"
-        message="Are you sure you want to delete this material?"
-        confirmLabel="Delete"
+        title={t('materials:delete.title')}
+        message={t('materials:delete.message')}
+        confirmLabel={t('common:buttons.delete')}
         danger
       />
     </div>

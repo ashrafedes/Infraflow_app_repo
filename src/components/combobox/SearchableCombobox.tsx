@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { ChevronDown, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -44,12 +45,14 @@ export function SearchableCombobox({
   items,
   value,
   onChange,
-  placeholder = 'Search...',
+  placeholder,
   autoFocus = false,
   disabled = false,
   className,
   onCloseEditor,
 }: SearchableComboboxProps) {
+  const { t } = useTranslation()
+  const ph = placeholder ?? t('common:buttons.search')
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [highlightIdx, setHighlightIdx] = useState(0)
@@ -181,7 +184,7 @@ export function SearchableCombobox({
           type="text"
           value={displayText}
           disabled={disabled}
-          placeholder={selectedItem ? '' : placeholder}
+          placeholder={selectedItem ? '' : ph}
           onChange={(e) => {
             setQuery(e.target.value)
             if (!open) setOpen(true)
@@ -199,7 +202,7 @@ export function SearchableCombobox({
           className="max-h-64 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
         >
           {filtered.length === 0 ? (
-            <div className="px-3 py-4 text-center text-sm text-gray-400">No matches found</div>
+            <div className="px-3 py-4 text-center text-sm text-gray-400">{t('common:messages.noResults')}</div>
           ) : (
             filtered.map((item, idx) => (
               <div

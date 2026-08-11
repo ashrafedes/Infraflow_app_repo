@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { PageHeader, LoadingSpinner, Alert, Modal } from '@/components/ui'
@@ -12,6 +13,7 @@ interface SubWithDetails extends Subscription {
 }
 
 export function SuperAdminSubscriptions() {
+  const { t } = useTranslation('superAdmin')
   const { user } = useAuth()
   const [subs, setSubs] = useState<SubWithDetails[]>([])
   const [plans, setPlans] = useState<SubscriptionPlan[]>([])
@@ -136,20 +138,20 @@ export function SuperAdminSubscriptions() {
 
   return (
     <div>
-      <PageHeader title="Subscriptions" subtitle="Manage company subscriptions" />
+      <PageHeader title={t('subscriptions.title')} subtitle={t('subscriptions.subtitle')} />
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
 
       <div className="card table-container">
         <table className="table">
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Plan</th>
-              <th>Status</th>
-              <th>Max Users</th>
-              <th>Trial Ends</th>
-              <th>Created</th>
-              <th className="text-right">Actions</th>
+              <th>{t('subscriptions.columns.company')}</th>
+              <th>{t('subscriptions.columns.plan')}</th>
+              <th>{t('subscriptions.columns.status')}</th>
+              <th>{t('subscriptions.columns.maxUsers')}</th>
+              <th>{t('subscriptions.columns.trialEnds')}</th>
+              <th>{t('subscriptions.columns.created')}</th>
+              <th className="text-right">{t('subscriptions.columns.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -162,16 +164,16 @@ export function SuperAdminSubscriptions() {
                     s.status === 'trial' ? 'badge-blue' :
                     s.status === 'active' ? 'badge-green' :
                     s.status === 'suspended' ? 'badge-gray' : 'badge-gray'
-                  }`}>{s.status}</span>
+                  }`}>{t(`common:status.${s.status}`)}</span>
                 </td>
                 <td>
-                  {s.max_users_override ? `${s.max_users} (override)` : `${plans.find(p => p.id === s.plan_id)?.default_max_users ?? '—'} (plan)`}
+                  {s.max_users_override ? `${s.max_users} (${t('subscriptions.override')})` : `${plans.find(p => p.id === s.plan_id)?.default_max_users ?? '—'} (${t('subscriptions.plan')})`}
                 </td>
                 <td>{s.trial_ends_at ? formatDate(s.trial_ends_at) : '—'}</td>
                 <td>{formatDate(s.created_at)}</td>
                 <td className="text-right whitespace-nowrap">
-                  <button onClick={() => handleEdit(s)} className="btn btn-secondary btn-sm mr-2">Edit</button>
-                  <button onClick={() => handleViewAudit(s)} className="btn btn-secondary btn-sm">Audit</button>
+                  <button onClick={() => handleEdit(s)} className="btn btn-secondary btn-sm mr-2">{t('common:buttons.edit')}</button>
+                  <button onClick={() => handleViewAudit(s)} className="btn btn-secondary btn-sm">{t('common:buttons.audit')}</button>
                 </td>
               </tr>
             ))}
@@ -180,10 +182,10 @@ export function SuperAdminSubscriptions() {
       </div>
 
       {/* Edit Modal */}
-      <Modal open={!!editSub} onClose={() => setEditSub(null)} title="Edit Subscription" size="lg">
+      <Modal open={!!editSub} onClose={() => setEditSub(null)} title={t('subscriptions.modal.editTitle')} size="lg">
         <div className="space-y-4">
           <div>
-            <label className="label">Plan</label>
+            <label className="label">{t('subscriptions.columns.plan')}</label>
             <select
               value={editForm.plan_id}
               onChange={e => setEditForm({ ...editForm, plan_id: e.target.value })}
@@ -193,17 +195,17 @@ export function SuperAdminSubscriptions() {
             </select>
           </div>
           <div>
-            <label className="label">Status</label>
+            <label className="label">{t('subscriptions.columns.status')}</label>
             <select
               value={editForm.status}
               onChange={e => setEditForm({ ...editForm, status: e.target.value })}
               className="input"
             >
-              <option value="trial">Trial</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
-              <option value="expired">Expired</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="trial">{t('common:status.trial')}</option>
+              <option value="active">{t('common:status.active')}</option>
+              <option value="suspended">{t('common:status.suspended')}</option>
+              <option value="expired">{t('common:status.expired')}</option>
+              <option value="cancelled">{t('common:status.cancelled')}</option>
             </select>
           </div>
           <div className="flex items-center gap-2">
@@ -213,11 +215,11 @@ export function SuperAdminSubscriptions() {
               checked={editForm.max_users_override}
               onChange={e => setEditForm({ ...editForm, max_users_override: e.target.checked })}
             />
-            <label htmlFor="max_users_override" className="text-sm">Override max users</label>
+            <label htmlFor="max_users_override" className="text-sm">{t('subscriptions.overrideMaxUsers')}</label>
           </div>
           {editForm.max_users_override && (
             <div>
-              <label className="label">Max Users</label>
+              <label className="label">{t('subscriptions.columns.maxUsers')}</label>
               <input
                 type="number"
                 value={editForm.max_users}
@@ -229,34 +231,34 @@ export function SuperAdminSubscriptions() {
           )}
           {editForm.status === 'suspended' && (
             <div>
-              <label className="label">Suspension Reason</label>
+              <label className="label">{t('subscriptions.suspensionReason')}</label>
               <input
                 type="text"
                 value={editForm.suspended_reason}
                 onChange={e => setEditForm({ ...editForm, suspended_reason: e.target.value })}
                 className="input"
-                placeholder="Reason for suspension"
+                placeholder={t('subscriptions.suspensionReasonPlaceholder')}
               />
             </div>
           )}
           {error && <Alert type="error" message={error} />}
           <div className="flex justify-end gap-3">
-            <button onClick={() => setEditSub(null)} className="btn btn-secondary">Cancel</button>
-            <button onClick={handleSave} className="btn btn-primary">Save</button>
+            <button onClick={() => setEditSub(null)} className="btn btn-secondary">{t('common:buttons.cancel')}</button>
+            <button onClick={handleSave} className="btn btn-primary">{t('common:buttons.save')}</button>
           </div>
         </div>
       </Modal>
 
       {/* Audit Log Modal */}
-      <Modal open={!!showAudit} onClose={() => setShowAudit(null)} title={`Audit Log — ${showAudit?.company_name ?? ''}`} size="xl">
+      <Modal open={!!showAudit} onClose={() => setShowAudit(null)} title={`${t('subscriptions.modal.auditTitle')} — ${showAudit?.company_name ?? ''}`} size="xl">
         <div className="table-container">
           <table className="table">
             <thead>
-              <tr><th>Action</th><th>Old Value</th><th>New Value</th><th>When</th></tr>
+              <tr><th>{t('subscriptions.audit.action')}</th><th>{t('subscriptions.audit.oldValue')}</th><th>{t('subscriptions.audit.newValue')}</th><th>{t('subscriptions.audit.when')}</th></tr>
             </thead>
             <tbody>
               {auditLog.length === 0 ? (
-                <tr><td colSpan={4} className="text-center text-gray-500 py-8">No audit entries</td></tr>
+                <tr><td colSpan={4} className="text-center text-gray-500 py-8">{t('subscriptions.empty')}</td></tr>
               ) : auditLog.map(log => (
                 <tr key={log.id}>
                   <td className="font-medium">{log.action}</td>
