@@ -3,7 +3,7 @@ services:
     name: infraflow
     env: static
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
+    staticPublishPath: ./out
     pullRequestPreviewsEnabled: false
     routes:
       - type: rewrite
