@@ -50,6 +50,9 @@ export function WorkOrdersPage() {
     supervisor: '', contractor_id: '', start_date: '', end_date: '',
   })
 
+  const [addingContractor, setAddingContractor] = useState(false)
+  const [newContractorName, setNewContractorName] = useState('')
+
   const listRef = useRef<HTMLDivElement>(null)
 
   const fetchData = async () => {
@@ -61,7 +64,16 @@ export function WorkOrdersPage() {
       supabase.from('contractors').select('*').eq('is_active', true).order('name'),
       supabase.from('materials').select('*').eq('is_active', true).order('item_number'),
     ])
-    setRows((wo.data ?? []) as WorkOrderRow[])
+
+    const flatRows = ((wo.data ?? []) as any[]).map((r) => ({
+      ...r,
+      project_name: r.projects?.name ?? r.project_name,
+      project_code: r.projects?.code ?? r.project_code,
+      work_location_name: r.work_locations?.name ?? r.work_location_name,
+      work_location_code: r.work_locations?.code ?? r.work_location_code,
+      contractor_name: r.contractors?.name ?? r.contractor_name,
+    })) as WorkOrderRow[]
+    setRows(flatRows)
     setProjects((pr.data ?? []) as Project[])
     setLocations((wl.data ?? []) as WorkLocation[])
     setContractors((con.data ?? []) as Contractor[])
@@ -320,12 +332,55 @@ export function WorkOrdersPage() {
                     <label className="label">Contractor</label>
                     <select
                       value={selectedWo.contractor_id ?? ''}
-                      onChange={(e) => handleHeaderFieldChange('contractor_id', e.target.value || null)}
+                      onChange={(e) => {
+                        if (e.target.value === '__new__') {
+                          setAddingContractor(true)
+                        } else {
+                          handleHeaderFieldChange('contractor_id', e.target.value || null)
+                        }
+                      }}
                       className="input"
                     >
                       <option value="">No contractor</option>
                       {contractors.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                      <option value="__new__">+ Add new contractor…</option>
                     </select>
+                    {addingContractor && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={newContractorName}
+                          onChange={(e) => setNewContractorName(e.target.value)}
+                          placeholder="Contractor name"
+                          className="input flex-1"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const name = newContractorName.trim()
+                            if (!name) return
+                            const { data, error: err } = await supabase.from('contractors').insert({ name }).select().single()
+                            if (err) { setError(err.message); return }
+                            const newContractor = data as Contractor
+                            setContractors((prev) => [...prev, newContractor].sort((a, b) => a.name.localeCompare(b.name)))
+                            handleHeaderFieldChange('contractor_id', newContractor.id)
+                            setNewContractorName('')
+                            setAddingContractor(false)
+                          }}
+                          className="btn btn-primary btn-sm"
+                        >
+                          Add
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => { setAddingContractor(false); setNewContractorName('') }}
+                          className="btn btn-secondary btn-sm"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="label">Status</label>
