@@ -68,6 +68,19 @@ export function BoqGrid({ workOrderId, materials, onDirtyChange }: BoqGridProps)
     [materials]
   )
 
+  // Flatten joined material fields onto the row object used by the grid
+  const withMaterialFields = useCallback((row: BoqRow) => {
+    if (!row.material_id) return row
+    const mat = materials.find((m) => m.id === row.material_id)
+    const joined = ((row as unknown) as Record<string, unknown>).materials as { item_number?: string; short_description?: string; uom?: string } | undefined
+    return {
+      ...row,
+      item_number: mat?.item_number ?? joined?.item_number,
+      short_description: mat?.short_description ?? joined?.short_description,
+      uom: mat?.uom ?? joined?.uom,
+    }
+  }, [materials])
+
   // Fetch BOQ data
   const fetchData = useCallback(async () => {
     if (!workOrderId) return
@@ -77,9 +90,9 @@ export function BoqGrid({ workOrderId, materials, onDirtyChange }: BoqGridProps)
       .select('*, materials!inner(item_number, short_description, uom, category_id)')
       .eq('work_order_id', workOrderId)
       .order('created_at')
-    setRows((data ?? []) as BoqRow[])
+    setRows((data ?? []).map((r) => withMaterialFields(r as BoqRow)) as BoqRow[])
     setLoading(false)
-  }, [workOrderId])
+  }, [workOrderId, withMaterialFields])
 
   useEffect(() => { fetchData() }, [fetchData])
 
@@ -143,7 +156,8 @@ export function BoqGrid({ workOrderId, materials, onDirtyChange }: BoqGridProps)
           .select('*, materials!inner(item_number, short_description, uom, category_id)')
           .single()
         if (err) { setError(err.message); allOk = false; break }
-        setRows((prev) => prev.map((r) => (r._tempId === row._tempId ? (data as BoqRow) : r)))
+        const flat = withMaterialFields(data as BoqRow)
+        setRows((prev) => prev.map((r) => (r._tempId === row._tempId ? flat : r)))
       } else {
         const { data, error: err } = await supabase
           .from('work_order_boq')
@@ -152,7 +166,8 @@ export function BoqGrid({ workOrderId, materials, onDirtyChange }: BoqGridProps)
           .select('*, materials!inner(item_number, short_description, uom, category_id)')
           .single()
         if (err) { setError(err.message); allOk = false; break }
-        setRows((prev) => prev.map((r) => (r.id === row.id ? { ...(data as BoqRow) } : r)))
+        const flat = withMaterialFields(data as BoqRow)
+        setRows((prev) => prev.map((r) => (r.id === row.id ? flat : r)))
       }
     }
 
