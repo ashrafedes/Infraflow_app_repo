@@ -124,5 +124,21 @@
   "validation": {
     "codeRequired": "Code is required",
     "nameRequired": "Name is required"
+  },
+  "attachments": {
+    "title": "Attachments",
+    "upload": "Upload",
+    "uploading": "Uploading...",
+    "deleting": "Deleting...",
+    "download": "Download",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this attachment? The file will be permanently removed.",
+    "deleteTitle": "Delete Attachment",
+    "empty": "No attachments yet",
+    "fileTooLarge": "File size exceeds 10MB limit",
+    "invalidType": "Only PDF, JPG, and PNG files are allowed",
+    "uploadFailed": "Failed to upload file",
+    "deleteFailed": "Failed to delete file",
+    "downloadFailed": "Failed to generate download link"
   }
 }

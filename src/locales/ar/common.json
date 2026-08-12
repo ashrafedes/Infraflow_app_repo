@@ -124,5 +124,21 @@
   "validation": {
     "codeRequired": "الرمز مطلوب",
     "nameRequired": "الاسم مطلوب"
+  },
+  "attachments": {
+    "title": "المرفقات",
+    "upload": "رفع",
+    "uploading": "جارٍ الرفع...",
+    "deleting": "جارٍ الحذف...",
+    "download": "تنزيل",
+    "delete": "حذف",
+    "deleteConfirm": "هل أنت متأكد من حذف هذا المرفق؟ سيتم حذف الملف نهائياً.",
+    "deleteTitle": "حذف المرفق",
+    "empty": "لا توجد مرفقات بعد",
+    "fileTooLarge": "حجم الملف يتجاوز حد 10 ميجابايت",
+    "invalidType": "يُسمح فقط بملفات PDF و JPG و PNG",
+    "uploadFailed": "فشل في رفع الملف",
+    "deleteFailed": "فشل في حذف الملف",
+    "downloadFailed": "فشل في إنشاء رابط التنزيل"
   }
 }

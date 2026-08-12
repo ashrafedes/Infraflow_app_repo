@@ -417,3 +417,24 @@ export interface SubscriptionUpgradeRequest {
   requested_by_email?: string
   reviewed_by_email?: string
 }
+
+// ============================================================================
+// Attachment Types
+// ============================================================================
+
+export type AttachmentEntityType = 'work_order' | 'movement'
+
+export interface Attachment {
+  id: string
+  company_id: string
+  entity_type: AttachmentEntityType
+  entity_id: string
+  file_name: string
+  file_path: string
+  file_size: number
+  mime_type: string
+  uploaded_by: string | null
+  created_at: string
+  // Joined fields
+  uploader_name?: string
+}

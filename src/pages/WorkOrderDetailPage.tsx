@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, Modal, ConfirmDialog, LoadingSpinner, EmptyState, Alert } from '@/components/ui'
+import { AttachmentList } from '@/components/AttachmentList'
 import { Plus, Trash2, ArrowLeft } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
 import type { WorkOrder, WorkOrderBOQ, Material } from '@/types'
@@ -96,6 +97,9 @@ export function WorkOrderDetailPage() {
           </table>
         </div>
       )}
+
+      {/* Attachments */}
+      {id && <div className="mt-6"><AttachmentList entityType="work_order" entityId={id} /></div>}
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={t('workOrders:boq.addLine')}>
         <form onSubmit={handleAddBoq} className="space-y-4">

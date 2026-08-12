@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { PageHeader, LoadingSpinner, EmptyState, ConfirmDialog, Alert } from '@/components/ui'
+import { AttachmentList } from '@/components/AttachmentList'
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { formatDate, formatNumber, formatDateTime } from '@/lib/utils'
 import { useAuth } from '@/contexts/AuthContext'
@@ -164,6 +165,9 @@ export function MovementDetailPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Attachments */}
+      {id && <div className="mt-6"><AttachmentList entityType="movement" entityId={id} /></div>}
 
       {isCompanyAdmin && (
         <ConfirmDialog
