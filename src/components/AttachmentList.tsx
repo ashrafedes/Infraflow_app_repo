@@ -32,10 +32,7 @@ export function AttachmentList({ entityType, entityId }: AttachmentListProps) {
     if (!entityId) return
     const { data, error } = await supabase
       .from('attachments')
-      .select(`
-        *,
-        uploader:user_profiles!attachments_uploaded_by_fkey(full_name)
-      `)
+      .select('*')
       .eq('entity_type', entityType)
       .eq('entity_id', entityId)
       .order('created_at', { ascending: false })
@@ -43,14 +40,28 @@ export function AttachmentList({ entityType, entityId }: AttachmentListProps) {
 
     if (error) {
       setError(error.message)
+      setAttachments([])
     } else {
-      const rows = (data ?? []) as unknown as Array<Attachment & {
-        uploader: { full_name: string } | null
-      }>
+      const rows = (data ?? []) as Attachment[]
+      // Fetch uploader names separately if any attachments have uploaded_by
+      const uploaderIds = rows.map(r => r.uploaded_by).filter(Boolean) as string[]
+      let uploaderMap: Record<string, string> = {}
+      if (uploaderIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('user_profiles')
+          .select('id, full_name')
+          .in('id', uploaderIds)
+          .limit(100)
+        if (profiles) {
+          uploaderMap = Object.fromEntries(
+            (profiles as { id: string; full_name: string }[]).map(p => [p.id, p.full_name])
+          )
+        }
+      }
       setAttachments(
         rows.map((r) => ({
           ...r,
-          uploader_name: r.uploader?.full_name ?? undefined,
+          uploader_name: r.uploaded_by ? uploaderMap[r.uploaded_by] : undefined,
         }))
       )
     }
