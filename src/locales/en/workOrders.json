@@ -1,7 +1,7 @@
 {
   "title": "Work Orders",
   "subtitle": "Master-detail — select a WO to edit header + BOQ. Ctrl+N for new, Ctrl+S to save.",
-  "search": "Search work orders...",
+  "search": "Search by WO #, site code...",
   "allProjects": "All Projects",
   "columns": {
     "woNumber": "WO Number",

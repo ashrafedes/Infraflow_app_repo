@@ -25,6 +25,12 @@ export function MovementDetailPage() {
   const { profile } = useAuth()
   const isCompanyAdmin = profile?.role === 'company_admin'
   const [lines, setLines] = useState<MovementDetail[]>([])
+  const [movementHeader, setMovementHeader] = useState<{
+    movement_number: string
+    movement_date: string
+    movement_type: string
+    created_at: string
+  } | null>(null)
   const [loading, setLoading] = useState(true)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -33,13 +39,21 @@ export function MovementDetailPage() {
   useEffect(() => {
     async function fetchData() {
       if (!id) return
-      const { data } = await supabase
-        .from('v_movement_details')
-        .select('*')
-        .eq('movement_id', id)
-        .order('item_number')
-        .limit(1000)
-      setLines((data ?? []) as MovementDetail[])
+      const [linesRes, movRes] = await Promise.all([
+        supabase
+          .from('v_movement_details')
+          .select('*')
+          .eq('movement_id', id)
+          .order('item_number')
+          .limit(1000),
+        supabase
+          .from('material_movements')
+          .select('movement_number, movement_date, movement_type, created_at')
+          .eq('id', id)
+          .single(),
+      ])
+      setLines((linesRes.data ?? []) as MovementDetail[])
+      setMovementHeader(movRes.data as typeof movementHeader)
       setLoading(false)
     }
     fetchData()
@@ -66,9 +80,10 @@ export function MovementDetailPage() {
   }
 
   if (loading) return <LoadingSpinner />
-  if (lines.length === 0) return <EmptyState message={t('movements:detail.notFound')} />
+  if (!movementHeader) return <EmptyState message={t('movements:detail.notFound')} />
 
-  const m = lines[0]
+  // Use first line for header info if available, otherwise use the movement header
+  const m = lines[0] ?? movementHeader
 
   return (
     <div>

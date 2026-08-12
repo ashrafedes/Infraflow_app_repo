@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { PageHeader, Modal, ConfirmDialog, LoadingSpinner, Alert, DirtyBadge } from '@/components/ui'
 import { Plus, Save, Trash2, Search } from 'lucide-react'
 import { BoqGrid } from '@/components/grid/BoqGrid'
+import { AttachmentList } from '@/components/AttachmentList'
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
 import { useUnsavedChanges } from '@/hooks/useUnsavedChanges'
 import { cn } from '@/lib/utils'
@@ -248,7 +249,7 @@ export function WorkOrdersPage() {
   if (loading) return <LoadingSpinner />
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 7rem)' }}>
       <PageHeader
         title={t('workOrders:title')}
         subtitle={t('workOrders:subtitle')}
@@ -258,9 +259,9 @@ export function WorkOrdersPage() {
       {error && <div className="mb-4"><Alert type="error" message={error} /></div>}
       {success && <div className="mb-4"><Alert type="success" message={success} /></div>}
 
-      <div className="flex flex-1 gap-4 overflow-hidden">
+      <div className="flex flex-1 gap-4 overflow-hidden min-h-0">
         {/* Left: WO List */}
-        <div className="w-80 flex-shrink-0 flex flex-col">
+        <div className="w-80 flex-shrink-0 flex flex-col min-h-0">
           <div className="mb-3 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
@@ -299,7 +300,10 @@ export function WorkOrdersPage() {
                         <span className="font-medium text-sm">{wo.work_order_number}</span>
                         <span className={cn('badge text-xs', statusColors[wo.status])}>{t(`common:status.${wo.status}`)}</span>
                       </div>
-                      <div className="text-xs text-gray-500 mt-1">{wo.project_name}</div>
+                      {wo.site_code && (
+                        <div className="text-xs text-gray-500 mt-1 font-mono">{wo.site_code}</div>
+                      )}
+                      <div className="text-xs text-gray-500 mt-0.5">{wo.project_name}</div>
                       <div className="text-xs text-gray-400">{wo.work_location_name}{wo.subclass ? ` · ${wo.subclass}` : ''}</div>
                       {wo._dirty && <DirtyBadge dirty />}
                     </button>
@@ -311,7 +315,7 @@ export function WorkOrdersPage() {
         </div>
 
         {/* Right: Detail Panel */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto min-h-0">
           {selectedWo ? (
             <div className="space-y-6">
               {/* Header card with inline-editable fields */}
@@ -495,6 +499,9 @@ export function WorkOrdersPage() {
                   onDirtyChange={setBoqDirty}
                 />
               </div>
+
+              {/* Attachments */}
+              <AttachmentList entityType="work_order" entityId={selectedWo.id} />
             </div>
           ) : (
             <div className="card flex h-full items-center justify-center">
